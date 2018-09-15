@@ -549,14 +549,14 @@ export default {
 
                   body: [
                     [ 'Descripción', {text: 'D/H/Porc', alignment: 'right'}, {text: 'Asignaciones', alignment: 'right'}, {text: 'Deducciones', alignment: 'right'} ],
-                    [ 'Salario', {text: `${res.data.dias_trabajados}`, alignment: 'right'}, {text: `${res.data.montos.pago_salario}`, alignment: 'right'}, {text: '0', alignment: 'right'} ],
-                    [ 'Horas Extras Diurnas', {text: `${res.data.he_diurnas}`, alignment: 'right'}, {text: `${res.data.montos.he_diurnas}`, alignment: 'right'}, {text: '0', alignment: 'right'} ],
-                    [ 'Horas Extras Nocturnas', {text: `${res.data.he_nocturnas}`, alignment: 'right'}, {text: `${res.data.montos.he_nocturnas}`, alignment: 'right'}, {text: '0', alignment: 'right'} ],
-                    [ 'Domingo / Feriados', {text: `${res.data.feriados}`, alignment: 'right'}, {text: `${res.data.montos.feriados}`, alignment: 'right'}, {text: '0', alignment: 'right'} ],
-                    [ 'IVSS', {text: `4.00`, alignment: 'right'}, {text: `0`, alignment: 'right'}, {text: `${res.data.montos.ivss}`, alignment: 'right'} ],
-                    [ 'Paro Forzoso', {text: `0.50`, alignment: 'right'}, {text: `0`, alignment: 'right'}, {text: `${res.data.montos.paro_forzoso}`, alignment: 'right'} ],
-                    [ {text: 'FAOV'}, {text: `1.00`, alignment: 'right'}, {text: `0`, alignment: 'right'}, {text: `${res.data.montos.faov}`, alignment: 'right'} ],
-                    [ {text: 'TOTALES', bold: true}, {text: ``, alignment: 'right'}, {text: `${res.data.montos.total_asignaciones}`, bold: true, alignment: 'right'}, {text: `${res.data.montos.total_deducciones}`,  bold: true, alignment: 'right'} ],
+                    [ 'Salario', {text: `${res.data.dias_trabajados} Días`, alignment: 'right'}, {text: `${res.data.montos.pago_salario}`, alignment: 'right'}, {text: '0', alignment: 'right'} ],
+                    [ 'Horas Extras Diurnas', {text: `${res.data.he_diurnas} Horas`, alignment: 'right'}, {text: `${res.data.montos.he_diurnas}`, alignment: 'right'}, {text: '0', alignment: 'right'} ],
+                    [ 'Horas Extras Nocturnas', {text: `${res.data.he_nocturnas} Horas`, alignment: 'right'}, {text: `${res.data.montos.he_nocturnas}`, alignment: 'right'}, {text: '0', alignment: 'right'} ],
+                    [ 'Domingo / Feriados', {text: `${res.data.feriados} Días`, alignment: 'right'}, {text: `${res.data.montos.feriados}`, alignment: 'right'}, {text: '0', alignment: 'right'} ],
+                    [ 'IVSS', {text: `4.00 %`, alignment: 'right'}, {text: `0`, alignment: 'right'}, {text: `${res.data.montos.ivss}`, alignment: 'right'} ],
+                    [ 'Paro Forzoso', {text: `0.50 %`, alignment: 'right'}, {text: `0`, alignment: 'right'}, {text: `${res.data.montos.paro_forzoso}`, alignment: 'right'} ],
+                    [ {text: 'FAOV'}, {text: `1.00 %`, alignment: 'right'}, {text: `0`, alignment: 'right'}, {text: `${res.data.montos.faov}`, alignment: 'right'} ],
+                    [ {text: 'TOTALES', bold: true}, {text: ``, alignment: 'right'}, {text: `${res.data.montos.total_asignaciones} bs`, bold: true, alignment: 'right'}, {text: `${res.data.montos.total_deducciones} bs`,  bold: true, alignment: 'right'} ],
                     [ {text: ''}, {text: ``, alignment: 'right'}, {text: `Neto a Cobrar Bs.`, bold: true, alignment: 'right'}, {text: `${res.data.montos.monto_total}`,  bold: true, alignment: 'right'} ],
 
                   ]

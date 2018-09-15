@@ -5,7 +5,7 @@
       <v-card class="elevation-12">
         <!-- Header card -->
         <v-toolbar dark color="teal darken-1" dense>
-          <v-btn icon color="teal darken-4" dark @click.native="$router.push({ path: '/users' })">
+          <v-btn icon color="teal darken-4" dark @click.native="$router.push({ path: '/trabajadores' })">
             <v-icon>reply</v-icon>
           </v-btn>
           <v-toolbar-title>Trabajador</v-toolbar-title>
@@ -277,6 +277,25 @@ export default {
       alertType: "success",
       alertMessage: ""
     };
+  },
+  watch: {
+    trabajador: {
+      deep: true,
+      handler(val) {
+        if (!val) return "";
+        val.cedula = val.cedula.toString();
+        val.nombre1 = val.nombre1.toString();
+        val.nombre2 = val.nombre2.toString();
+        val.apellido1 = val.apellido1.toString();
+        val.apellido2 = val.apellido2.toString();
+
+        this.trabajador.cedula = val.cedula.charAt(0).toUpperCase() + val.cedula.slice(1);
+        this.trabajador.nombre1 = val.nombre1.charAt(0).toUpperCase() + val.nombre1.slice(1).toLowerCase();
+        this.trabajador.nombre2 = val.nombre2.charAt(0).toUpperCase() + val.nombre2.slice(1).toLowerCase();
+        this.trabajador.apellido1 = val.apellido1.charAt(0).toUpperCase() + val.apellido1.slice(1).toLowerCase();
+        this.trabajador.apellido2 = val.apellido2.charAt(0).toUpperCase() + val.apellido2.slice(1).toLowerCase();
+      }
+    }
   },
   created() {
     const dict = {

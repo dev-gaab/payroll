@@ -215,6 +215,17 @@ export default {
       alertMsg: ''
     };
   },
+  watch: {
+    empresa: {
+      deep: true,
+      handler(val) {
+        if (!val) return "";
+        val.rif = val.rif.toString();
+
+        this.empresa.rif = val.rif.charAt(0).toUpperCase() + val.rif.slice(1);
+      }
+    }
+  },
   created() {
     const dict = {
       custom: {

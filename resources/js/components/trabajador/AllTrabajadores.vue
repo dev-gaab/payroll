@@ -546,6 +546,23 @@ export default {
       dialogDis: false
     };
   },
+  watch: {
+    trabajador: {
+      deep: true,
+      handler(val) {
+        if (!val) return "";
+        val.nombre1 = val.nombre1.toString();
+        val.nombre2 = val.nombre2.toString();
+        val.apellido1 = val.apellido1.toString();
+        val.apellido2 = val.apellido2.toString();
+
+        this.trabajador.nombre1 = val.nombre1.charAt(0).toUpperCase() + val.nombre1.slice(1).toLowerCase();
+        this.trabajador.nombre2 = val.nombre2.charAt(0).toUpperCase() + val.nombre2.slice(1).toLowerCase();
+        this.trabajador.apellido1 = val.apellido1.charAt(0).toUpperCase() + val.apellido1.slice(1).toLowerCase();
+        this.trabajador.apellido2 = val.apellido2.charAt(0).toUpperCase() + val.apellido2.slice(1).toLowerCase();
+      }
+    }
+  },
   created() {
     const dict = {
       custom: {
