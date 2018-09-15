@@ -31,7 +31,13 @@
             <td>{{ props.item.monto | numberFormat }}</td>
             <!-- Acciones -->
             <td class="justify-center layout px-0">
-              <v-btn @click="deleteU(props.item.id)" icon small color="error" title="Eliminar utilidades">
+              <v-btn
+                @click="deleteU(props.item.id)"
+                icon
+                small
+                color="error"
+                title="Eliminar utilidades"
+              >
                 <v-icon small>fa-trash</v-icon>
               </v-btn>
             </td>
@@ -48,11 +54,11 @@
     </v-flex>
 
     <v-layout row justify-center>
-      <v-dialog v-model="dialog" persistent>
+      <v-dialog v-model="dialog" persistent max-width="800">
         <v-flex xs12>
           <v-card>
             <v-card-title>
-              <h3>Calcular Utilidades - Trabajadores disponibles</h3>
+              <h3>Calcular Utilidades</h3>
               <v-spacer></v-spacer>
               <v-text-field
                 color="teal darken-4"
@@ -92,7 +98,7 @@
       </v-dialog>
     </v-layout>
 
-     <v-layout row justify-center>
+    <v-layout row justify-center>
       <v-dialog v-model="dialogCal" persistent max-width="300">
         <v-card class="elevation-12">
           <!-- formulario -->
@@ -187,7 +193,7 @@ export default {
       dialogCal: false
     };
   },
-   created() {
+  created() {
     this.allUtilidades();
 
     const dict = {
@@ -281,25 +287,23 @@ export default {
           .catch(err => console.log(err));
       });
     },
-     deleteU(id) {
-
-      let confirm = window.confirm(
-        "¿Seguro que quiere eliminar?"
-      );
-       const vm = this;
+    deleteU(id) {
+      let confirm = window.confirm("¿Seguro que quiere eliminar?");
+      const vm = this;
 
       if (confirm) {
-          axios.delete(`http://payroll.com.local/api/utilidades/${id}`, {
-          headers: {
-            Authorization: `Bearer ${vm.$store.state.currentUser.token}`
-          }
-        })
-        .then(res => {
-          this.alertMsg = "Utilidades Eliminada";
-          this.alert = true;
-          this.allUtilidades();
-        })
-        .catch(err => console.log(err));
+        axios
+          .delete(`http://payroll.com.local/api/utilidades/${id}`, {
+            headers: {
+              Authorization: `Bearer ${vm.$store.state.currentUser.token}`
+            }
+          })
+          .then(res => {
+            this.alertMsg = "Utilidades Eliminada";
+            this.alert = true;
+            this.allUtilidades();
+          })
+          .catch(err => console.log(err));
       }
     }
   },

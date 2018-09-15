@@ -5,17 +5,17 @@ use Illuminate\Http\Request;
 /**
  * TODO:
  *
- * ![] Realizar las rutas para usuario
- * ![] Probar las rutas con POSTMAN antes de con la API.
+ * ![x] Realizar las rutas para usuario
+ * ![x] Probar las rutas con POSTMAN antes de con la API.
  */
 Route::group(['prefix' => 'auth'], function () {
-    Route::post('login', 'AuthController@login');
-    Route::post('signup', 'AuthController@signup');
+  Route::post('login', 'AuthController@login');
+  Route::post('signup', 'AuthController@signup');
 
-    Route::group(['middleware' => 'auth:api'], function() {
-        Route::get('logout', 'AuthController@logout');
-        Route::get('user', 'AuthController@user');
-    });
+  Route::group(['middleware' => 'auth:api'], function () {
+    Route::get('logout', 'AuthController@logout');
+    Route::get('user', 'AuthController@user');
+  });
 });
 
 Route::group(['prefix' => 'users', 'middleware' => 'auth:api'], function () {
@@ -28,17 +28,17 @@ Route::group(['prefix' => 'users', 'middleware' => 'auth:api'], function () {
 
 // Routes para modulo de empresas
 
-Route::group(['prefix' => 'empresas', 'middleware' => 'auth:api'], function() {
-    Route::get('/', 'Api\EmpresaController@verTodas');
-    Route::get('/{id}', 'Api\EmpresaController@ver');
-    Route::post('/', 'Api\EmpresaController@agregar')->middleware('check.rol');
-    Route::put('/{id}', 'Api\EmpresaController@modificar');
-    Route::put('/disable/{id}', 'Api\EmpresaController@deshabilitar');
+Route::group(['prefix' => 'empresas', 'middleware' => 'auth:api'], function () {
+  Route::get('/', 'Api\EmpresaController@verTodas');
+  Route::get('/{id}', 'Api\EmpresaController@ver');
+  Route::post('/', 'Api\EmpresaController@agregar')->middleware('check.rol');
+  Route::put('/{id}', 'Api\EmpresaController@modificar');
+  Route::put('/disable/{id}', 'Api\EmpresaController@deshabilitar');
 });
 
 
 //Routes para modulo de trabajadores
-Route::group(['prefix' => 'trabajadores', 'middleware' => 'auth:api'], function() {
+Route::group(['prefix' => 'trabajadores', 'middleware' => 'auth:api'], function () {
   Route::get('/all/{id}', 'Api\TrabajadorController@verTodos');
   Route::get('/{id}', 'Api\TrabajadorController@ver');
   Route::post('/{id}', 'Api\TrabajadorController@agregar');
@@ -48,7 +48,7 @@ Route::group(['prefix' => 'trabajadores', 'middleware' => 'auth:api'], function(
 
 
 // Routes Nomina
-Route::group(['prefix' => 'nominas', 'middleware' => 'auth:api'], function() {
+Route::group(['prefix' => 'nominas', 'middleware' => 'auth:api'], function () {
   Route::get('/{id}', 'Api\NominaController@verTodas');
   Route::post('/generar/{id}', 'Api\NominaController@generar');
   Route::get('/validar/trabajadores/{empresa_id}', 'Api\NominaController@validarTrabajadores');
@@ -58,25 +58,25 @@ Route::group(['prefix' => 'nominas', 'middleware' => 'auth:api'], function() {
   Route::put('/detalle/{nomina_id}/{trabajador_id}', 'Api\NominaController@modificarNominaDetalle');
 });
 
-Route::group(['prefix' => 'vacaciones', 'middleware' => 'auth:api'], function() {
+Route::group(['prefix' => 'vacaciones', 'middleware' => 'auth:api'], function () {
   Route::get('/disponibles/{empresa_id}', 'Api\VacacionesController@trabajadoresDisponibles');
   Route::get('/all/{empresa_id}', 'Api\VacacionesController@index');
   Route::get('/ver/{id}', 'Api\VacacionesController@find');
   Route::post('/calcular', 'Api\VacacionesController@agregar');
-  Route::put('/{id}','Api\VacacionesController@modificar');
+  Route::put('/{id}', 'Api\VacacionesController@modificar');
   Route::delete('/{id}', 'Api\VacacionesController@delete');
   // Vacaciones Fraccionadas
   Route::get('/fraccionadas/disponibles/{empresa_id}', 'Api\VacacionesController@vacacionesFracDisponibles');
 });
 
-Route::group(['prefix' => 'prestaciones', 'middleware' => 'auth:api'], function() {
-  Route::get('/{empresa_id}', 'Api\PrestacionesController@todas');
-  Route::get('/disponibles/{empresa_id}', 'Api\PrestacionesController@disponibles');
-  Route::post('/calcular', 'Api\PrestacionesController@calcularPrestaciones');
-  Route::delete('/{id}', 'Api\PrestacionesController@delete');
-});
+// Route::group(['prefix' => 'prestaciones', 'middleware' => 'auth:api'], function () {
+//   Route::get('/{empresa_id}', 'Api\PrestacionesController@todas');
+//   Route::get('/disponibles/{empresa_id}', 'Api\PrestacionesController@disponibles');
+//   Route::post('/calcular', 'Api\PrestacionesController@calcularPrestaciones');
+//   Route::delete('/{id}', 'Api\PrestacionesController@delete');
+// });
 
-Route::group(['prefix' => 'utilidades', 'middleware' => 'auth:api'], function() {
+Route::group(['prefix' => 'utilidades', 'middleware' => 'auth:api'], function () {
   Route::get('/{empresa_id}', 'Api\UtilidadesController@todas');
   Route::get('/disponibles/{empresa_id}', 'Api\UtilidadesController@disponibles');
   Route::post('/calcular', 'Api\UtilidadesController@addUtilidades');
@@ -84,18 +84,17 @@ Route::group(['prefix' => 'utilidades', 'middleware' => 'auth:api'], function() 
   Route::delete('/{id}', 'Api\UtilidadesController@delete');
 });
 
-Route::group(['prefix' => 'reportes', 'middleware' => 'auth:api'], function() {
+Route::group(['prefix' => 'reportes', 'middleware' => 'auth:api'], function () {
   Route::get('/empresas/activas', 'Api\ReportesController@empresasActivas');
   Route::get('/empresas/inactivas', 'Api\ReportesController@empresasInactivas');
   Route::get('/nomina/detalle/{id}', 'Api\ReportesController@nominaUno');
 });
 
 
-// Route::group(['prefix' => 'bases', 'middleware' => 'auth:api'], function() {
-//   Route::get('/', 'Api\BasesController@verActual');
-//   Route::get('/cesta', 'Api\BasesController@histoCesta');
-//   Route::get('/salarios', 'Api\BasesController@histoSalario');
-//   Route::post('/salarios', 'Api\BasesController@updSalario');
-//   Route::post('/cesta', 'Api\BasesController@updCesta');
-
-// });
+Route::group(['prefix' => 'bases', 'middleware' => 'auth:api'], function () {
+  Route::get('/', 'Api\BasesController@verActual');
+  Route::get('/cesta', 'Api\BasesController@histoCesta');
+  Route::get('/salarios', 'Api\BasesController@histoSalario');
+  Route::post('/salarios', 'Api\BasesController@updSalario');
+  Route::post('/cesta', 'Api\BasesController@updCesta');
+});

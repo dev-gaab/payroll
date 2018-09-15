@@ -75,6 +75,15 @@
           </v-list-tile-content>
         </v-list-tile>
 
+        <v-list-tile @click="routAllBases">
+          <v-list-tile-action>
+            <v-icon>fa-calculator</v-icon>
+          </v-list-tile-action>
+          <v-list-tile-content>
+            <v-list-tile-title>Bases de Cálculo</v-list-tile-title>
+          </v-list-tile-content>
+        </v-list-tile>
+
         <v-list-tile @click="routUtilidades">
           <v-list-tile-action>
             <v-icon>redeem</v-icon>

@@ -92,7 +92,7 @@
     </v-flex>
     <!-- historial -->
     <v-layout row justify-center>
-      <v-dialog v-model="dialogHisto" persistent>
+      <v-dialog v-model="dialogHisto" persistent max-width="700">
         <v-card>
           <v-card-title>
             <h3>{{ headerTable }}</h3>
@@ -112,7 +112,7 @@
           </v-card-title>
           <v-data-table :headers="headers" :items="items" :search="search">
             <template slot="items" slot-scope="props">
-              <td>{{ props.item.monto ? props.item.monto : props.item.cantidad }}</td>
+              <td>{{ props.item.monto ? props.item.monto : props.item.cantidad | numberFormat}}</td>
               <td>{{ props.item.desde | dateFormat }}</td>
               <td>{{ props.item.hasta | dateFormat }}</td>
               <td>{{ props.item.estatus | capitalize }}</td>
@@ -141,6 +141,8 @@
             </v-btn>
           </v-toolbar>
           <v-card-text>
+            <v-alert v-model="alertUpd" dismissible type="warning">{{alertUpdMsg}}</v-alert>
+
             <v-container grid-list-md>
               <v-layout wrap>
                 <v-flex xs12>
@@ -190,7 +192,9 @@ export default {
       opc: "",
       monto: 0,
       alert: false,
-      alertMsg: ""
+      alertMsg: "",
+      alertUpd: false,
+      alertUpdMsg: ""
     };
   },
   created() {
@@ -245,6 +249,8 @@ export default {
     },
     modalModificar(opc) {
       this.opc = opc;
+      this.monto =
+        opc == "salario" ? this.salarioMinimo.monto : this.cestaTicket.cantidad;
       this.dialogUpd = true;
     },
     save() {
@@ -268,13 +274,15 @@ export default {
         })
         .then(res => {
           if (!res.data.error) {
-
-            vm.monto = 0
+            vm.monto = 0;
             vm.dialogUpd = false;
             vm.alert = true;
             vm.alertMsg = "Salario Mínimo modificado";
 
             vm.getBases();
+          } else {
+            vm.alertUpd = true;
+            vm.alertUpdMsg = res.data.error;
           }
         })
         .catch(err => console.log(err));
@@ -293,13 +301,15 @@ export default {
         })
         .then(res => {
           if (!res.data.error) {
-
             vm.monto = 0;
             vm.dialogUpd = false;
             vm.alert = true;
             vm.alertMsg = "Cesta Ticket modificada";
 
             vm.getBases();
+          } else {
+            vm.alertUpd = true;
+            vm.alertUpdMsg = res.data.error;
           }
         })
         .catch(err => console.log(err));

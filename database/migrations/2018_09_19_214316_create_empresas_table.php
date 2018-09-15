@@ -6,29 +6,31 @@ use Illuminate\Database\Migrations\Migration;
 
 class CreateEmpresasTable extends Migration
 {
-    /**
-     * Run the migrations.
-     *
-     * @return void
-     */
-    public function up()
-    {
-        Schema::create('empresa', function (Blueprint $table) {
-            $table->increments('id');
-            $table->string('rif', 11);
-            $table->string('razon_social');
-            $table->text('direccion');
-            $table->string('estatus', 12);
-        });
-    }
+  /**
+   * Run the migrations.
+   *
+   * @return void
+   */
 
-    /**
-     * Reverse the migrations.
-     *
-     * @return void
-     */
-    public function down()
-    {
-        Schema::dropIfExists('empresa');
-    }
+  public function up()
+  {
+    Schema::create('empresa', function (Blueprint $table) {
+      $table->increments('id');
+      $table->string('rif', 11);
+      $table->string('razon_social');
+      $table->text('direccion');
+      $table->integer('dias_utilidades');
+      $table->string('estatus', 12);
+    });
+  }
+
+  /**
+   * Reverse the migrations.
+   *
+   * @return void
+   */
+  public function down()
+  {
+    Schema::dropIfExists('empresa');
+  }
 }

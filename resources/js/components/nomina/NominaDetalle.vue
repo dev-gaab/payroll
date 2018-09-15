@@ -4,10 +4,16 @@
       <v-alert v-model="alert" dismissible :type="alertType">{{alertMsg}}</v-alert>
       <v-card>
         <v-card-title>
-          <v-btn icon color="teal darken-4" dark @click.native="$router.push({ path: '/nominas' })">
+          <v-btn
+            icon
+            color="teal darken-4"
+            small
+            dark
+            @click.native="$router.push({ path: '/nominas' })"
+          >
             <v-icon>reply</v-icon>
           </v-btn>
-          <h3>Nomina Detalle</h3>
+          <h3>Nomina - {{codigo}}</h3>
           <v-spacer></v-spacer>
           <v-text-field
             color="teal darken-4"
@@ -18,7 +24,18 @@
             hide-details
           ></v-text-field>
           <v-spacer></v-spacer>
+          <v-btn
+            @click="printAll()"
+            icon
+            medium
+            color="teal darken-4"
+            dark
+            title="Imprimir recibo de pago"
+          >
+            <v-icon small>fa-print</v-icon>
+          </v-btn>
         </v-card-title>
+
         <v-data-table :headers="headers" :items="nominas" :search="search">
           <template slot="items" slot-scope="props">
             <td>{{ props.item.cedula }}</td>
@@ -49,16 +66,6 @@
               >
                 <v-icon small>fa-edit</v-icon>
               </v-btn>
-              <v-btn
-                @click="print(props.item.id)"
-                icon
-                small
-                color="teal darken-1"
-                dark
-                title="Imprimir recibo de pago"
-              >
-                <v-icon small>fa-print</v-icon>
-              </v-btn>
             </td>
           </template>
 
@@ -78,6 +85,16 @@
           <v-toolbar dark color="teal darken-1" dense>
             <v-toolbar-title>{{nominaDetalle.cedula}} - {{nominaDetalle.nombre}} {{nominaDetalle.apellido}}</v-toolbar-title>
             <v-spacer></v-spacer>
+            <v-btn
+              @click="print(nominaDetalle.id)"
+              icon
+              medium
+              color="light-green darken-1"
+              dark
+              title="Imprimir recibo de pago"
+            >
+              <v-icon small>fa-print</v-icon>
+            </v-btn>
             <v-btn @click.native="dialogVer = false" icon flat>
               <v-icon medium>fa-times-circle</v-icon>
             </v-btn>
@@ -85,6 +102,7 @@
           <v-card-text>
             <v-container grid-list-md>
               <h3>Asignaciones</h3>
+
               <v-divider></v-divider>
               <v-layout wrap>
                 <v-flex xs6>
@@ -119,7 +137,7 @@
                 </v-flex>
               </v-layout>
 
-              <v-layout wrap mb-3>
+              <v-layout wrap>
                 <v-flex xs6>
                   <v-list-tile>
                     <v-list-tile-content>
@@ -146,6 +164,24 @@
                         <span
                           class="text--primary"
                         >{{nominaDetalle.he_nocturnas}} horas = {{nominaDetalle.montos.he_nocturnas | numberFormat}}</span>
+                      </v-list-tile-sub-title>
+                    </v-list-tile-content>
+                  </v-list-tile>
+                </v-flex>
+              </v-layout>
+
+              <v-layout wrap mb-3>
+                <v-flex xs6>
+                  <v-list-tile>
+                    <v-list-tile-content>
+                      <v-list-tile-title>
+                        <strong>Otras Asignaciones</strong>
+                      </v-list-tile-title>
+
+                      <v-list-tile-sub-title>
+                        <span
+                          class="text--primary"
+                        >{{nominaDetalle.otras_asignaciones | numberFormat}}</span>
                       </v-list-tile-sub-title>
                     </v-list-tile-content>
                   </v-list-tile>
@@ -242,7 +278,7 @@
                 </v-flex>
               </v-layout>
 
-              <v-layout wrap>
+              <v-layout wrap mb-3>
                 <v-flex xs6>
                   <v-list-tile>
                     <v-list-tile-content>
@@ -270,6 +306,20 @@
                         <span
                           class="text--primary"
                         >{{nominaDetalle.montos.monto_total | numberFormat}}</span>
+                      </v-list-tile-sub-title>
+                    </v-list-tile-content>
+                  </v-list-tile>
+                </v-flex>
+              </v-layout>
+
+              <h3>Observaciones</h3>
+              <v-divider></v-divider>
+              <v-layout wrap>
+                <v-flex xs12>
+                  <v-list-tile>
+                    <v-list-tile-content>
+                      <v-list-tile-sub-title>
+                        <span class="text--primary">{{nominaDetalle.observaciones}}</span>
                       </v-list-tile-sub-title>
                     </v-list-tile-content>
                   </v-list-tile>
@@ -366,11 +416,31 @@
 
                 <v-layout wrap>
                   <v-flex xs6>
-                    <v-checkbox v-model="nominaDetalleUpd.faov" label="FAOV"></v-checkbox>
+                    <v-text-field
+                      :color="errors.has('otras_asignaciones') ? 'error' : 'teal darken-1'"
+                      v-model="nominaDetalleUpd.otras_asignaciones"
+                      name="otras_asignaciones"
+                      label="Otras Asignaciones"
+                      id="otras_asignaciones"
+                      v-validate="'required|decimal:2|min_value:0'"
+                    ></v-text-field>
+                    <v-alert
+                      v-show="errors.has('otras_asignaciones')"
+                      type="error"
+                    >{{errors.first('otras_asignaciones')}}</v-alert>
                   </v-flex>
+                </v-layout>
 
-                  <v-flex xs6>
-                    <v-checkbox v-model="nominaDetalleUpd.paro_forzoso" label="Paro Forzoso"></v-checkbox>
+                <v-layout wrap>
+                  <v-flex xs12>
+                    <v-textarea
+                      :color="errors.has('observaciones') ? 'error' : 'teal darken-1'"
+                      v-model="nominaDetalleUpd.observaciones"
+                      name="observaciones"
+                      label="Observaciones"
+                      id="observaciones"
+                      rows="3"
+                    ></v-textarea>
                   </v-flex>
                 </v-layout>
               </v-container>
@@ -422,7 +492,8 @@ export default {
       dialogUpd: false,
       alert: false,
       alertType: "error",
-      alertMsg: ""
+      alertMsg: "",
+      codigo: ""
     };
   },
   components: {},
@@ -465,7 +536,8 @@ export default {
           }
         })
         .then(res => {
-          vm.nominas = res.data;
+          vm.nominas = res.data.nominas;
+          vm.codigo = res.data.codigo;
         })
         .catch(err => console.log(err));
     },
@@ -542,7 +614,7 @@ export default {
           const nominaDesde = moment(res.data.desde).format("DD-MM-YYYY");
           const nominaHasta = moment(res.data.hasta).format("DD-MM-YYYY");
           const fechaIngreso = moment(res.data.fecha_ingreso).format(
-            "DD-MM-YYY"
+            "DD-MM-YYYY"
           );
           const pago_salario = this.nmbFormat(res.data.montos.pago_salario);
           const he_diurnas = this.nmbFormat(res.data.montos.he_diurnas);
@@ -558,12 +630,11 @@ export default {
             res.data.montos.total_deducciones
           );
           const monto_total = this.nmbFormat(res.data.montos.monto_total);
-
           let dd = {
             footer: {
               columns: [
                 {
-                  text: `Direccion`,
+                  text: `${this.$store.state.empresa.direccion}`,
                   alignment: "center",
                   bold: true
                 }
@@ -598,6 +669,11 @@ export default {
                 margin: [0, 0, 0, 15]
               },
               {
+                text: `Código: ${res.data.trabajador_id}`,
+                bold: true,
+                margin: [0, 0, 0, 2]
+              },
+              {
                 text: `${res.data.cedula} - ${res.data.nombre1} ${
                   res.data.apellido1
                 }`,
@@ -605,12 +681,12 @@ export default {
                 margin: [0, 0, 0, 2]
               },
               {
-                text: `Cargo ${res.data.cargo}`,
+                text: `Cargo: ${res.data.cargo}`,
                 bold: true,
                 margin: [0, 0, 0, 2]
               },
               {
-                text: `Fecha de Ingreso ${fechaIngreso}`,
+                text: `Fecha de Ingreso: ${fechaIngreso}`,
                 bold: true,
                 margin: [0, 0, 0, 10]
               },
@@ -727,6 +803,12 @@ export default {
                 }
               },
               {
+                text: `Observaciones: ${res.data.observaciones}`,
+                fontSize: 10,
+                bold: true,
+                margin: [0, 40, 0, 50]
+              },
+              {
                 text: `He recibido de la Empresa la cantidad especificada en este recibo, que comprende con la totalidad de mi salario al periodo que se indica en el mismo`,
                 fontSize: 10,
                 bold: true,
@@ -762,6 +844,7 @@ export default {
         })
         .catch(err => console.log(err));
     },
+    printAll() {},
     nmbFormat(value) {
       value = new Intl.NumberFormat("es-VE", {
         style: "decimal",

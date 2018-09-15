@@ -5,10 +5,10 @@ use Illuminate\Database\Seeder;
 class DatabaseSeeder extends Seeder
 {
   /**
-     * Seed the application's database.
-     *
-     * @return void
-     */
+   * Seed the application's database.
+   *
+   * @return void
+   */
   public function run()
   {
     $this->call(UsersTableSeeder::class);
@@ -18,7 +18,7 @@ class DatabaseSeeder extends Seeder
         'rif' => 'V123456789',
         'razon_social' => 'Empresa de prueba, C.A',
         'direccion'  => 'Carupano',
-        'riesgo_ivss' => 'minimo',
+        'dias_utilidades' => 30,
         'estatus' => 'activa'
       ]);
 

@@ -72,68 +72,19 @@
               </v-layout>
 
               <v-layout wrap>
-                <v-flex xs6>
-                  <v-text-field
-                    :color="errors.has('fecha_ivss') ? 'error' : 'teal darken-1'"
-                    v-model="empresa.fecha_inscripcion_ivss"
-                    name="fecha_ivss"
-                    label="Fecha de inscripcion IVSS"
-                    id="fecha_ivss"
-                    type="date"
-                  ></v-text-field>
-                </v-flex>
-
-                <v-flex xs6>
-                  <v-text-field
-                    :color="errors.has('num_ivss') ? 'error' : 'teal darken-1'"
-                    v-model="empresa.num_afiliacion_ivss"
-                    name="num_ivss"
-                    label="Numero de afiliación IVSS"
-                    id="num_ivss"
-                    v-validate="{regex: /[a-zA-z0-9]+$/}"
-                  ></v-text-field>
-                  <v-alert v-show="errors.has('num_ivss')" type="error">{{errors.first('num_ivss')}}</v-alert>
-                </v-flex>
-              </v-layout>
-
-              <v-layout wrap>
                 <v-flex xs12>
-                  <v-select
-                    :items="riesgoIvss"
-                    :color="errors.has('riesgo_ivss') ? 'error' : 'teal darken-1'"
-                    v-model="empresa.riesgo_ivss"
-                    label="Riesgo IVSS"
-                    name="riesgo_ivss"
-                    id="riesgo_ivss"
-                  ></v-select>
-                </v-flex>
-              </v-layout>
-
-              <v-layout wrap>
-                <v-flex xs6>
                   <v-text-field
-                    :color="errors.has('num_faov') ? 'error' : 'teal darken-1'"
-                    v-model="empresa.num_afiliacion_faov"
-                    name="num_faov"
-                    label="Numero de afiliación FAOV"
-                    id="num_faov"
-                    v-validate="{regex: /[a-zA-z0-9]+$/}"
-                  ></v-text-field>
-                  <v-alert v-show="errors.has('num_faov')" type="error">{{errors.first('num_faov')}}</v-alert>
-                </v-flex>
-                <v-flex xs6>
-                  <v-text-field
-                    :color="errors.has('num_inces') ? 'error' : 'teal darken-1'"
-                    v-model="empresa.num_afiliacion_inces"
-                    name="num_inces"
-                    label="Numero de afiliación INCES"
-                    id="num_inces"
-                    v-validate="{regex: /[a-zA-z0-9]+$/}"
+                    :color="errors.has('dias_utilidades') ? 'error' : 'teal darken-1'"
+                    v-model="empresa.dias_utilidades"
+                    name="dias_utilidades"
+                    label="Días a pagar por utilidades"
+                    id="dias_utilidades"
+                    v-validate="'required|numeric|min_value:30|max_value:120'"
                   ></v-text-field>
                   <v-alert
-                    v-show="errors.has('num_inces')"
+                    v-show="errors.has('dias_utilidades')"
                     type="error"
-                  >{{errors.first('num_inces')}}</v-alert>
+                  >{{errors.first('dias_utilidades')}}</v-alert>
                 </v-flex>
               </v-layout>
             </v-container>
@@ -253,24 +204,18 @@ export default {
           regex:
             "Solo se permite el uso de letras, numeros y los caracteres (, . / #) "
         },
-        num_ivss: {
-          regex: "Solo se permite el uso de numeros y letras"
-        },
-        num_faov: {
-          regex: "Solo se permite el uso de numeros y letras"
-        },
-        num_inces: {
-          regex: "Solo se permite el uso de numeros y letras"
+        dias_utilidades: {
+          required: "No debe ser vacio",
+          numeric: "Solo se permite el ingreso de números",
+          min_value: "El valor mínimo es de 30 y máximo 120",
+          max_value: "El valor mínimo es de 30 y máximo 120"
         }
       }
     };
     // or use the instance method
     this.$validator.localize("es", dict);
   },
-  mounted() {
-    let fechaActual = moment().format("YYYY-MM-DD");
-    document.getElementById("fecha_ivss").max = fechaActual;
-  },
+  mounted() {},
   methods: {
     addEmpresa() {
       const vm = this;

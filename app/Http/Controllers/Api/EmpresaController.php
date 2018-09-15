@@ -52,41 +52,21 @@ class EmpresaController extends Controller
     $empresa->rif = $request->rif;
     $empresa->razon_social = $request->razon_social;
     $empresa->direccion = $request->direccion;
+    $empresa->dias_utilidades = $request->dias_utilidades;
 
     $empresa->save();
 
-    if($request->cambiar_configuracion) {
+    // $sesion = Sesion::where("final", null)->where("usuario_id", Auth::id())->first();
 
-      $configuracion_vieja = Configuraciones::where('empresa_id', $id)
-          ->where('estatus', 'activa')
-          ->first();
+    // $datos_sesion = [
+    //   "accion" => "Modificar empresa",
+    //   "fecha" => date('Y-m-d h:i:s A')
+    // ];
 
-      $configuracion = new Configuraciones([
-        'empresa_id' => $id,
-        'dias_utilidades' => $request->dias_utilidades,
-        'ivss' => $request->ivss,
-        'faov' => $request->faov,
-        'paro_forzoso' => $request->paro_forzoso
-      ]);
-
-      if($configuracion->save()) {
-        $configuracion_vieja->estatus = 'inactiva';
-        $configuracion_vieja->save();
-      }
-      
-    }
-
-    $sesion = Sesion::where("final", null)->where("usuario_id", Auth::id())->first();
-
-    $datos_sesion = [
-      "accion" => "Modificar empresa",
-      "fecha" => date('Y-m-d h:i:s A')
-    ]; 
-
-    $historial = new Historial();
-    $historial->sesion_id = $sesion->id;
-    $historial->data  = json_encode($datos_sesion);
-    $historial->save();
+    // $historial = new Historial();
+    // $historial->sesion_id = $sesion->id;
+    // $historial->data  = json_encode($datos_sesion);
+    // $historial->save();
 
     return response()->json(['res' => 'Empresa Modificada']);
   }
@@ -97,32 +77,31 @@ class EmpresaController extends Controller
       ->where('estatus', 'activa')
       ->first();
 
-    if($validate_rif != null)
+    if ($validate_rif != null)
       return response()->json(["error" => 'Rif Existente']);
 
     $empresa = new Empresa();
     $empresa->rif = $request->rif;
     $empresa->razon_social = $request->razon_social;
     $empresa->direccion = $request->direccion;
+    $empresa->dias_utilidades = $request->dias_utilidades;
     $empresa->estatus = 'activa';
 
     $empresa->save();
 
-    $sesion = Sesion::where("final", null)->where("usuario_id", Auth::id())->first();
+    // $sesion = Sesion::where("final", null)->where("usuario_id", Auth::id())->first();
 
-    $datos_sesion = [
-      "accion" => "Agregar empresa",
-      "fecha" => date('Y-m-d h:i:s A')
-    ]; 
+    // $datos_sesion = [
+    //   "accion" => "Agregar empresa",
+    //   "fecha" => date('Y-m-d h:i:s A')
+    // ];
 
-    $historial = new Historial();
-    $historial->sesion_id = $sesion->id;
-    $historial->data  = json_encode($datos_sesion);
-    $historial->save();
+    // $historial = new Historial();
+    // $historial->sesion_id = $sesion->id;
+    // $historial->data  = json_encode($datos_sesion);
+    // $historial->save();
 
     return response()->json(['res' => "Done!"]);
-
-
   }
 
   //    Funcion para deshabilitar una empresa
@@ -138,7 +117,7 @@ class EmpresaController extends Controller
     $datos_sesion = [
       "accion" => "Deshabilitar empresa",
       "fecha" => date('Y-m-d h:i:s A')
-    ]; 
+    ];
 
     $historial = new Historial();
     $historial->sesion_id = $sesion->id;

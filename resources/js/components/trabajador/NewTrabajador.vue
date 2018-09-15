@@ -221,6 +221,14 @@
                 v-validate="`${trabajador.salario_minimo ? '' : 'required'}|decimal:2`"
               ></v-text-field>
               <v-alert v-show="errors.has('salario')" type="error">{{errors.first('salario')}}</v-alert>
+
+              <v-toolbar dark color="teal darken-1" dense>
+                <v-toolbar-title>Deducciones</v-toolbar-title>
+                <v-spacer></v-spacer>
+              </v-toolbar>
+              <v-checkbox v-model="trabajador.ivss" label="IVSS"></v-checkbox>
+              <v-checkbox v-model="trabajador.faov" label="FAOV"></v-checkbox>
+              <v-checkbox v-model="trabajador.paro_forzoso" label="Paro Forzoso"></v-checkbox>
             </v-container>
           </v-card-text>
           <v-card-actions>
@@ -283,6 +291,9 @@ class Trabajador {
     this.fecha_ingreso = "";
     this.salario_minimo = "true";
     this.salario = "";
+    this.ivss = true;
+    this.faov = false;
+    this.paro_forzoso = false;
   }
 }
 

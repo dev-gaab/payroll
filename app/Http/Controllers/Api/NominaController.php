@@ -45,6 +45,8 @@ class NominaController extends Controller
       ->where('estatus', 'activo')
       ->first();
 
+    $trabajador = Trabajador::find($trabajador_id);
+
     $asig = Asignaciones::where('estatus', 'activa')->first();
     $ded = Deducciones::where('estatus', 'activa')->first();
     $cest = CestaTicket::where('estatus', 'activa')->first();
@@ -57,22 +59,28 @@ class NominaController extends Controller
 
     $pago = $datos['dias_trabajados'] * $salario->salario_diario;
     // deducciones
-    $monto_ivss = $pago * ($ded->ivss / 100);
-
+    $monto_ivss = 0;
     $monto_faov = 0;
-    if ($datos['faov'] == true) {
+    $monto_paro = 0;
+
+    if ($trabajador->ivss) {
+      $monto_ivss = $pago * ($ded->ivss / 100);
+    }
+
+    if ($trabajador->faov) {
       $monto_faov = $pago * ($ded->faov / 100);
     }
 
-    $monto_paro = 0;
-    if ($datos['paro_forzoso'] == true) {
+    if ($trabajador->paro_forzoso) {
       $monto_paro = $pago * ($ded->paro_forzoso / 100);
     }
 
     // cesta ticket
     $monto_cest = ($cest->cantidad / 30) * $datos['dias_trabajados'];
-
-    $total_asignaciones = $pago + $monto_he_diurnas + $monto_he_noct + $monto_feriados;
+    // otras asignaciones
+    $otras_asignaciones = 0;
+    // totales
+    $total_asignaciones = $pago + $monto_he_diurnas + $monto_he_noct + $monto_feriados + $otras_asignaciones;
     $total_deducciones = $monto_ivss + $monto_faov + $monto_paro;
     $monto_total = ($total_asignaciones - $total_deducciones) + $monto_cest;
 
@@ -99,9 +107,11 @@ class NominaController extends Controller
     $nomina_detalle->he_diurnas = $datos['he_diurnas'];
     $nomina_detalle->he_nocturnas = $datos['he_nocturnas'];
     $nomina_detalle->feriados = $datos['feriados'];
-    $nomina_detalle->ivss = true;
-    $nomina_detalle->faov = $datos['faov'];
-    $nomina_detalle->paro_forzoso = $datos['paro_forzoso'];
+    $nomina_detalle->otras_asignaciones = $otras_asignaciones;
+    $nomina_detalle->observaciones = "";
+    $nomina_detalle->ivss = $trabajador->ivss;
+    $nomina_detalle->faov = $trabajador->faov;
+    $nomina_detalle->paro_forzoso = $trabajador->paro_forzoso;
     $nomina_detalle->montos = json_encode($montos);
 
     $nomina_detalle->save();
@@ -135,7 +145,7 @@ class NominaController extends Controller
 
     if (sizeof($nominas) > 0) {
 
-      if($this->validateFechaNomina($id)) {
+      if ($this->validateFechaNomina($id)) {
         return response()->json(["error" => "No se puede generar una nueva nomina, la nomina actual aun esta sin vencer"]);
       }
 
@@ -201,7 +211,7 @@ class NominaController extends Controller
     $nomina->tipo = 'quincenal';
 
     if ($nomina->save()) {
-      if(sizeof($nominas)) {
+      if (sizeof($nominas)) {
         $nomina_activa->estatus = 'historico';
         $nomina_activa->save();
       }
@@ -215,8 +225,6 @@ class NominaController extends Controller
       "he_nocturnas" => 0,
       "feriados" => 0,
       "dias_trabajados" => 15,
-      "faov" => false,
-      "paro_forzoso" => false
     ];
 
     for ($i = 0; $i < $nro_trabajadores; $i++) {
@@ -233,6 +241,8 @@ class NominaController extends Controller
       ->where('estatus', 'activo')
       ->first();
 
+    $trabajador = Trabajador::find($trabajador_id);
+
     $asig = Asignaciones::where('estatus', 'activa')->first();
     $ded = Deducciones::where('estatus', 'activa')->first();
     $cest = CestaTicket::where('estatus', 'activa')->first();
@@ -244,22 +254,28 @@ class NominaController extends Controller
     $monto_feriados = ($salario->salario_diario * $asig->feriados) * $request->feriados;
 
     $pago = $request->dias_trabajados * $salario->salario_diario;
-    // deducciones
-    $monto_ivss = $pago * ($ded->ivss / 100);
 
+    // deducciones
+    $monto_ivss = 0;
     $monto_faov = 0;
-    if ($request->faov == true) {
+    $monto_paro = 0;
+
+    if ($trabajador->ivss) {
+      $monto_ivss = $pago * ($ded->ivss / 100);
+    }
+
+    if ($trabajador->faov) {
       $monto_faov = $pago * ($ded->faov / 100);
     }
 
-    $monto_paro = 0;
-    if ($request->paro_forzoso == true) {
+    if ($trabajador->paro_forzoso) {
       $monto_paro = $pago * ($ded->paro_forzoso / 100);
     }
 
     // cesta ticket
     $monto_cest = ($cest->cantidad / 30) * $request->dias_trabajados;
-    $total_asignaciones = $pago + $monto_he_diurnas + $monto_he_noct + $monto_feriados;
+    // totales
+    $total_asignaciones = $pago + $monto_he_diurnas + $monto_he_noct + $monto_feriados + $request->otras_asignaciones;
     $total_deducciones = $monto_ivss + $monto_faov + $monto_paro;
     $monto_total = ($total_asignaciones - $total_deducciones) + $monto_cest;
 
@@ -274,6 +290,7 @@ class NominaController extends Controller
       "pago_salario" => $pago,
       "salario_diario"  => $salario->salario_diario,
       "cesta_ticket_mensual" => $cest->cantidad,
+      "otras_asignaciones"  => $request->otras_asignaciones,
       "total_asignaciones" => $total_asignaciones,
       "total_deducciones" => $total_deducciones,
       "monto_total" => $monto_total
@@ -284,9 +301,11 @@ class NominaController extends Controller
     $nomina_detalle->he_diurnas = $request->he_diurnas;
     $nomina_detalle->he_nocturnas = $request->he_nocturnas;
     $nomina_detalle->feriados = $request->feriados;
-    $nomina_detalle->ivss = true;
-    $nomina_detalle->faov = $request->faov;
-    $nomina_detalle->paro_forzoso = $request->paro_forzoso;
+    $nomina_detalle->ivss = $trabajador->ivss;
+    $nomina_detalle->faov = $trabajador->faov;
+    $nomina_detalle->paro_forzoso = $trabajador->paro_forzoso;
+    $nomina_detalle->otras_asignaciones = $request->otras_asignaciones;
+    $nomina_detalle->observaciones = $request->observaciones;
     $nomina_detalle->montos = json_encode($montos);
 
     $nomina_detalle->save();
@@ -297,16 +316,19 @@ class NominaController extends Controller
   public function allNominaDetalle($id)
   {
 
+    $nomina = Nomina::find($id);
+    $codigo = $nomina->codigo;
+
     $nominas = DB::table('nomina_detalle')
       ->join('trabajador', 'nomina_detalle.trabajador_id', '=', 'trabajador.id')
       ->where("nomina_id", $id)
       ->select('trabajador.id as trabajador_id', 'trabajador.cedula', 'trabajador.nombre1 as nombre', 'trabajador.apellido1 as apellido', 'nomina_detalle.*')
       ->get();
 
-    for($i = 0 ; $i < sizeof($nominas); $i++) {
+    for ($i = 0; $i < sizeof($nominas); $i++) {
       $nominas[$i]->montos = json_decode($nominas[$i]->montos);
     }
-    return response()->json($nominas);
+    return response()->json(["nominas" => $nominas, "codigo" => $codigo]);
   }
 
   public function verNominaDetalle($id)
@@ -328,10 +350,9 @@ class NominaController extends Controller
       ->where('estatus', 'activo')
       ->first();
 
-    if($trabajadores == null)
+    if ($trabajadores == null)
       return response()->json(['error' => 'No hay trabajadores activos.']);
 
     return response()->json(['msg' => 'Done!']);
   }
-
 }

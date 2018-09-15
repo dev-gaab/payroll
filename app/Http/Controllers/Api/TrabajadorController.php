@@ -10,6 +10,7 @@ use App\Models\Trabajador;
 use App\Models\Salario;
 use App\Models\SalarioMinimo;
 use App\Models\BaseLegal;
+use App\Cargos;
 
 class TrabajadorController extends Controller
 {
@@ -112,6 +113,9 @@ class TrabajadorController extends Controller
     $trabajador->direccion = $request->direccion;
     $trabajador->telefono_fijo = $request->telefono_fijo;
     $trabajador->telefono_celular = $request->telefono_celular;
+    $trabajador->ivss = $request->ivss;
+    $trabajador->faov = $request->faov;
+    $trabajador->paro_forzoso = $request->paro_forzoso;
 
     if ($trabajador->save()) {
       return response()->json(['message' => 'ok']);
@@ -150,6 +154,9 @@ class TrabajadorController extends Controller
       $trabajador->telefono_celular = $request->telefono_celular;
       $trabajador->fecha_ingreso = $request->fecha_ingreso;
       $trabajador->fecha_egreso = $request->fecha_egreso;
+      $trabajador->ivss = $request->ivss;
+      $trabajador->faov = $request->faov;
+      $trabajador->paro_forzoso = $request->paro_forzoso;
       $trabajador->estatus = 'activo';
 
       $trabajador->save();
@@ -190,5 +197,29 @@ class TrabajadorController extends Controller
     $trabajador->save();
 
     return response()->json(["res" => "done!"]);
+  }
+
+  public function verCargos()
+  {
+    $cargos = Cargos::all();
+
+    return response()->json($cargos);
+  }
+
+  public function agregarCargo(Request $request)
+  {
+
+    $validar = Cargos::where('nombre', $request->nombre)->first();
+
+    if ($validar != null) {
+      return response()->json(["error" => "Cargo ya existe"]);
+    }
+
+    $cargo = new Cargos();
+
+    $cargo->nombre = $request->nombre;
+    $cargo->save();
+
+    return response()->json(["res" => "Done!"]);
   }
 }

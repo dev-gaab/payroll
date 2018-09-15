@@ -202,7 +202,7 @@
 
               <v-divider></v-divider>
               <v-layout wrap>
-                <v-flex xs4>
+                <v-flex xs6>
                   <v-list-tile>
                     <v-list-tile-content>
                       <v-list-tile-title>
@@ -215,15 +215,46 @@
                     </v-list-tile-content>
                   </v-list-tile>
                 </v-flex>
-                <v-flex xs4>
-                  <v-list-tile v-if="trabajador.fecha_egreso">
+
+                <v-flex xs6>
+                  <v-list-tile>
                     <v-list-tile-content>
                       <v-list-tile-title>
-                        <strong>Fecha Egreso</strong>
+                        <strong>Estatus</strong>
                       </v-list-tile-title>
 
                       <v-list-tile-sub-title>
-                        <span class="text--primary">{{trabajador.fecha_egreso | dateFormat}}</span>
+                        <span class="text--primary">{{trabajador.estatus | capitalize}}</span>
+                      </v-list-tile-sub-title>
+                    </v-list-tile-content>
+                  </v-list-tile>
+                </v-flex>
+              </v-layout>
+
+              <v-divider></v-divider>
+              <v-layout wrap>
+                <v-flex xs4>
+                  <v-list-tile>
+                    <v-list-tile-content>
+                      <v-list-tile-title>
+                        <strong>IVSS</strong>
+                      </v-list-tile-title>
+
+                      <v-list-tile-sub-title>
+                        <span class="text--primary">{{trabajador.ivss ? 'Si' : 'No' }}</span>
+                      </v-list-tile-sub-title>
+                    </v-list-tile-content>
+                  </v-list-tile>
+                </v-flex>
+                <v-flex xs4>
+                  <v-list-tile>
+                    <v-list-tile-content>
+                      <v-list-tile-title>
+                        <strong>FAOV</strong>
+                      </v-list-tile-title>
+
+                      <v-list-tile-sub-title>
+                        <span class="text--primary">{{trabajador.faov ? 'Si' : 'No'}}</span>
                       </v-list-tile-sub-title>
                     </v-list-tile-content>
                   </v-list-tile>
@@ -233,11 +264,11 @@
                   <v-list-tile>
                     <v-list-tile-content>
                       <v-list-tile-title>
-                        <strong>Estatus</strong>
+                        <strong>Paro Forzoso</strong>
                       </v-list-tile-title>
 
                       <v-list-tile-sub-title>
-                        <span class="text--primary">{{trabajador.estatus | capitalize}}</span>
+                        <span class="text--primary">{{trabajador.paro_forzoso ? 'Si' : 'No' }}</span>
                       </v-list-tile-sub-title>
                     </v-list-tile-content>
                   </v-list-tile>
@@ -466,6 +497,14 @@
                 ></v-text-field>
 
                 <v-alert v-show="errors.has('salario')" type="error">{{errors.first('salario')}}</v-alert>
+
+                <v-toolbar dark color="teal darken-1" dense>
+                  <v-toolbar-title>Deducciones</v-toolbar-title>
+                  <v-spacer></v-spacer>
+                </v-toolbar>
+                <v-checkbox v-model="trabajador.ivss" label="IVSS"></v-checkbox>
+                <v-checkbox v-model="trabajador.faov" label="FAOV"></v-checkbox>
+                <v-checkbox v-model="trabajador.paro_forzoso" label="Paro Forzoso"></v-checkbox>
               </v-container>
             </v-card-text>
             <v-card-actions>

@@ -37,7 +37,7 @@
             <!-- Acciones -->
             <td class="justify-center layout px-0">
               <v-btn
-                @click="activarEmpresa(props.item.id, props.item.razon_social)"
+                @click="activarEmpresa(props.item.id, props.item.razon_social, props.item.direccion)"
                 v-if="props.item.id != empresaId"
                 icon
                 small
@@ -45,13 +45,33 @@
               >
                 <v-icon small>fa-check</v-icon>
               </v-btn>
-              <v-btn @click="verEmpresa(props.item.id)" icon small color="primary" title="Utilizar empresa">
+              <v-btn
+                @click="verEmpresa(props.item.id)"
+                icon
+                small
+                color="primary"
+                title="Utilizar empresa"
+              >
                 <v-icon small>fa-eye</v-icon>
               </v-btn>
-              <v-btn @click="editEmpresa(props.item.id)" icon small color="warning" v-if="$store.state.currentUser.isAdmin" title="Editar empresa">
+              <v-btn
+                @click="editEmpresa(props.item.id)"
+                icon
+                small
+                color="warning"
+                v-if="$store.state.currentUser.isAdmin"
+                title="Editar empresa"
+              >
                 <v-icon small>fa-edit</v-icon>
               </v-btn>
-              <v-btn @click="disableEmpresa(props.item.id)" v-if="props.item.estatus == 'activa' && props.item.id != empresaId && $store.state.currentUser.isAdmin"" icon small color="error" title="Inhabilitar Empresa">
+              <v-btn
+                @click="disableEmpresa(props.item.id)"
+                v-if="props.item.estatus == 'activa' && props.item.id != empresaId && $store.state.currentUser.isAdmin"
+                icon
+                small
+                color="error"
+                title="Inhabilitar Empresa"
+              >
                 <v-icon small>fa-lock</v-icon>
               </v-btn>
             </td>
@@ -71,7 +91,7 @@
       <v-dialog v-model="dialogVer" persistent max-width="500">
         <v-card>
           <v-toolbar dark color="teal darken-1" dense>
-            <v-toolbar-title>{{empresa.rif}} - {{empresa.razon_social}}</v-toolbar-title>
+            <v-toolbar-title>{{empresa.rif}}</v-toolbar-title>
             <v-spacer></v-spacer>
             <v-btn @click.native="dialogVer = false" icon flat>
               <v-icon medium>fa-times-circle</v-icon>
@@ -81,20 +101,41 @@
           <v-card-text>
             <v-container grid-list-md>
               <v-layout wrap>
-                <v-flex xs6>
+                <v-flex xs12>
                   <v-list-tile>
                     <v-list-tile-content>
                       <v-list-tile-title>
-                        <strong>Riesgo IVSS</strong>
+                        <strong>Razon Social</strong>
                       </v-list-tile-title>
 
                       <v-list-tile-sub-title>
-                        <span class="text--primary">{{empresa.riesgo_ivss | capitalize}}</span>
+                        <span class="text--primary">{{empresa.razon_social}}</span>
                       </v-list-tile-sub-title>
                     </v-list-tile-content>
                   </v-list-tile>
                 </v-flex>
-                <v-flex xs6>
+              </v-layout>
+              <v-divider></v-divider>
+
+              <v-layout wrap>
+                <v-flex xs12>
+                  <v-list-tile>
+                    <v-list-tile-content>
+                      <v-list-tile-title>
+                        <strong>Días a pagar por utilidades</strong>
+                      </v-list-tile-title>
+
+                      <v-list-tile-sub-title>
+                        <span class="text--primary">{{empresa.dias_utilidades}}</span>
+                      </v-list-tile-sub-title>
+                    </v-list-tile-content>
+                  </v-list-tile>
+                </v-flex>
+              </v-layout>
+              <v-divider></v-divider>
+
+              <v-layout wrap>
+                <v-flex xs12>
                   <v-list-tile>
                     <v-list-tile-content>
                       <v-list-tile-title>
@@ -103,83 +144,6 @@
 
                       <v-list-tile-sub-title>
                         <span class="text--primary">{{empresa.direccion}}</span>
-                      </v-list-tile-sub-title>
-                    </v-list-tile-content>
-                  </v-list-tile>
-                </v-flex>
-              </v-layout>
-              <v-divider></v-divider>
-
-              <v-layout wrap>
-                <v-flex xs6>
-                  <v-list-tile>
-                    <v-list-tile-content>
-                      <v-list-tile-title>
-                        <strong>Num. Afiliación IVSS</strong>
-                      </v-list-tile-title>
-
-                      <v-list-tile-sub-title>
-                        <span class="text--primary">{{empresa.num_afiliacion_ivss}}</span>
-                      </v-list-tile-sub-title>
-                    </v-list-tile-content>
-                  </v-list-tile>
-                </v-flex>
-                <v-flex xs6>
-                  <v-list-tile>
-                    <v-list-tile-content>
-                      <v-list-tile-title>
-                        <strong>Fecha de Inscripción IVSS</strong>
-                      </v-list-tile-title>
-
-                      <v-list-tile-sub-title>
-                        <span class="text--primary">{{empresa.fecha_inscripcion_ivss | dateFormat}}</span>
-                      </v-list-tile-sub-title>
-                    </v-list-tile-content>
-                  </v-list-tile>
-                </v-flex>
-              </v-layout>
-              <v-divider></v-divider>
-
-              <v-layout wrap>
-                <v-flex xs6>
-                  <v-list-tile>
-                    <v-list-tile-content>
-                      <v-list-tile-title>
-                        <strong>Num. Afiliación FAOV</strong>
-                      </v-list-tile-title>
-
-                      <v-list-tile-sub-title>
-                        <span class="text--primary">{{empresa.num_afiliacion_faov}}</span>
-                      </v-list-tile-sub-title>
-                    </v-list-tile-content>
-                  </v-list-tile>
-                </v-flex>
-                <v-flex xs6>
-                  <v-list-tile>
-                    <v-list-tile-content>
-                      <v-list-tile-title>
-                        <strong>Num. Afiliación INCES</strong>
-                      </v-list-tile-title>
-
-                      <v-list-tile-sub-title>
-                        <span class="text--primary">{{empresa.num_afiliacion_inces}}</span>
-                      </v-list-tile-sub-title>
-                    </v-list-tile-content>
-                  </v-list-tile>
-                </v-flex>
-              </v-layout>
-              <v-divider></v-divider>
-
-              <v-layout wrap>
-                <v-flex xs6>
-                  <v-list-tile>
-                    <v-list-tile-content>
-                      <v-list-tile-title>
-                        <strong>Estatus</strong>
-                      </v-list-tile-title>
-
-                      <v-list-tile-sub-title>
-                        <span class="text--primary">{{empresa.estatus | capitalize}}</span>
                       </v-list-tile-sub-title>
                     </v-list-tile-content>
                   </v-list-tile>
@@ -213,7 +177,7 @@
             <v-card-text>
               <v-container grid-list-md>
                 <v-layout wrap>
-                  <v-flex xs12>
+                  <v-flex xs6>
                     <v-text-field
                       :color="errors.has('rif') ? 'error' : 'teal darken-1'"
                       v-model="empresa.rif"
@@ -224,6 +188,22 @@
                     ></v-text-field>
 
                     <v-alert v-show="errors.has('rif')" type="error">{{errors.first('rif')}}</v-alert>
+                  </v-flex>
+
+                  <v-flex xs6>
+                    <v-text-field
+                      :color="errors.has('dias_utilidades') ? 'error' : 'teal darken-1'"
+                      v-model="empresa.dias_utilidades"
+                      name="dias_utilidades"
+                      label="Dias de Utilidades"
+                      id="dias_utilidades"
+                      v-validate="'required|numeric|min_value:30|max_value:120'"
+                    ></v-text-field>
+
+                    <v-alert
+                      v-show="errors.has('dias_utilidades')"
+                      type="error"
+                    >{{errors.first('dias_utilidades')}}</v-alert>
                   </v-flex>
                 </v-layout>
                 <v-layout wrap>
@@ -254,61 +234,13 @@
                       rows="2"
                       v-validate="{required: true, regex: /[a-zA-Z0-9\.\,\#\/\sáéíóú]+$/}"
                     ></v-textarea>
-                    <v-alert v-show="errors.has('direccion')" type="error">{{errors.first('direccion')}}</v-alert>
-                  </v-flex>
-                </v-layout>
-
-                <v-layout wrap>
-                  <v-flex xs6>
-                    <v-text-field
-                      :color="errors.has('num_ivss') ? 'error' : 'teal darken-1'"
-                      v-model="empresa.num_afiliacion_ivss"
-                      name="num_ivss"
-                      label="Numero de IVSS"
-                      id="num_ivss"
-                      v-validate="{regex: /[a-zA-z0-9]+$/}"
-                    ></v-text-field>
-                    <v-alert v-show="errors.has('num_ivss')" type="error">{{errors.first('num_ivss')}}</v-alert>
-                  </v-flex>
-                  <v-flex xs6>
-                    <v-text-field
-                      :color="errors.has('fecha_ivss') ? 'error' : 'teal darken-1'"
-                      v-model="empresa.fecha_inscripcion_ivss"
-                      name="fecha_ivss"
-                      label="Fecha de inscripcion IVSS"
-                      id="fecha_ivss"
-                      type="date"
-                    ></v-text-field>
-                  </v-flex>
-                </v-layout>
-
-                <v-layout wrap>
-                  <v-flex xs6>
-                    <v-text-field
-                      :color="errors.has('num_faov') ? 'error' : 'teal darken-1'"
-                      v-model="empresa.num_afiliacion_faov"
-                      name="num_faov"
-                      label="Numero de FAOV"
-                      id="num_faov"
-                      v-validate="{regex: /[a-zA-z0-9]+$/}"
-                    ></v-text-field>
-                    <v-alert v-show="errors.has('num_faov')" type="error">{{errors.first('num_faov')}}</v-alert>
-                  </v-flex>
-
-                  <v-flex xs6>
-                    <v-text-field
-                      :color="errors.has('num_inces') ? 'error' : 'teal darken-1'"
-                      v-model="empresa.num_afiliacion_inces"
-                      name="num_inces"
-                      label="Numero de INCES"
-                      id="num_inces"
-                      v-validate="{regex: /[a-zA-z0-9]+$/}"
-                    ></v-text-field>
-                    <v-alert v-show="errors.has('num_inces')" type="error">{{errors.first('num_inces')}}</v-alert>
+                    <v-alert
+                      v-show="errors.has('direccion')"
+                      type="error"
+                    >{{errors.first('direccion')}}</v-alert>
                   </v-flex>
                 </v-layout>
               </v-container>
-
             </v-card-text>
             <v-card-actions>
               <v-spacer></v-spacer>
@@ -389,27 +321,18 @@ export default {
           regex:
             "Solo se permite el uso de letras, numeros y los caracteres (, . / #) "
         },
-        fecha_ivss: {
-          required: "No debe ser vacio"
-        },
-        num_ivss: {
-          regex: "Solo se permite el uso de numeros y letras"
-        },
-        num_faov: {
-          regex: "Solo se permite el uso de numeros y letras"
-        },
-        num_inces: {
-          regex: "Solo se permite el uso de numeros y letras"
+        dias_utilidades: {
+          required: "No debe ser vacio",
+          numeric: "Solo se permite el ingreso de números",
+          min_value: "El valor mínimo es de 30 y máximo 120",
+          max_value: "El valor mínimo es de 30 y máximo 120"
         }
       }
     };
     // or use the instance method
     this.$validator.localize("es", dict);
   },
-  mounted() {
-    let fechaActual = moment().format("YYYY-MM-DD");
-    document.getElementById("fecha_ivss").max = fechaActual;
-  },
+  mounted() {},
   computed: {
     empresaId() {
       let empresa = this.$store.state.empresa;
@@ -485,23 +408,30 @@ export default {
         });
     },
     disableEmpresa(id) {
-      let confirm = window.confirm("¿Seguro que quiere inhabilitar la empresa?\n Al inhabilitarla no podra realizar mas funciones y no podra volverla habilitar.");
+      let confirm = window.confirm(
+        "¿Seguro que quiere inhabilitar la empresa?\n Al inhabilitarla no podra realizar mas funciones y no podra volverla habilitar."
+      );
 
-      if(confirm) {
+      if (confirm) {
         const vm = this;
 
-         axios.put(`http://payroll.com.local/api/empresas/disable/${id}`, {}, {
-          headers: {
-            Authorization: `Bearer ${vm.$store.state.currentUser.token}`
-          }
-        })
-        .then(res => {
-          vm.alertSuc = true;
-          vm.messageSuc = "Empresa Inhabilitada";
+        axios
+          .put(
+            `http://payroll.com.local/api/empresas/disable/${id}`,
+            {},
+            {
+              headers: {
+                Authorization: `Bearer ${vm.$store.state.currentUser.token}`
+              }
+            }
+          )
+          .then(res => {
+            vm.alertSuc = true;
+            vm.messageSuc = "Empresa Inhabilitada";
 
-          vm.allEmpresas();
-        })
-        .catch(err => console.log(err));
+            vm.allEmpresas();
+          })
+          .catch(err => console.log(err));
       }
     },
     save() {
@@ -617,8 +547,8 @@ export default {
         pdfMake.createPdf(dd).open();
       });
     },
-    activarEmpresa(id, nombre) {
-      this.$store.commit("activarEmpresa", { id: id, nombre: nombre });
+    activarEmpresa(id, nombre,direccion) {
+      this.$store.commit("activarEmpresa", { id: id, nombre: nombre, direccion: direccion });
 
       this.messageSuc = `¡La empresa se ha cambiado! ${nombre}`;
       this.alertSuc = true;

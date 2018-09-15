@@ -78,7 +78,8 @@ export default {
     activarEmpresa(state, payload) {
       state.empresa = {
         id: payload.id,
-        nombre: payload.nombre
+        nombre: payload.nombre,
+        direccion: payload.direccion
       };
 
       sessionStorage.setItem("empresa", JSON.stringify(state.empresa));

@@ -17,9 +17,13 @@
             hide-details
           ></v-text-field>
           <v-spacer></v-spacer>
-          <v-btn v-if="!isVacioTrabajadores" color="teal darken-4" dark @click="generarNomina">
-            Generar
-          </v-btn>
+          <v-btn
+            v-if="!isVacioTrabajadores"
+            color="teal darken-4"
+            dark
+            @click="generarNomina"
+            title="Generar nueva nomina"
+          >Generar</v-btn>
         </v-card-title>
         <v-data-table :headers="headers" :items="nominas" :search="search">
           <template slot="items" slot-scope="props">
@@ -29,8 +33,24 @@
             <td>{{ props.item.estatus | capitalize }}</td>
             <!-- Acciones -->
             <td class="justify-center layout px-0">
-              <v-btn @click="verNomina(props.item.id)" icon small color="primary">
+              <v-btn
+                @click="verNomina(props.item.id)"
+                icon
+                small
+                color="primary"
+                title="Ver nómina detalle"
+              >
                 <v-icon small>fa-eye</v-icon>
+              </v-btn>
+              <v-btn
+                @click="print(props.item.id)"
+                icon
+                small
+                color="teal darken-1"
+                dark
+                title="Imprimir Resumen de pago"
+              >
+                <v-icon small>fa-print</v-icon>
               </v-btn>
             </td>
           </template>
@@ -66,8 +86,8 @@ export default {
       nominas: [],
       isVacioTrabajadores: true,
       alert: false,
-      alertType: 'success',
-      alertMsg: '',
+      alertType: "success",
+      alertMsg: "",
       idE: this.$store.state.empresa.id
     };
   },
@@ -94,7 +114,6 @@ export default {
         } else {
           this.isVacioTrabajadores = false;
         }
-
       });
   },
   methods: {
@@ -113,26 +132,29 @@ export default {
     generarNomina() {
       const vm = this;
 
-      if(!vm.isVacioTrabajadores) {
+      if (!vm.isVacioTrabajadores) {
         axios
-        .post(
-          `http://payroll.com.local/api/nominas/generar/${vm.idE}`,
-          {},
-          {
-            headers: {
-              Authorization: `Bearer ${vm.$store.state.currentUser.token}`
+          .post(
+            `http://payroll.com.local/api/nominas/generar/${vm.idE}`,
+            {},
+            {
+              headers: {
+                Authorization: `Bearer ${vm.$store.state.currentUser.token}`
+              }
             }
-          }
-        )
-        .then(res => {
-          if(res.data.error) {
-            vm.alert = true;
-            vm.alertType = "error";
-            vm.alertMsg = res.data.error;
-          } else {
-            vm.listNominas();
-          }
-        });
+          )
+          .then(res => {
+            if (res.data.error) {
+              vm.alert = true;
+              vm.alertType = "error";
+              vm.alertMsg = res.data.error;
+            } else {
+              vm.listNominas();
+              vm.alertType = "success";
+              vm.alertMsg = "Nueva nómina generada";
+              vm.alert = true;
+            }
+          });
       }
     },
     verNomina(id) {
@@ -150,7 +172,7 @@ export default {
 
       value = moment(value, "YYYY-MM-DD").format("DD/MM/YYYY");
       return value;
-    },
+    }
   }
 };
 </script>
