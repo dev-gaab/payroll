@@ -24,3 +24,4 @@ Route::get('/users', function () {
 // Routes para modulo de empresas
 Route::get('/empresas', 'Api\EmpresaController@verTodas');
 Route::get('/empresas/{id}', 'Api\EmpresaController@ver');
+Route::put('/empresas/{id}', 'Api\EmpresaController@modificar');

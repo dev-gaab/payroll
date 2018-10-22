@@ -37,7 +37,7 @@
               <v-btn @click="verEmpresa(props.item.id)" icon small color="primary">
                 <v-icon small>fa-eye</v-icon>
               </v-btn>
-              <v-btn icon small color="warning">
+              <v-btn @click="editEmpresa(props.item.id)" icon small color="warning">
                 <v-icon small>fa-edit</v-icon>
               </v-btn>
               <v-btn v-if="props.item.estatus == 'habilitada'" icon small color="error">
@@ -57,6 +57,8 @@
     </v-flex>
     <!-- Componente para ver modal de ver empresa -->
     <VerEmpresa :id="idE" :dialog="dialogVer" :empresa="empresa"></VerEmpresa>
+    <!-- componente modal para editar empresa -->
+    <EditEmpresa :dialog="dialogUpd" :empresa="empresa" v-on:updSuccess='updSuc'></EditEmpresa>
   </v-layout>
 
 </template>
@@ -64,6 +66,7 @@
 <script>
   import axios from 'axios';
   import VerEmpresa from './VerEmpresa.vue';
+  import EditEmpresa from './EditEmpresa.vue';
 
   export default {
     name: 'AllEmpresas',
@@ -81,11 +84,13 @@
         empresas: [],
         idE: 0,
         dialogVer: false,
+        dialogUpd: false,
         empresa: {}
       }
     },
     components: {
-      VerEmpresa
+      VerEmpresa,
+      EditEmpresa
     },
     created () {
       this.allEmpresas();
@@ -118,6 +123,24 @@
           .catch((err) => {
               console.log(err);
           });
+      },
+      editEmpresa (id) {
+        this.dialogUpd = true;
+
+        const vm = this;
+
+        axios.get(`http://payroll.com.local/api/empresas/${id}`)
+          .then((res) => {
+              vm.$data.empresa = res.data.empresa;
+          })
+          .catch((err) => {
+              console.log(err);
+          });
+      },
+      updSuc () {
+        console.log('se modifico');
+        this.dialogUpd = false;
+        this.allEmpresas();
       }
     },
     filters: {
