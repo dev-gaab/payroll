@@ -38,35 +38,44 @@
 
             <v-text-field
               color="teal darken-1"
-              v-model="empresa.num_ivss"
-              name="num_ivss"
-              label="Numero de IVSS"
-              id="num_ivss"
+              v-model="empresa.num_afiliacion_ivss"
+              name="num_afiliacion_ivss"
+              label="Numero de afiliación IVSS"
+              id="num_afiliacion_ivss"
             ></v-text-field>
 
             <v-text-field
               color="teal darken-1"
-              v-model="empresa.fecha_ivss"
+              v-model="empresa.fecha_inscripcion_ivss"
               name="fecha_ivss"
               label="Fecha de inscripcion IVSS"
               id="fecha_ivss"
               type="date"
             ></v-text-field>
 
+            <v-select
+              :items="riesgoIvss"
+              color="teal darken-1"
+              v-model="empresa.riesgo_ivss"
+              label="Riesgo IVSS"
+              name="riesgo_ivss"
+              id="riesgo_ivss"
+            ></v-select>
+
             <v-text-field
               color="teal darken-1"
-              v-model="empresa.num_faov"
-              name="num_faov"
-              label="Numero de FAOV"
-              id="num_faov"
+              v-model="empresa.num_afiliacion_faov"
+              name="num_afiliacion_faov"
+              label="Numero de afiliación FAOV"
+              id="num_afiliacion_faov"
             ></v-text-field>
 
             <v-text-field
               color="teal darken-1"
-              v-model="empresa.num_inces"
-              name="num_inces"
-              label="Numero de INCES"
-              id="num_inces"
+              v-model="empresa.num_afiliacion_inces"
+              name="num_afiliacion_inces"
+              label="Numero de afiliación INCES"
+              id="num_afiliacion_inces"
             ></v-text-field>
 
           </v-card-text>
@@ -114,15 +123,15 @@
   import axios from 'axios';
 
   class Empresa {
-    constructor (rif, razon_social, direccion, riesgo_ivss, num_ivss, num_faov, num_inces, fecha_ivss) {
+    constructor (rif, razon_social, direccion, riesgo_ivss, num_afiliacion_ivss, num_afiliacion_faov, num_afiliacion_inces, fecha_inscripcion_ivss) {
       this.rif = rif != null ? rif :'';
       this.razon_social = razon_social != null ? razon_social :'';
       this.direccion = direccion != null ? direccion :'';
       this.riesgo_ivss = riesgo_ivss != null ? riesgo_ivss :'';
-      this.num_ivss = num_ivss != null ? num_ivss :'';
-      this.num_faov = num_faov != null ? num_faov :'';
-      this.num_inces = num_inces != null ? num_inces :'';
-      this.fecha_ivss = fecha_ivss != null ? fecha_ivss :'';
+      this.num_afiliacion_ivss = num_afiliacion_ivss != null ? num_afiliacion_ivss :'';
+      this.num_afiliacion_faov = num_afiliacion_faov != null ? num_afiliacion_faov :'';
+      this.num_afiliacion_inces = num_afiliacion_inces != null ? num_afiliacion_inces :'';
+      this.fecha_inscripcion_ivss = fecha_inscripcion_ivss != null ? fecha_inscripcion_ivss :'';
     }
   }
 
@@ -132,6 +141,7 @@
       return {
         search: '',
         empresa: new Empresa(),
+        riesgoIvss: ['Mínimo', 'Medio', 'Máximo'],
         headers: [
           { text: 'Rif', value: 'rif' },
           { text: 'Razon Social', value: 'razon_social' },
@@ -142,7 +152,7 @@
     methods: {
       addEmpresa () {
         const vm = this;
-        axios.post('http://localhost:3000/api/empresas', {empresa: vm.$data.empresa})
+        axios.post('http://payroll.com.local/api/empresas', vm.$data.empresa)
           .then((res) => {
             console.log(res.data);
             if(!res.data.error){
