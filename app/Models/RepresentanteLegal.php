@@ -13,7 +13,7 @@ class RepresentanteLegal extends Model
     public $timestamps = false;
 
     // campos que se pueden ingresar y modificar
-    protected $fillable =
+    protected $fillable = [
     	'empresa_id', 'nombre', 'apellido', 'cedula', 'estatus', 'desde', 'hasta'
     ];
 }

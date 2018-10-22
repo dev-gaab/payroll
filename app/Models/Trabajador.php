@@ -13,7 +13,7 @@ class Trabajador extends Model
     public $timestamps = false;
 
     // campos que se pueden ingresar y modificar
-    protected $fillable =
+    protected $fillable = [
     	'empresa_id', 'cedula', 'cedula', 'nombres', 'apellidos', 'cargo', 'fecha_nacimiento', 'sexo', 'direccion', 'telefono_fijo', 'telefono_celular', 'fecha_ingreso', 'fecha_egreso', 'estatus'
     ];
 }

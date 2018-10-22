@@ -13,7 +13,7 @@ class Deducciones extends Model
     public $timestamps = false;
 
     // campos que se pueden ingresar y modificar
-    protected $fillable =
+    protected $fillable = [
     	'ivss', 'faov', 'paro_forzoso', 'estatus'
     ];
 }

@@ -13,7 +13,7 @@ class Asignaciones extends Model
     public $timestamps = false;
 
     // campos que se pueden ingresar y modificar
-    protected $fillable =
+    protected $fillable = [
     	'he_diurnas', 'he_nocturnas', 'domingo_feriados', 'estatus'
     ];
 }

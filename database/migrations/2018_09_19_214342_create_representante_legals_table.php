@@ -13,7 +13,7 @@ class CreateRepresentanteLegalsTable extends Migration
      */
     public function up()
     {
-        Schema::create('representante_legals', function (Blueprint $table) {
+        Schema::create('representante_legal', function (Blueprint $table) {
             $table->increments('id');
             $table->integer('empresa_id')->unsigned();
             $table->string('nombre', 25);
@@ -23,7 +23,7 @@ class CreateRepresentanteLegalsTable extends Migration
             $table->date('hasta')->nullable();
             $table->string('estatus', 12);
 
-            $table->foreing('empresa_id')
+            $table->foreign('empresa_id')
                 ->references('id')
                 ->on('empresa')
                 ->onUpdate('cascade')
@@ -38,6 +38,6 @@ class CreateRepresentanteLegalsTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('representante_legals');
+        Schema::dropIfExists('representante_legal');
     }
 }

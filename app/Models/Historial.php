@@ -13,7 +13,7 @@ class Historial extends Model
     public $timestamps = false;
 
 	// campos que se pueden ingresar y modificar
-    protected $fillable =
+    protected $fillable = [
     	'sesion_id', 'data'
     ];
 

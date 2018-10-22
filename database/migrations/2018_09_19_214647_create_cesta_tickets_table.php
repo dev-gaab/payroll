@@ -17,6 +17,8 @@ class CreateCestaTicketsTable extends Migration
             $table->increments('id');
             $table->float('cantidad');
             $table->float('unidad_tributaria');
+            $table->date('desde');
+            $table->date('hasta')->nullable();
             $table->string('estatus', 12);
         });
     }

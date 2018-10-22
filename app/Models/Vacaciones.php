@@ -13,7 +13,7 @@ class Vacaciones extends Model
     public $timestamps = false;
 
     // campos que se pueden ingresar y modificar
-    protected $fillable =
+    protected $fillable = [
     	'trabajador_id', 'anios_servicio', 'desde', 'hasta', 'dias_disfrute', 'bono_vacacional', 'dias_feriados', 'cesta_ticket'
     ];
 }

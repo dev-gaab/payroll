@@ -13,7 +13,7 @@ class Sesion extends Model
     public $timestamps = false;
 
     // campos que se pueden ingresar y modificar
-    protected $fillable =
+    protected $fillable = [
     	'usuario_id', 'fecha', 'hora_inicio', 'hora_final'
     ];
 

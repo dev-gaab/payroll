@@ -16,6 +16,9 @@ class CreateSalarioMinimosTable extends Migration
         Schema::create('salario_minimo', function (Blueprint $table) {
             $table->increments('id');
             $table->float('monto');
+            $table->string('tipo');
+            $table->date('desde');
+            $table->date('hasta')->nullable();
             $table->string('estatus', 12);
         });
     }

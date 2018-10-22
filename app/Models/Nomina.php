@@ -13,7 +13,7 @@ class Nomina extends Model
     public $timestamps = false;
 
     // campos que se pueden ingresar y modificar
-    protected $fillable =
+    protected $fillable = [
     	'trabajador_id', 'dias_trabajados', 'he_diurnas', 'he_nocturnas', 'feriados', 'ivss', 'faov', 'paro_forzoso', 'desde', 'hasta', 'tipo', 'estatus', 'vac_colectivas', 'montos'
     ];
 }

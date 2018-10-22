@@ -34,7 +34,7 @@
               <v-btn v-if="props.item.id != id" icon small color="success">
                 <v-icon small>fa-check</v-icon>
               </v-btn>
-              <v-btn icon small color="primary">
+              <v-btn @click="verEmpresa(props.item.id)" icon small color="primary">
                 <v-icon small>fa-eye</v-icon>
               </v-btn>
               <v-btn icon small color="warning">
@@ -55,12 +55,15 @@
         </v-data-table>
       </v-card>
     </v-flex>
+    <!-- Componente para ver modal de ver empresa -->
+    <VerEmpresa :id="idE" :dialog="dialogVer" :empresa="empresa"></VerEmpresa>
   </v-layout>
 
 </template>
 
 <script>
   import axios from 'axios';
+  import VerEmpresa from './VerEmpresa.vue';
 
   export default {
     name: 'AllEmpresas',
@@ -75,8 +78,14 @@
           { text: 'Estatus', value: 'estatus' },
           { text: 'Acciones', align: 'center', value: 'rif', sortable: false}
         ],
-        empresas: []
+        empresas: [],
+        idE: 0,
+        dialogVer: false,
+        empresa: {}
       }
+    },
+    components: {
+      VerEmpresa
     },
     created () {
       this.allEmpresas();
@@ -88,12 +97,26 @@
       allEmpresas () {
         const vm = this;
 
-        axios.get('http://localhost:3000/api/empresas')
+        axios.get('http://payroll.com.local/api/empresas')
           .then((res) => {
-            vm.$data.empresas = res.data.data;
+            vm.$data.empresas = res.data.empresas;
           })
           .catch((err) => {
             console.log(err);
+          });
+      },
+      verEmpresa (id) {
+        this.idE = id;
+        this.dialogVer = true;
+
+        const vm = this;
+
+        axios.get(`http://payroll.com.local/api/empresas/${vm.idE}`)
+          .then((res) => {
+              vm.$data.empresa = res.data.empresa;
+          })
+          .catch((err) => {
+              console.log(err);
           });
       }
     },

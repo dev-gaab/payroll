@@ -16,14 +16,14 @@ class CreateVacacionesTable extends Migration
         Schema::create('vacaciones', function (Blueprint $table) {
             $table->increments('id');
             $table->integer('trabajador_id')->unsigned();
-            $table->integer('anios_servicio');
-            $table->date('desde');
-            $table->date('hasta')->nullable();
+            $table->integer('a_servicio');
             $table->integer('dias_disfrute');
             $table->integer('bono_vacacional');
             $table->integer('dias_feriados');
             $table->float('cesta_ticket');
             $table->json('montos');
+            $table->date('fecha_inicial');
+            $table->date('fecha_final');
 
             $table->foreign('trabajador_id')
                 ->references('id')

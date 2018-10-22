@@ -13,7 +13,7 @@ class BaseLegal extends Model
     public $timestamps = false;
 
     // campos que se pueden ingresar y modificar
-    protected $fillable =
+    protected $fillable = [
     	'empresa_id', 'asignaciones_id', 'deducciones_id', 'cesta_ticket_id', 'salario_minimo_id', 'desde', 'hasta', 'estatus'
     ];
 }

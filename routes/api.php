@@ -20,3 +20,7 @@ Route::middleware('auth:api')->get('/user', function (Request $request) {
 Route::get('/users', function () {
     return factory('App\User', 10)->make();
 });
+
+// Routes para modulo de empresas
+Route::get('/empresas', 'Api\EmpresaController@verTodas');
+Route::get('/empresas/{id}', 'Api\EmpresaController@ver');

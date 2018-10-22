@@ -18,6 +18,8 @@ class CreateDeduccionesTable extends Migration
             $table->float('ivss');
             $table->float('faov')->nullable();
             $table->float('paro_forzoso')->nullable();
+            $table->date('desde');
+            $table->date('hasta')->nullable();
             $table->string('estatus', 12);
         });
     }

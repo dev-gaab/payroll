@@ -18,6 +18,8 @@ class CreateAsignacionesTable extends Migration
             $table->float('he_diurnas');
             $table->float('he_nocturnas');
             $table->float('feriados');
+            $table->date('desde');
+            $table->date('hasta')->nullable();
             $table->string('estatus', 12);
         });
     }

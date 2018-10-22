@@ -13,7 +13,7 @@ class Empresa extends Model
     public $timestamps = false;
 
     // campos que se pueden ingresar y modificar
-    protected $fillable =
+    protected $fillable = [
     	'rif', 'razon_social', 'direccion', 'riesgo_ivss', 'num_afiliacion_ivss', 'num_afiliacion_inces', 'num_afiliacion_faov', 'fecha_inscripcion_ivss', 'estatus'
     ];
 }

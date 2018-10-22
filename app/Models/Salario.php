@@ -13,7 +13,7 @@ class Salario extends Model
     public $timestamps = false;
 
     // campos que se pueden ingresar y modificar
-    protected $fillable =
+    protected $fillable = [
     	'trabajador_id', 'salario', 'tipo', 'desde', 'hasta', 'estatus'
     ];
 }
