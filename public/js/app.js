@@ -13493,6 +13493,9 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
     routAllEmpresas: function routAllEmpresas() {
       this.$router.push({ path: '/empresas' });
     },
+    routAllBases: function routAllBases() {
+      this.$router.push({ path: '/bases' });
+    },
     logout: function logout() {
       this.$store.commit('logout');
       this.$router.push({ path: '/login' });
@@ -13630,7 +13633,7 @@ var render = function() {
                       _vm._v(" "),
                       _c(
                         "v-list-tile",
-                        { on: { click: function($event) {} } },
+                        { on: { click: _vm.routAllBases } },
                         [
                           _c(
                             "v-list-tile-content",
@@ -13801,6 +13804,9 @@ if (false) {
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__components_empresa_AllEmpresas___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_4__components_empresa_AllEmpresas__);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_5__components_empresa_NewEmpresa__ = __webpack_require__(124);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_5__components_empresa_NewEmpresa___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_5__components_empresa_NewEmpresa__);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_6__components_bases_AllBases__ = __webpack_require__(157);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_6__components_bases_AllBases___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_6__components_bases_AllBases__);
+
 
 
 
@@ -13836,6 +13842,12 @@ __WEBPACK_IMPORTED_MODULE_0_vue___default.a.use(__WEBPACK_IMPORTED_MODULE_1_vue_
     path: '/empresas/nueva',
     name: 'NewEmpresa',
     component: __WEBPACK_IMPORTED_MODULE_5__components_empresa_NewEmpresa___default.a
+  },
+  // rutas de bases legales
+  {
+    path: '/bases',
+    name: 'Bases',
+    component: __WEBPACK_IMPORTED_MODULE_6__components_bases_AllBases___default.a
   }],
   mode: 'history'
 }));
@@ -42142,6 +42154,339 @@ module.exports = "/fonts/vendor/@fortawesome/fontawesome-free/webfa-solid-900.sv
 /***/ (function(module, exports) {
 
 // removed by extract-text-webpack-plugin
+
+/***/ }),
+/* 156 */,
+/* 157 */
+/***/ (function(module, exports, __webpack_require__) {
+
+var disposed = false
+var normalizeComponent = __webpack_require__(1)
+/* script */
+var __vue_script__ = __webpack_require__(158)
+/* template */
+var __vue_template__ = __webpack_require__(159)
+/* template functional */
+var __vue_template_functional__ = false
+/* styles */
+var __vue_styles__ = null
+/* scopeId */
+var __vue_scopeId__ = null
+/* moduleIdentifier (server only) */
+var __vue_module_identifier__ = null
+var Component = normalizeComponent(
+  __vue_script__,
+  __vue_template__,
+  __vue_template_functional__,
+  __vue_styles__,
+  __vue_scopeId__,
+  __vue_module_identifier__
+)
+Component.options.__file = "resources/js/components/bases/AllBases.vue"
+
+/* hot reload */
+if (false) {(function () {
+  var hotAPI = require("vue-hot-reload-api")
+  hotAPI.install(require("vue"), false)
+  if (!hotAPI.compatible) return
+  module.hot.accept()
+  if (!module.hot.data) {
+    hotAPI.createRecord("data-v-71a51a79", Component.options)
+  } else {
+    hotAPI.reload("data-v-71a51a79", Component.options)
+  }
+  module.hot.dispose(function (data) {
+    disposed = true
+  })
+})()}
+
+module.exports = Component.exports
+
+
+/***/ }),
+/* 158 */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_axios__ = __webpack_require__(2);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_axios___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_0_axios__);
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+
+
+
+/* harmony default export */ __webpack_exports__["default"] = ({
+  name: 'AllBases',
+  data: function data() {
+    return {
+      search: '',
+      headers: [{ text: 'Estatus', value: 'estatus' }, { text: 'Desde', value: 'desde' }, { text: 'Hasta', value: 'hasta' }, { text: 'Acciones', align: 'center', value: 'id', sortable: false }],
+      bases: [],
+      idEmpresa: 1
+    };
+  },
+  created: function created() {
+    this.allBases();
+  },
+
+  methods: {
+    allBases: function allBases() {
+      var vm = this;
+
+      __WEBPACK_IMPORTED_MODULE_0_axios___default.a.get('http://payroll.com.local/api/bases').then(function (res) {
+        vm.$data.bases = res.data.bases;
+      }).catch(function (err) {
+        console.log(err);
+      });
+    },
+    newBases: function newBases() {}
+  },
+  filters: {
+    capitalize: function capitalize(value) {
+      if (!value) return '';
+      value = value.toString();
+      return value.charAt(0).toUpperCase() + value.slice(1);
+    }
+  }
+});
+
+/***/ }),
+/* 159 */
+/***/ (function(module, exports, __webpack_require__) {
+
+var render = function() {
+  var _vm = this
+  var _h = _vm.$createElement
+  var _c = _vm._self._c || _h
+  return _c(
+    "v-layout",
+    { attrs: { row: "", wrap: "" } },
+    [
+      _c(
+        "v-flex",
+        { attrs: { xs12: "" } },
+        [
+          _c(
+            "v-card",
+            [
+              _c(
+                "v-card-title",
+                [
+                  _c("h3", [_vm._v("Bases Legales")]),
+                  _vm._v(" "),
+                  _c("v-spacer"),
+                  _vm._v(" "),
+                  _c("v-text-field", {
+                    attrs: {
+                      color: "teal accent-4",
+                      "append-icon": "fa-search",
+                      label: "Search",
+                      "single-line": "",
+                      "hide-details": ""
+                    },
+                    model: {
+                      value: _vm.search,
+                      callback: function($$v) {
+                        _vm.search = $$v
+                      },
+                      expression: "search"
+                    }
+                  }),
+                  _vm._v(" "),
+                  _c("v-spacer"),
+                  _vm._v(" "),
+                  _vm.bases == null
+                    ? _c(
+                        "v-btn",
+                        {
+                          attrs: { icon: "", color: "teal accent-4", dark: "" },
+                          on: { click: _vm.newBases }
+                        },
+                        [_c("v-icon", [_vm._v("add")])],
+                        1
+                      )
+                    : _vm._e()
+                ],
+                1
+              ),
+              _vm._v(" "),
+              _c(
+                "v-data-table",
+                {
+                  attrs: {
+                    headers: _vm.headers,
+                    items: _vm.bases,
+                    search: _vm.search
+                  },
+                  scopedSlots: _vm._u([
+                    {
+                      key: "items",
+                      fn: function(props) {
+                        return [
+                          _c("td", [
+                            _vm._v(
+                              _vm._s(_vm._f("capitalize")(props.item.estatus))
+                            )
+                          ]),
+                          _vm._v(" "),
+                          _c("td", [_vm._v(_vm._s(props.item.desde))]),
+                          _vm._v(" "),
+                          _c("td", [_vm._v(_vm._s(props.item.hasta))]),
+                          _vm._v(" "),
+                          _c(
+                            "td",
+                            { staticClass: "justify-center layout px-0" },
+                            [
+                              _c(
+                                "v-btn",
+                                {
+                                  attrs: {
+                                    icon: "",
+                                    small: "",
+                                    color: "primary"
+                                  },
+                                  on: {
+                                    click: function($event) {
+                                      _vm.verBase(props.item.id)
+                                    }
+                                  }
+                                },
+                                [
+                                  _c("v-icon", { attrs: { small: "" } }, [
+                                    _vm._v("fa-eye")
+                                  ])
+                                ],
+                                1
+                              ),
+                              _vm._v(" "),
+                              props.item.estatus == "activa"
+                                ? _c(
+                                    "v-btn",
+                                    {
+                                      attrs: {
+                                        icon: "",
+                                        small: "",
+                                        color: "warning"
+                                      },
+                                      on: {
+                                        click: function($event) {
+                                          _vm.editBase(props.item.id)
+                                        }
+                                      }
+                                    },
+                                    [
+                                      _c("v-icon", { attrs: { small: "" } }, [
+                                        _vm._v("fa-edit")
+                                      ])
+                                    ],
+                                    1
+                                  )
+                                : _vm._e()
+                            ],
+                            1
+                          )
+                        ]
+                      }
+                    }
+                  ])
+                },
+                [
+                  _c(
+                    "v-alert",
+                    {
+                      attrs: {
+                        slot: "no-results",
+                        value: true,
+                        color: "",
+                        icon: "fa-exclamation-triangle"
+                      },
+                      slot: "no-results"
+                    },
+                    [
+                      _vm._v(
+                        '\n          Tu busqueda "' +
+                          _vm._s(_vm.search) +
+                          '" no encontro resultados.\n        '
+                      )
+                    ]
+                  )
+                ],
+                1
+              )
+            ],
+            1
+          )
+        ],
+        1
+      )
+    ],
+    1
+  )
+}
+var staticRenderFns = []
+render._withStripped = true
+module.exports = { render: render, staticRenderFns: staticRenderFns }
+if (false) {
+  module.hot.accept()
+  if (module.hot.data) {
+    require("vue-hot-reload-api")      .rerender("data-v-71a51a79", module.exports)
+  }
+}
 
 /***/ })
 /******/ ]);

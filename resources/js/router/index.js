@@ -4,6 +4,7 @@ import Home from '../components/Home'
 import Login from '../components/Login'
 import AllEmpresas from '../components/empresa/AllEmpresas'
 import NewEmpresa from '../components/empresa/NewEmpresa'
+import AllBases from '../components/bases/AllBases'
 
 Vue.use(Router)
 /**
@@ -37,6 +38,12 @@ export default new Router({
       path: '/empresas/nueva',
       name: 'NewEmpresa',
       component: NewEmpresa
+    },
+    // rutas de bases legales
+    {
+      path: '/bases',
+      name: 'Bases',
+      component: AllBases
     }
   ],
   mode: 'history'

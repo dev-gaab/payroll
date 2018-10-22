@@ -26,3 +26,6 @@ Route::get('/empresas', 'Api\EmpresaController@verTodas');
 Route::get('/empresas/{id}', 'Api\EmpresaController@ver');
 Route::put('/empresas/{id}', 'Api\EmpresaController@modificar');
 Route::post('/empresas', 'Api\EmpresaController@agregar');
+
+// Routes para modulo de bases legales
+Route::get('/bases/all/{id}', 'Api\BasesController@verTodas');

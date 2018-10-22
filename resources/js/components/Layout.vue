@@ -53,7 +53,7 @@
             </v-list-tile-content>
           </v-list-tile>
 
-          <v-list-tile @click="">
+          <v-list-tile @click="routAllBases">
 
             <v-list-tile-content>
               <v-list-tile-title>Todas</v-list-tile-title>
@@ -128,6 +128,9 @@
       },
       routAllEmpresas () {
         this.$router.push({path: '/empresas'})
+      },
+      routAllBases () {
+        this.$router.push({path: '/bases'})
       },
       logout () {
         this.$store.commit('logout');
