@@ -79,9 +79,10 @@ export default {
       allBases () {
         const vm = this;
 
-        axios.get('http://payroll.com.local/api/bases')
+        axios.get(`http://payroll.com.local/api/bases/all/${vm.idEmpresa}`)
           .then( (res) => {
             vm.$data.bases = res.data.bases;
+            console.log(vm.$data.bases);
           })
           .catch( (err) => {
             console.log(err);

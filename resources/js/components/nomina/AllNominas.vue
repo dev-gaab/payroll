@@ -5,7 +5,7 @@
     <v-flex xs12>
       <v-card>
         <v-card-title>
-          <h3>Trabajadores</h3>
+          <h3>Nominas</h3>
           <v-spacer></v-spacer>
           <v-text-field
             color="teal accent-4"
@@ -16,31 +16,29 @@
             hide-details
           ></v-text-field>
           <v-spacer></v-spacer>
-          <v-btn icon color="teal accent-4" dark @click="newTrabajador"><v-icon>add</v-icon></v-btn>
+          <v-btn icon color="teal accent-4" dark @click="newNomina"><v-icon>add</v-icon></v-btn>
         </v-card-title>
         <v-data-table
           :headers="headers"
-          :items="trabajadores"
+          :items="nominas"
           :search="search"
         >
           <template slot="items" slot-scope="props">
 
-            <td>{{ props.item.cedula }}</td>
-            <td>{{ props.item.nombre1 }} {{props.item.nombre2}}</td>
-            <td>{{ props.item.apellido1 }} {{props.item.apellido2}}</td>
-            <td>{{props.item.cargo}}</td>
-            <td>{{props.item.fecha_ingreso}}</td>
-            <td>{{props.item.fecha_egreso}}</td>
+            <td>{{ props.item.codigo }}</td>
+            <td>{{ props.item.desde }} </td>
+            <td>{{ props.item.hasta }} </td>
+            <td>{{props.item.tipo}}</td>
             <td>{{ props.item.estatus | capitalize}}</td>
             <!-- Acciones -->
             <td class="justify-center layout px-0">
-              <v-btn @click="verTrabajador(props.item.id)" icon small color="primary">
+              <v-btn @click="verNomina(props.item.id)" icon small color="primary">
                 <v-icon small>fa-eye</v-icon>
               </v-btn>
-              <v-btn @click="editTrabajador(props.item.id)" icon small color="warning">
+              <v-btn @click="editNomina(props.item.id)" icon small color="warning">
                 <v-icon small>fa-edit</v-icon>
               </v-btn>
-              <v-btn @click="inaTrabajador(props.item.id)" v-if="props.item.estatus == 'activo'" icon small color="error">
+              <v-btn @click="inaNomina(props.item.id)" v-if="props.item.estatus == 'activo'" icon small color="error">
                 <v-icon small>fa-lock</v-icon>
               </v-btn>
             </td>
@@ -65,25 +63,20 @@
 
 
   export default {
-    name: 'AllTrabajadores',
+    name: 'AllNominas',
     data () {
       return {
         search: '',
         headers: [
-          { text: 'Cédula', value: 'cedula' },
-          { text: 'Nombres', value: 'nombres' },
-          { text: 'Apellidos', value: 'apellidos' },
-          { text: 'Cargo', value: 'cargo' },
-          { text: 'Fecha Ingreso', value: 'fecha_ingreso' },
-          { text: 'Fecha Egreso', value: 'fecha_greso' },
+          { text: 'Código', value: 'codigo' },
+          { text: 'Desde', value: 'desde' },
+          { text: 'Hasta', value: 'hasta' },
+          { text: 'Tipo', value: 'tipo' },
           { text: 'Estatus', value: 'estatus' },
-          { text: 'Acciones', align: 'center', value: 'cedula', sortable: false}
+          { text: 'Acciones', align: 'center', value: 'codigo', sortable: false}
         ],
-        trabajadores: [],
-        idE: 1,
-        dialogVer: false,
-        dialogUpd: false,
-        trabajador: {}
+        nominas: [],
+        idE: 1
       }
     },
     components: {
@@ -92,8 +85,8 @@
       this.allTrabajadores();
     },
     methods: {
-      newTrabajador () {
-        this.$router.push({path: '/trabajadores/nuevo'});
+      newNomina () {
+        this.$router.push({path: '/nominas/nueva'});
       },
       allTrabajadores () {
         const vm = this;
@@ -106,37 +99,6 @@
           .catch((err) => {
             console.log(err);
           });
-      },
-      verTrabajador (id) {
-        this.dialogVer = true;
-
-        const vm = this;
-
-        axios.get(`http://payroll.com.local/api/trabajadores/${id}`)
-          .then((res) => {
-              vm.$data.trabajador = res.data.trabajador;
-          })
-          .catch((err) => {
-              console.log(err);
-          });
-      },
-      editEmpresa (id) {
-        this.dialogUpd = true;
-
-        const vm = this;
-
-        axios.get(`http://payroll.com.local/api/trabajadores/ver/${id}`)
-          .then((res) => {
-              vm.$data.trabajador = res.data.trabajador;
-          })
-          .catch((err) => {
-              console.log(err);
-          });
-      },
-      updSuc () {
-        console.log('se modifico');
-        this.dialogUpd = false;
-        this.allTrabajadores();
       }
     },
     filters: {

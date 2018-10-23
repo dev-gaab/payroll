@@ -5,6 +5,11 @@ import Login from '../components/Login'
 import AllEmpresas from '../components/empresa/AllEmpresas'
 import NewEmpresa from '../components/empresa/NewEmpresa'
 import AllBases from '../components/bases/AllBases'
+import AllTrabajadores from '../components/trabajador/AllTrabajadores'
+import NewTrabajador from '../components/trabajador/NewTrabajador'
+import AllNominas from '../components/nomina/AllNominas'
+import NewNomina from '../components/nomina/NewNomina'
+import NominaDetalle from '../components/nomina/NominaDetalle'
 
 Vue.use(Router)
 /**
@@ -44,6 +49,33 @@ export default new Router({
       path: '/bases',
       name: 'Bases',
       component: AllBases
+    },
+    // rutas para trabajadores.
+    {
+      path: '/trabajadores',
+      name: 'Trabajadores',
+      component: AllTrabajadores
+    },
+    {
+      path: '/trabajadores/nuevo',
+      name: 'NewTrabajador',
+      component: NewTrabajador
+    },
+    // Rutas para nomina
+    {
+      path: '/nominas/nueva',
+      name: 'NewNominas',
+      component: NewNomina
+    },
+    {
+      path: '/nominas',
+      name: 'Nominas',
+      component: AllNominas
+    },
+    {
+      path: '/nominas/detalle/:id',
+      name: 'NominaDetalle',
+      component: NominaDetalle
     }
   ],
   mode: 'history'

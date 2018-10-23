@@ -56,99 +56,325 @@
       </v-card>
     </v-flex>
     <!-- Componente para ver modal de ver empresa -->
-    <VerEmpresa :id="idE" :dialog="dialogVer" :empresa="empresa"></VerEmpresa>
+    <v-layout row justify-center>
+    <v-dialog v-model="dialogVer" persistent max-width="500">
+      <v-card>
+        <v-card-title class="headline">{{empresa.razon_social}}</v-card-title>
+        <v-list two-line>
+
+          <v-list-tile>
+
+            <v-list-tile-content>
+
+              <v-list-tile-title>Rif</v-list-tile-title>
+
+                <v-list-tile-sub-title>
+                  <span class='text--primary'>{{empresa.rif}}</span>
+                </v-list-tile-sub-title>
+
+            </v-list-tile-content>
+
+          </v-list-tile>
+          <v-divider></v-divider>
+
+          <v-list-tile>
+
+            <v-list-tile-content>
+
+              <v-list-tile-title>Dirección</v-list-tile-title>
+
+                <v-list-tile-sub-title>
+                  <span class='text--primary'>{{empresa.direccion}}</span>
+                </v-list-tile-sub-title>
+                
+            </v-list-tile-content>
+
+          </v-list-tile>
+          <v-divider></v-divider>
+
+           <v-list-tile>
+
+            <v-list-tile-content>
+
+              <v-list-tile-title>Riesgo IVSS</v-list-tile-title>
+
+                <v-list-tile-sub-title>
+                  <span class='text--primary'>{{empresa.riesgo_ivss}}</span>
+                </v-list-tile-sub-title>
+                
+            </v-list-tile-content>
+
+          </v-list-tile>
+          <v-divider></v-divider>
+
+          <v-list-tile>
+
+            <v-list-tile-content>
+
+              <v-list-tile-title>Num. Afiliación IVSS</v-list-tile-title>
+
+                <v-list-tile-sub-title>
+                  <span class='text--primary'>{{empresa.num_afiliacion_ivss}}</span>
+                </v-list-tile-sub-title>
+                
+            </v-list-tile-content>
+
+          </v-list-tile>
+          <v-divider></v-divider>
+
+          <v-list-tile>
+
+            <v-list-tile-content>
+
+              <v-list-tile-title>Fecha de Inscripción IVSS</v-list-tile-title>
+
+                <v-list-tile-sub-title>
+                  <span class='text--primary'>{{empresa.fecha_inscripcion_ivss}}</span>
+                </v-list-tile-sub-title>
+                
+            </v-list-tile-content>
+
+          </v-list-tile>
+          <v-divider></v-divider>
+
+          <v-list-tile>
+
+            <v-list-tile-content>
+
+              <v-list-tile-title>Num. Afiliación FAOV</v-list-tile-title>
+
+                <v-list-tile-sub-title>
+                  <span class='text--primary'>{{empresa.num_afiliacion_faov}}</span>
+                </v-list-tile-sub-title>
+                
+            </v-list-tile-content>
+
+          </v-list-tile>
+          <v-divider></v-divider>
+
+
+          <v-list-tile>
+
+            <v-list-tile-content>
+
+              <v-list-tile-title>Num. Afiliación INCES</v-list-tile-title>
+
+                <v-list-tile-sub-title>
+                  <span class='text--primary'>{{empresa.num_afiliacion_inces}}</span>
+                </v-list-tile-sub-title>
+                
+            </v-list-tile-content>
+            
+          </v-list-tile>
+          <v-divider></v-divider>
+
+           <v-list-tile>
+
+            <v-list-tile-content>
+
+              <v-list-tile-title>Estatus</v-list-tile-title>
+
+                <v-list-tile-sub-title>
+                  <span class='text--primary'>{{empresa.estatus}}</span>
+                </v-list-tile-sub-title>
+                
+            </v-list-tile-content>
+            
+          </v-list-tile>
+
+        </v-list>
+        <v-card-actions>
+          <v-spacer></v-spacer>
+          <v-btn color="blue darken-1" flat @click.native="dialogVer = false">Cerrar</v-btn>
+        </v-card-actions>
+      </v-card>
+    </v-dialog>
+  </v-layout>
     <!-- componente modal para editar empresa -->
-    <EditEmpresa :dialog="dialogUpd" :empresa="empresa" v-on:updSuccess='updSuc'></EditEmpresa>
+    <v-layout row justify-center>
+    <v-dialog v-model="dialogUpd" persistent max-width="500">
+      <v-card class="elevation-12">
+        <!-- Header card -->
+        <v-toolbar dark color="teal darken-1" dense>
+          <v-toolbar-title>Empresa</v-toolbar-title>
+          <v-spacer></v-spacer>
+        </v-toolbar>
+        <!-- formulario -->
+        <form @submit.prevent="save">
+          <v-card-text>
+            <v-text-field
+              color="teal darken-1"
+              v-model="empresa.rif"
+              name="rif"
+              label="Rif"
+              id="rif"
+            ></v-text-field>
+
+            <v-text-field
+              color="teal darken-1"
+              v-model="empresa.razon_social"
+              name="razon_social"
+              label="Razon Social"
+              id="razon_social"
+            ></v-text-field>
+
+            <v-textarea
+              color="teal darken-1"
+              v-model="empresa.direccion"
+              name="direccion"
+              label="Direccion"
+              id="direccion"
+              rows="2"
+            ></v-textarea>
+
+            <v-text-field
+              color="teal darken-1"
+              v-model="empresa.num_afiliacion_ivss"
+              name="num_ivss"
+              label="Numero de IVSS"
+              id="num_ivss"
+            ></v-text-field>
+
+            <v-text-field
+              color="teal darken-1"
+              v-model="empresa.fecha_inscripcion_ivss"
+              name="fecha_ivss"
+              label="Fecha de inscripcion IVSS"
+              id="fecha_ivss"
+              type="date"
+            ></v-text-field>
+
+            <v-text-field
+              color="teal darken-1"
+              v-model="empresa.num_afiliacion_faov"
+              name="num_faov"
+              label="Numero de FAOV"
+              id="num_faov"
+            ></v-text-field>
+
+            <v-text-field
+              color="teal darken-1"
+              v-model="empresa.num_afiliacion_inces"
+              name="num_inces"
+              label="Numero de INCES"
+              id="num_inces"
+            ></v-text-field>
+
+          </v-card-text>
+          <v-card-actions>
+            <v-spacer></v-spacer>
+            <v-btn color="blue darken-1" flat @click.native="dialogUpd = false">Cerrar</v-btn>
+            <v-btn type="submit" dark color="teal darken-1">Guardar</v-btn>
+          </v-card-actions>
+        </form> <!-- Fin form-->
+      </v-card>
+    </v-dialog>
+  </v-layout>
+
   </v-layout>
 
 </template>
 
 <script>
-  import axios from 'axios';
-  import VerEmpresa from './VerEmpresa.vue';
-  import EditEmpresa from './EditEmpresa.vue';
+import axios from "axios";
+import VerEmpresa from "./VerEmpresa.vue";
+import EditEmpresa from "./EditEmpresa.vue";
 
-  export default {
-    name: 'AllEmpresas',
-    data () {
-      return {
-        id: 1,
-        search: '',
-        headers: [
-          { text: 'Rif', value: 'rif' },
-          { text: 'Razon Social', value: 'razon_social' },
-          { text: 'Direccion', value: 'direccion' },
-          { text: 'Estatus', value: 'estatus' },
-          { text: 'Acciones', align: 'center', value: 'rif', sortable: false}
-        ],
-        empresas: [],
-        idE: 0,
-        dialogVer: false,
-        dialogUpd: false,
-        empresa: {}
-      }
+export default {
+  name: "AllEmpresas",
+  data() {
+    return {
+      id: 1,
+      search: "",
+      headers: [
+        { text: "Rif", value: "rif" },
+        { text: "Razon Social", value: "razon_social" },
+        { text: "Direccion", value: "direccion" },
+        { text: "Estatus", value: "estatus" },
+        { text: "Acciones", align: "center", value: "rif", sortable: false }
+      ],
+      empresas: [],
+      idE: 0,
+      dialogVer: false,
+      dialogUpd: false,
+      empresa: {}
+    };
+  },
+  components: {
+    VerEmpresa,
+    EditEmpresa
+  },
+  created() {
+    this.allEmpresas();
+  },
+  methods: {
+    newEmpresa() {
+      this.$router.push({ path: "/empresas/nueva" });
     },
-    components: {
-      VerEmpresa,
-      EditEmpresa
+    allEmpresas() {
+      const vm = this;
+
+      axios
+        .get("http://payroll.com.local/api/empresas")
+        .then(res => {
+          vm.$data.empresas = res.data.empresas;
+        })
+        .catch(err => {
+          console.log(err);
+        });
     },
-    created () {
-      this.allEmpresas();
+    verEmpresa(id) {
+      this.idE = id;
+      this.dialogVer = true;
+
+      const vm = this;
+
+      axios
+        .get(`http://payroll.com.local/api/empresas/${vm.idE}`)
+        .then(res => {
+          vm.$data.empresa = res.data.empresa;
+        })
+        .catch(err => {
+          console.log(err);
+        });
     },
-    methods: {
-      newEmpresa () {
-        this.$router.push({path: '/empresas/nueva'});
-      },
-      allEmpresas () {
-        const vm = this;
+    editEmpresa(id) {
+      this.dialogUpd = true;
 
-        axios.get('http://payroll.com.local/api/empresas')
-          .then((res) => {
-            vm.$data.empresas = res.data.empresas;
-          })
-          .catch((err) => {
-            console.log(err);
-          });
-      },
-      verEmpresa (id) {
-        this.idE = id;
-        this.dialogVer = true;
+      const vm = this;
 
-        const vm = this;
-
-        axios.get(`http://payroll.com.local/api/empresas/${vm.idE}`)
-          .then((res) => {
-              vm.$data.empresa = res.data.empresa;
-          })
-          .catch((err) => {
-              console.log(err);
-          });
-      },
-      editEmpresa (id) {
-        this.dialogUpd = true;
-
-        const vm = this;
-
-        axios.get(`http://payroll.com.local/api/empresas/${id}`)
-          .then((res) => {
-              vm.$data.empresa = res.data.empresa;
-          })
-          .catch((err) => {
-              console.log(err);
-          });
-      },
-      updSuc () {
-        console.log('se modifico');
-        this.dialogUpd = false;
-        this.allEmpresas();
-      }
+      axios
+        .get(`http://payroll.com.local/api/empresas/${id}`)
+        .then(res => {
+          vm.$data.empresa = res.data.empresa;
+        })
+        .catch(err => {
+          console.log(err);
+        });
     },
-    filters: {
-      capitalize (value) {
-        if (!value) return ''
-        value = value.toString()
-        return value.charAt(0).toUpperCase() + value.slice(1)
-      }
+    save () {
+      const vm = this;
+      axios.put(`http://payroll.com.local/api/empresas/${vm.empresa.id}`, vm.empresa)
+        .then( (res) => {
+          if (res.data.res == 'Modificado'){
+            vm.dialogUpd = false;
+            vm.allEmpresas();
+          } else {
+            console.log('error');
+          }
+          
+        })
+        .catch((err) => {
+          console.log(err);
+        });
+    }
+  },
+  filters: {
+    capitalize(value) {
+      if (!value) return "";
+      value = value.toString();
+      return value.charAt(0).toUpperCase() + value.slice(1);
     }
   }
+};
 </script>

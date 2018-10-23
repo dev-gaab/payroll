@@ -71,6 +71,24 @@
 
         </v-list-group>
 
+        <v-list-tile @click="routTrabajador">
+          <v-list-tile-action>
+            <v-icon>people</v-icon>
+          </v-list-tile-action>
+          <v-list-tile-content>
+            <v-list-tile-title>Trabajadores</v-list-tile-title>
+          </v-list-tile-content>
+        </v-list-tile>
+
+        <v-list-tile @click="routAllNominas">
+          <v-list-tile-action>
+            <v-icon>work</v-icon>
+          </v-list-tile-action>
+          <v-list-tile-content>
+            <v-list-tile-title>Nomina</v-list-tile-title>
+          </v-list-tile-content>
+        </v-list-tile>
+
       </v-list>
     </v-navigation-drawer>
     <!-- Toolbar -->
@@ -131,6 +149,15 @@
       },
       routAllBases () {
         this.$router.push({path: '/bases'})
+      },
+      routTrabajador () {
+        this.$router.push({path: '/trabajadores'})
+      },
+      routAllNominas () {
+        this.$router.push({path: '/nominas'})
+      },
+      routActualNomina () {
+        this.$router.push({path: '/nominas/actual'})
       },
       logout () {
         this.$store.commit('logout');

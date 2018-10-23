@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use App\Models\Trabajador;
 use App\Models\Salario;
+use App\Models\SalarioMinimo;
 
 class TrabajadorController extends Controller
 {
@@ -31,13 +32,14 @@ class TrabajadorController extends Controller
         if ($trabajador != "") {
             return response()->json(['trabajador' => $trabajador, 'message' => 'ok']);
         } else {
-            return response()->json(['message' => 'no']);
+            return response()->json(['error' => 'No se encontro']);
         }
         
     }
 
     public function modificar($id, Request $request)
     {
+
         $trabajador = Trabajador::find($id);
 
         $trabajador->cedula = $request->cedula;
@@ -80,5 +82,35 @@ class TrabajadorController extends Controller
         $trabajador->fecha_ingreso = $request->fecha_ingreso;
         $trabajador->fecha_egreso = $request->fecha_egreso;
         $trabajador->estatus = 'activo';
+
+        if ($trabajador->save()){
+            date_default_timezone_set('America/Caracas');
+
+            if ($request->salario_minimo == true){
+                $salarioMin = SalarioMinimo::where('estatus', 'activo')->first();
+                $salarioMen = $salarioMin->monto;
+            } else {
+                $salarioMen = $request->salario;
+            }
+
+            $salario_diario = $salarioMen/30;
+
+            $salario = new Salario();
+        
+            $salario->trabajador_id = $trabajador->id;
+            $salario->salario = $salarioMen;
+            $salario->salario_diario = $salario_diario;
+            $salario->tipo = $request->tipo_salario;
+            $salario->desde = date("d-m-Y");
+            $salario->estatus = 'activo';
+
+            if ($salario->save()){
+                return response()->json(['message' => 'ok']);
+            } else {
+                return response()->json(['error' => 'salario']);
+            }
+        } else {
+            return response()->json(['error' => 'trabajador']);
+        }
     }
 }

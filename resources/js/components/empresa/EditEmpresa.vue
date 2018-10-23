@@ -1,6 +1,6 @@
 <template>
   <v-layout row justify-center>
-    <v-dialog v-model="dialog" persistent max-width="500">
+    <v-dialog v-model="dialogUpd" persistent max-width="500">
       <v-card class="elevation-12">
         <!-- Header card -->
         <v-toolbar dark color="teal darken-1" dense>
@@ -71,7 +71,7 @@
           </v-card-text>
           <v-card-actions>
             <v-spacer></v-spacer>
-            <v-btn color="blue darken-1" flat @click.native="dialog = false">Cerrar</v-btn>
+            <v-btn color="blue darken-1" flat @click.native="dialogUpd = false">Cerrar</v-btn>
             <v-btn type="submit" dark color="teal darken-1">Guardar</v-btn>
           </v-card-actions>
         </form> <!-- Fin form-->
@@ -84,7 +84,7 @@ import axios from 'axios';
 
 export default {
   name: 'EditEmpresa',
-  props: ['dialog', 'empresa'],
+  props: ['dialogUpd', 'empresa'],
   methods: {
     save () {
       const vm = this;

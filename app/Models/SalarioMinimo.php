@@ -14,6 +14,6 @@ class SalarioMinimo extends Model
 
     // campos que se pueden ingresar y modificar
     protected $fillable = [
-    	'cantidad', 'estatus'
+    	'monto', 'tipo', 'desde', 'hasta', 'estatus'
     ];
 }
