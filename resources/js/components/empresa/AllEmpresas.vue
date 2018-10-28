@@ -3,6 +3,13 @@
 <template>
   <v-layout row wrap>
     <v-flex xs12>
+      <v-alert
+        v-model="alertSuc"
+        dismissible
+        type="success"
+      >
+        {{messageSuc}}
+      </v-alert>
       <v-card>
         <v-card-title>
           <h3>Empresas</h3>
@@ -31,7 +38,7 @@
             <td>{{ props.item.estatus | capitalize}}</td>
             <!-- Acciones -->
             <td class="justify-center layout px-0">
-              <v-btn v-if="props.item.id != id" icon small color="success">
+              <v-btn @click="activarEmpresa(props.item.id, props.item.razon_social)" v-if="props.item.id != empresaId" icon small color="success">
                 <v-icon small>fa-check</v-icon>
               </v-btn>
               <v-btn @click="verEmpresa(props.item.id)" icon small color="primary">
@@ -42,9 +49,6 @@
               </v-btn>
               <v-btn v-if="props.item.estatus == 'habilitada'" icon small color="error">
                 <v-icon small>fa-lock</v-icon>
-              </v-btn>
-              <v-btn v-if="props.item.estatus != 'habilitada'" icon small color="success">
-                <v-icon small>fa-unlock</v-icon>
               </v-btn>
             </td>
           </template>
@@ -59,7 +63,11 @@
     <v-layout row justify-center>
     <v-dialog v-model="dialogVer" persistent max-width="500">
       <v-card>
-        <v-card-title class="headline">{{empresa.razon_social}}</v-card-title>
+        <v-toolbar dark color="teal darken-1" dense>
+          <v-toolbar-title>{{empresa.razon_social}}</v-toolbar-title>
+          <v-spacer></v-spacer>
+        </v-toolbar>
+
         <v-list two-line>
 
           <v-list-tile>
@@ -284,7 +292,6 @@ export default {
   name: "AllEmpresas",
   data() {
     return {
-      id: 1,
       search: "",
       headers: [
         { text: "Rif", value: "rif" },
@@ -297,7 +304,9 @@ export default {
       idE: 0,
       dialogVer: false,
       dialogUpd: false,
-      empresa: {}
+      empresa: {},
+      alertSuc: false,
+      messageSuc: null
     };
   },
   components: {
@@ -305,7 +314,26 @@ export default {
     EditEmpresa
   },
   created() {
+
     this.allEmpresas();
+  },
+  computed: {
+    empresaId () {
+      let empresa = this.$store.state.empresa;
+      if (empresa == null) {
+        return empresa;
+      } else {
+        return empresa.id;
+      }
+    },
+    empresaName () {
+      let empresa = this.$store.state.empresa;
+      if (empresa == null) {
+        return empresa;
+      } else {
+        return empresa.nombre;
+      }
+    }
   },
   methods: {
     newEmpresa() {
@@ -367,6 +395,13 @@ export default {
         .catch((err) => {
           console.log(err);
         });
+    },
+
+    activarEmpresa (id, nombre) {
+      this.$store.commit('activarEmpresa', {id: id, nombre: nombre});
+      
+      this.messageSuc = `¡La empresa se ha cambiado! ${nombre}`;
+      this.alertSuc = true;
     }
   },
   filters: {

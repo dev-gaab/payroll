@@ -96,7 +96,8 @@
 
       <v-toolbar-side-icon @click.stop="drawer = !drawer"></v-toolbar-side-icon>
       <v-toolbar-title><img src="../assets/Logo.png" height="40"></v-toolbar-title>
-
+      <v-spacer></v-spacer>
+      <h1>{{nombreEmpresa}}</h1>
       <v-spacer></v-spacer>
 
       <v-toolbar-items>
@@ -139,6 +140,16 @@
     },
     created (){
       // this.loggedIn = this.$store.state.isLoggedIn;
+    },
+    computed: {
+      nombreEmpresa () {
+        let empresa = this.$store.state.empresa;
+        if (empresa == null) {
+          return '';
+        } else {
+          return empresa.nombre;
+        }
+      }
     },
     methods: {
       routHome () {

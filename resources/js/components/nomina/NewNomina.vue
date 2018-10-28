@@ -17,7 +17,7 @@
               label="Desde"
               name="desde"
               id="desde"
-              type="date"
+              type="month"
             ></v-text-field>
 
             <v-text-field
@@ -26,7 +26,7 @@
               label="Hasta"
               name="hasta"
               id="hasta"
-              type="date"
+              type="week"
             ></v-text-field>
 
            <v-select
