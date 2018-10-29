@@ -7,6 +7,7 @@ use App\Http\Controllers\Controller;
 use App\Models\Trabajador;
 use App\Models\Salario;
 use App\Models\SalarioMinimo;
+use App\Models\BaseLegal;
 
 class TrabajadorController extends Controller
 {
@@ -36,12 +37,44 @@ class TrabajadorController extends Controller
         }
         
     }
-
+    // Recibir el id de la empresa para poder seleccionar el salario minimo
     public function modificar($id, Request $request)
     {
 
         $trabajador = Trabajador::find($id);
 
+        $sal = Salario::where('trabajador_id', $id)
+            ->where('estatus', 'activo')
+            ->first();
+        
+        if ($request->salario_minimo == true){
+            $base = BaseLegal::where('empresa_id', $idE)->where('estatus', 'activa')->first();
+            $salarioMin = SalarioMinimo::find($base->salario_minimo_id);
+            $salarioMen = $salarioMin->monto;
+        } else {
+            $salarioMen = $request->salario;
+        }
+        
+        if($sal->monto != $salarioMen) {
+            date_default_timezone_set('America/Caracas');
+
+            $sal->estatus = 'inactivo';
+            $sal->hasta = date('d-m-Y');
+            $sal->save();
+
+            $salario_diario = $salarioMen/30;
+
+            $salario = new Salario();
+        
+            $salario->trabajador_id = $trabajador->id;
+            $salario->salario = $salarioMen;
+            $salario->salario_diario = $salario_diario;
+            $salario->tipo = $request->tipo_salario;
+            $salario->desde = date("d-m-Y");
+            $salario->estatus = 'activo';
+            $salario->save();
+        }
+        
         $trabajador->cedula = $request->cedula;
         $trabajador->nombre1 = $request->nombre1;
         $trabajador->nombre2 = $request->nombre2;
@@ -87,7 +120,8 @@ class TrabajadorController extends Controller
             date_default_timezone_set('America/Caracas');
 
             if ($request->salario_minimo == true){
-                $salarioMin = SalarioMinimo::where('estatus', 'activo')->first();
+                $base = BaseLegal::where('empresa_id', $id)->where('estatus', 'activa')->first();
+                $salarioMin = SalarioMinimo::find($base->salario_minimo_id);
                 $salarioMen = $salarioMin->monto;
             } else {
                 $salarioMen = $request->salario;
