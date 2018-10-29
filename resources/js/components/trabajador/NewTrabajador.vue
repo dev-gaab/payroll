@@ -219,10 +219,28 @@
         trabajadores: []
       }
     },
+    computed: {
+      empresaId () {
+        let empresa = this.$store.state.empresa;
+        if (empresa == null) {
+          return empresa;
+        } else {
+          return empresa.id;
+        }
+      },
+      empresaName () {
+        let empresa = this.$store.state.empresa;
+        if (empresa == null) {
+          return empresa;
+        } else {
+          return empresa.nombre;
+        }
+      }
+    },
     methods: {
       addTrabajador () {
         const vm = this;
-        axios.post(`http://payroll.com.local/api/trabajadores/${vm.idE}`, vm.$data.trabajador)
+        axios.post(`http://payroll.com.local/api/trabajadores/${vm.empresaId}`, vm.$data.trabajador)
           .then((res) => {
             
             if(!res.data.error){

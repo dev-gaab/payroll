@@ -20524,6 +20524,256 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 
 
 
@@ -20534,25 +20784,115 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
       search: '',
       headers: [{ text: 'Estatus', value: 'estatus' }, { text: 'Desde', value: 'desde' }, { text: 'Hasta', value: 'hasta' }, { text: 'Acciones', align: 'center', value: 'id', sortable: false }],
       bases: [],
-      idEmpresa: 1
+      base: {},
+      dialog: false,
+      dialogVer: false,
+      isMod: false,
+      alertErr: false,
+      msgErr: null,
+      alertSuc: false,
+      msgSuc: null
     };
   },
   created: function created() {
     this.allBases();
   },
 
+  computed: {
+    empresaId: function empresaId() {
+      var empresa = this.$store.state.empresa;
+      if (empresa == null) {
+        return empresa;
+      } else {
+        return empresa.id;
+      }
+    },
+    empresaName: function empresaName() {
+      var empresa = this.$store.state.empresa;
+      if (empresa == null) {
+        return empresa;
+      } else {
+        return empresa.nombre;
+      }
+    }
+  },
   methods: {
     allBases: function allBases() {
       var vm = this;
 
-      __WEBPACK_IMPORTED_MODULE_0_axios___default.a.get('http://payroll.com.local/api/bases/all/' + vm.idEmpresa).then(function (res) {
+      __WEBPACK_IMPORTED_MODULE_0_axios___default.a.get('http://payroll.com.local/api/bases/all/' + vm.empresaId).then(function (res) {
         vm.$data.bases = res.data.bases;
-        console.log(vm.$data.bases);
       }).catch(function (err) {
         console.log(err);
       });
     },
-    newBases: function newBases() {}
+    newBases: function newBases() {
+      this.dialog = true;
+    },
+    verBase: function verBase(id) {
+      var vm = this;
+
+      __WEBPACK_IMPORTED_MODULE_0_axios___default.a.get('http://payroll.com.local/api/bases/ver/' + id).then(function (res) {
+        vm.dialogVer = true;
+        vm.$data.base = res.data.base;
+      }).catch(function (err) {
+        console.log(err);
+      });
+    },
+    editBases: function editBases() {
+      this.dialog = true;
+      this.isMod = true;
+
+      var vm = this;
+
+      __WEBPACK_IMPORTED_MODULE_0_axios___default.a.get('http://payroll.com.local/api/bases/' + vm.empresaId).then(function (res) {
+        vm.$data.base = res.data.base;
+      }).catch(function (err) {
+        console.log(err);
+      });
+    },
+    save: function save() {
+      if (this.isMod == true) {
+
+        var vm = this;
+
+        __WEBPACK_IMPORTED_MODULE_0_axios___default.a.put('http://payroll.com.local/api/bases/' + vm.empresaId, vm.base).then(function (res) {
+
+          vm.dialog = false;
+
+          vm.allBases();
+
+          if (res.data.error) {
+            vm.alertErr = true;
+            vm.msgErr = "Ocurrio un error al modificar las bases legales.";
+          } else {
+            vm.alertSuc = true;
+            vm.msgSuc = "Bases Legales modificadas.";
+          }
+        }).catch(function (err) {
+          console.log(err);
+        });
+      } else {
+
+        var _vm = this;
+
+        __WEBPACK_IMPORTED_MODULE_0_axios___default.a.post('http://payroll.com.local/api/bases/' + _vm.empresaId, _vm.base).then(function (res) {
+
+          _vm.dialog = false;
+          _vm.allBases();
+
+          if (res.data.error) {
+            alertErr = true;
+            msgErr = "Ocurrio un error al registrar las bases legales.";
+          } else {
+            alertSuc = true;
+            msgSuc = "Bases Legales registradas.";
+          }
+        }).catch(function (err) {
+          console.log(err);
+        });
+      }
+    }
   },
   filters: {
     capitalize: function capitalize(value) {
@@ -20579,6 +20919,21 @@ var render = function() {
         "v-flex",
         { attrs: { xs12: "" } },
         [
+          _c(
+            "v-alert",
+            {
+              attrs: { dismissible: "", type: "success" },
+              model: {
+                value: _vm.alertSuc,
+                callback: function($$v) {
+                  _vm.alertSuc = $$v
+                },
+                expression: "alertSuc"
+              }
+            },
+            [_vm._v("\n      " + _vm._s(_vm.msgSuc) + "\n    ")]
+          ),
+          _vm._v(" "),
           _c(
             "v-card",
             [
@@ -20608,7 +20963,7 @@ var render = function() {
                   _vm._v(" "),
                   _c("v-spacer"),
                   _vm._v(" "),
-                  _vm.bases == null
+                  _vm.bases == ""
                     ? _c(
                         "v-btn",
                         {
@@ -20616,6 +20971,18 @@ var render = function() {
                           on: { click: _vm.newBases }
                         },
                         [_c("v-icon", [_vm._v("add")])],
+                        1
+                      )
+                    : _vm._e(),
+                  _vm._v(" "),
+                  _vm.bases != ""
+                    ? _c(
+                        "v-btn",
+                        {
+                          attrs: { icon: "", color: "warning", dark: "" },
+                          on: { click: _vm.editBases }
+                        },
+                        [_c("v-icon", [_vm._v("fa-edit")])],
                         1
                       )
                     : _vm._e()
@@ -20670,31 +21037,7 @@ var render = function() {
                                   ])
                                 ],
                                 1
-                              ),
-                              _vm._v(" "),
-                              props.item.estatus == "activa"
-                                ? _c(
-                                    "v-btn",
-                                    {
-                                      attrs: {
-                                        icon: "",
-                                        small: "",
-                                        color: "warning"
-                                      },
-                                      on: {
-                                        click: function($event) {
-                                          _vm.editBase(props.item.id)
-                                        }
-                                      }
-                                    },
-                                    [
-                                      _c("v-icon", { attrs: { small: "" } }, [
-                                        _vm._v("fa-edit")
-                                      ])
-                                    ],
-                                    1
-                                  )
-                                : _vm._e()
+                              )
                             ],
                             1
                           )
@@ -20722,6 +21065,629 @@ var render = function() {
                           '" no encontro resultados.\n        '
                       )
                     ]
+                  )
+                ],
+                1
+              )
+            ],
+            1
+          )
+        ],
+        1
+      ),
+      _vm._v(" "),
+      _c(
+        "v-layout",
+        { attrs: { row: "", "justify-center": "" } },
+        [
+          _c(
+            "v-dialog",
+            {
+              attrs: { persistent: "", "max-width": "600" },
+              model: {
+                value: _vm.dialog,
+                callback: function($$v) {
+                  _vm.dialog = $$v
+                },
+                expression: "dialog"
+              }
+            },
+            [
+              _c(
+                "v-card",
+                { staticClass: "elevation-12" },
+                [
+                  _c(
+                    "v-toolbar",
+                    { attrs: { dark: "", color: "teal darken-1", dense: "" } },
+                    [
+                      _c("v-toolbar-title", [_vm._v("Bases legales")]),
+                      _vm._v(" "),
+                      _c("v-spacer")
+                    ],
+                    1
+                  ),
+                  _vm._v(" "),
+                  _c("br"),
+                  _vm._v(" "),
+                  _c(
+                    "form",
+                    {
+                      on: {
+                        submit: function($event) {
+                          $event.preventDefault()
+                          return _vm.save($event)
+                        }
+                      }
+                    },
+                    [
+                      _c(
+                        "v-card-text",
+                        [
+                          _c(
+                            "v-toolbar",
+                            {
+                              attrs: {
+                                dark: "",
+                                color: "teal darken-1",
+                                dense: ""
+                              }
+                            },
+                            [
+                              _c("v-toolbar-title", [_vm._v("Salario Minimo")]),
+                              _vm._v(" "),
+                              _c("v-spacer")
+                            ],
+                            1
+                          ),
+                          _vm._v(" "),
+                          _c("br"),
+                          _vm._v(" "),
+                          _c("v-text-field", {
+                            attrs: {
+                              color: "teal darken-1",
+                              name: "salario_minimo",
+                              label: "Salario Mínimo",
+                              id: "salario_minimo"
+                            },
+                            model: {
+                              value: _vm.base.salario_minimo,
+                              callback: function($$v) {
+                                _vm.$set(_vm.base, "salario_minimo", $$v)
+                              },
+                              expression: "base.salario_minimo"
+                            }
+                          }),
+                          _vm._v(" "),
+                          _c(
+                            "v-toolbar",
+                            {
+                              attrs: {
+                                dark: "",
+                                color: "teal darken-1",
+                                dense: ""
+                              }
+                            },
+                            [
+                              _c("v-toolbar-title", [_vm._v("Cesta Ticket")]),
+                              _vm._v(" "),
+                              _c("v-spacer")
+                            ],
+                            1
+                          ),
+                          _vm._v(" "),
+                          _c("br"),
+                          _vm._v(" "),
+                          _c("v-text-field", {
+                            attrs: {
+                              "mt-2": "",
+                              color: "teal darken-1",
+                              name: "unidad_tributaria",
+                              label: "Unidad Tributaria",
+                              id: "unidad_tributaria"
+                            },
+                            model: {
+                              value: _vm.base.unidad_tributaria,
+                              callback: function($$v) {
+                                _vm.$set(_vm.base, "unidad_tributaria", $$v)
+                              },
+                              expression: "base.unidad_tributaria"
+                            }
+                          }),
+                          _vm._v(" "),
+                          _c("v-text-field", {
+                            attrs: {
+                              color: "teal darken-1",
+                              name: "cantidad",
+                              label: "Cantidad de unidades tributarias por día",
+                              id: "cantidad"
+                            },
+                            model: {
+                              value: _vm.base.cantidad,
+                              callback: function($$v) {
+                                _vm.$set(_vm.base, "cantidad", $$v)
+                              },
+                              expression: "base.cantidad"
+                            }
+                          }),
+                          _vm._v(" "),
+                          _c(
+                            "v-toolbar",
+                            {
+                              attrs: {
+                                dark: "",
+                                color: "teal darken-1",
+                                dense: ""
+                              }
+                            },
+                            [
+                              _c("v-toolbar-title", [_vm._v("Asignaciones")]),
+                              _vm._v(" "),
+                              _c("v-spacer")
+                            ],
+                            1
+                          ),
+                          _vm._v(" "),
+                          _c("br"),
+                          _vm._v(" "),
+                          _c("v-text-field", {
+                            attrs: {
+                              color: "teal darken-1",
+                              name: "he_diurnas",
+                              label: "Horas Extras Diurnas",
+                              id: "he_diurnas"
+                            },
+                            model: {
+                              value: _vm.base.he_diurnas,
+                              callback: function($$v) {
+                                _vm.$set(_vm.base, "he_diurnas", $$v)
+                              },
+                              expression: "base.he_diurnas"
+                            }
+                          }),
+                          _vm._v(" "),
+                          _c("v-text-field", {
+                            attrs: {
+                              color: "teal darken-1",
+                              name: "he_nocturnas",
+                              label: "Horas Extras Nocturnas",
+                              id: "he_nocturnas"
+                            },
+                            model: {
+                              value: _vm.base.he_nocturnas,
+                              callback: function($$v) {
+                                _vm.$set(_vm.base, "he_nocturnas", $$v)
+                              },
+                              expression: "base.he_nocturnas"
+                            }
+                          }),
+                          _vm._v(" "),
+                          _c("v-text-field", {
+                            attrs: {
+                              color: "teal darken-1",
+                              name: "feriados",
+                              label: "Feriados",
+                              id: "feriados"
+                            },
+                            model: {
+                              value: _vm.base.feriados,
+                              callback: function($$v) {
+                                _vm.$set(_vm.base, "feriados", $$v)
+                              },
+                              expression: "base.feriados"
+                            }
+                          }),
+                          _vm._v(" "),
+                          _c(
+                            "v-toolbar",
+                            {
+                              attrs: {
+                                dark: "",
+                                color: "teal darken-1",
+                                dense: ""
+                              }
+                            },
+                            [
+                              _c("v-toolbar-title", [_vm._v("Deducciones")]),
+                              _vm._v(" "),
+                              _c("v-spacer")
+                            ],
+                            1
+                          ),
+                          _vm._v(" "),
+                          _c("br"),
+                          _vm._v(" "),
+                          _c("v-text-field", {
+                            attrs: {
+                              color: "teal darken-1",
+                              name: "ivss",
+                              label: "IVSS",
+                              id: "ivss"
+                            },
+                            model: {
+                              value: _vm.base.ivss,
+                              callback: function($$v) {
+                                _vm.$set(_vm.base, "ivss", $$v)
+                              },
+                              expression: "base.ivss"
+                            }
+                          }),
+                          _vm._v(" "),
+                          _c("v-text-field", {
+                            attrs: {
+                              color: "teal darken-1",
+                              name: "faov",
+                              label: "FAOV",
+                              id: "faov"
+                            },
+                            model: {
+                              value: _vm.base.faov,
+                              callback: function($$v) {
+                                _vm.$set(_vm.base, "faov", $$v)
+                              },
+                              expression: "base.faov"
+                            }
+                          }),
+                          _vm._v(" "),
+                          _c("v-text-field", {
+                            attrs: {
+                              color: "teal darken-1",
+                              name: "paro_forzoso",
+                              label: "Paro Forzoso",
+                              id: "paro_forzoso"
+                            },
+                            model: {
+                              value: _vm.base.paro_forzoso,
+                              callback: function($$v) {
+                                _vm.$set(_vm.base, "paro_forzoso", $$v)
+                              },
+                              expression: "base.paro_forzoso"
+                            }
+                          })
+                        ],
+                        1
+                      ),
+                      _vm._v(" "),
+                      _c(
+                        "v-card-actions",
+                        [
+                          _c("v-spacer"),
+                          _vm._v(" "),
+                          _c(
+                            "v-btn",
+                            {
+                              attrs: { color: "blue darken-1", flat: "" },
+                              nativeOn: {
+                                click: function($event) {
+                                  _vm.dialog = false
+                                }
+                              }
+                            },
+                            [_vm._v("Cerrar")]
+                          ),
+                          _vm._v(" "),
+                          _c(
+                            "v-btn",
+                            {
+                              attrs: {
+                                type: "submit",
+                                dark: "",
+                                color: "teal darken-1"
+                              }
+                            },
+                            [_vm._v("Guardar")]
+                          )
+                        ],
+                        1
+                      )
+                    ],
+                    1
+                  )
+                ],
+                1
+              )
+            ],
+            1
+          )
+        ],
+        1
+      ),
+      _vm._v(" "),
+      _c(
+        "v-layout",
+        { attrs: { row: "", "justify-center": "" } },
+        [
+          _c(
+            "v-dialog",
+            {
+              attrs: { persistent: "", "max-width": "600" },
+              model: {
+                value: _vm.dialogVer,
+                callback: function($$v) {
+                  _vm.dialogVer = $$v
+                },
+                expression: "dialogVer"
+              }
+            },
+            [
+              _c(
+                "v-card",
+                { staticClass: "elevation-12" },
+                [
+                  _c(
+                    "v-toolbar",
+                    { attrs: { dark: "", color: "teal darken-1", dense: "" } },
+                    [
+                      _c("v-toolbar-title", [_vm._v("Bases legales")]),
+                      _vm._v(" "),
+                      _c("v-spacer")
+                    ],
+                    1
+                  ),
+                  _vm._v(" "),
+                  _c("br"),
+                  _vm._v(" "),
+                  _c(
+                    "form",
+                    [
+                      _c(
+                        "v-card-text",
+                        [
+                          _c(
+                            "v-toolbar",
+                            {
+                              attrs: {
+                                dark: "",
+                                color: "teal darken-1",
+                                dense: ""
+                              }
+                            },
+                            [
+                              _c("v-toolbar-title", [_vm._v("Salario Minimo")]),
+                              _vm._v(" "),
+                              _c("v-spacer")
+                            ],
+                            1
+                          ),
+                          _vm._v(" "),
+                          _c("br"),
+                          _vm._v(" "),
+                          _c("v-text-field", {
+                            attrs: {
+                              color: "teal darken-1",
+                              name: "salario_minimo",
+                              label: "Salario Mínimo",
+                              id: "salario_minimo",
+                              readonly: ""
+                            },
+                            model: {
+                              value: _vm.base.salario_minimo,
+                              callback: function($$v) {
+                                _vm.$set(_vm.base, "salario_minimo", $$v)
+                              },
+                              expression: "base.salario_minimo"
+                            }
+                          }),
+                          _vm._v(" "),
+                          _c(
+                            "v-toolbar",
+                            {
+                              attrs: {
+                                dark: "",
+                                color: "teal darken-1",
+                                dense: ""
+                              }
+                            },
+                            [
+                              _c("v-toolbar-title", [_vm._v("Cesta Ticket")]),
+                              _vm._v(" "),
+                              _c("v-spacer")
+                            ],
+                            1
+                          ),
+                          _vm._v(" "),
+                          _c("br"),
+                          _vm._v(" "),
+                          _c("v-text-field", {
+                            attrs: {
+                              "mt-2": "",
+                              color: "teal darken-1",
+                              name: "unidad_tributaria",
+                              label: "Unidad Tributaria",
+                              id: "unidad_tributaria",
+                              readonly: ""
+                            },
+                            model: {
+                              value: _vm.base.unidad_tributaria,
+                              callback: function($$v) {
+                                _vm.$set(_vm.base, "unidad_tributaria", $$v)
+                              },
+                              expression: "base.unidad_tributaria"
+                            }
+                          }),
+                          _vm._v(" "),
+                          _c("v-text-field", {
+                            attrs: {
+                              color: "teal darken-1",
+                              name: "cantidad",
+                              label: "Cantidad de unidades tributarias por día",
+                              id: "cantidad",
+                              readonly: ""
+                            },
+                            model: {
+                              value: _vm.base.cantidad,
+                              callback: function($$v) {
+                                _vm.$set(_vm.base, "cantidad", $$v)
+                              },
+                              expression: "base.cantidad"
+                            }
+                          }),
+                          _vm._v(" "),
+                          _c(
+                            "v-toolbar",
+                            {
+                              attrs: {
+                                dark: "",
+                                color: "teal darken-1",
+                                dense: ""
+                              }
+                            },
+                            [
+                              _c("v-toolbar-title", [_vm._v("Asignaciones")]),
+                              _vm._v(" "),
+                              _c("v-spacer")
+                            ],
+                            1
+                          ),
+                          _vm._v(" "),
+                          _c("br"),
+                          _vm._v(" "),
+                          _c("v-text-field", {
+                            attrs: {
+                              color: "teal darken-1",
+                              name: "he_diurnas",
+                              label: "Horas Extras Diurnas",
+                              id: "he_diurnas",
+                              readonly: ""
+                            },
+                            model: {
+                              value: _vm.base.he_diurnas,
+                              callback: function($$v) {
+                                _vm.$set(_vm.base, "he_diurnas", $$v)
+                              },
+                              expression: "base.he_diurnas"
+                            }
+                          }),
+                          _vm._v(" "),
+                          _c("v-text-field", {
+                            attrs: {
+                              color: "teal darken-1",
+                              name: "he_nocturnas",
+                              label: "Horas Extras Nocturnas",
+                              id: "he_nocturnas",
+                              readonly: ""
+                            },
+                            model: {
+                              value: _vm.base.he_nocturnas,
+                              callback: function($$v) {
+                                _vm.$set(_vm.base, "he_nocturnas", $$v)
+                              },
+                              expression: "base.he_nocturnas"
+                            }
+                          }),
+                          _vm._v(" "),
+                          _c("v-text-field", {
+                            attrs: {
+                              color: "teal darken-1",
+                              name: "feriados",
+                              label: "Feriados",
+                              id: "feriados",
+                              readonly: ""
+                            },
+                            model: {
+                              value: _vm.base.feriados,
+                              callback: function($$v) {
+                                _vm.$set(_vm.base, "feriados", $$v)
+                              },
+                              expression: "base.feriados"
+                            }
+                          }),
+                          _vm._v(" "),
+                          _c(
+                            "v-toolbar",
+                            {
+                              attrs: {
+                                dark: "",
+                                color: "teal darken-1",
+                                dense: ""
+                              }
+                            },
+                            [
+                              _c("v-toolbar-title", [_vm._v("Deducciones")]),
+                              _vm._v(" "),
+                              _c("v-spacer")
+                            ],
+                            1
+                          ),
+                          _vm._v(" "),
+                          _c("br"),
+                          _vm._v(" "),
+                          _c("v-text-field", {
+                            attrs: {
+                              color: "teal darken-1",
+                              name: "ivss",
+                              label: "IVSS",
+                              id: "ivss",
+                              readonly: ""
+                            },
+                            model: {
+                              value: _vm.base.ivss,
+                              callback: function($$v) {
+                                _vm.$set(_vm.base, "ivss", $$v)
+                              },
+                              expression: "base.ivss"
+                            }
+                          }),
+                          _vm._v(" "),
+                          _c("v-text-field", {
+                            attrs: {
+                              color: "teal darken-1",
+                              name: "faov",
+                              label: "FAOV",
+                              id: "faov",
+                              readonly: ""
+                            },
+                            model: {
+                              value: _vm.base.faov,
+                              callback: function($$v) {
+                                _vm.$set(_vm.base, "faov", $$v)
+                              },
+                              expression: "base.faov"
+                            }
+                          }),
+                          _vm._v(" "),
+                          _c("v-text-field", {
+                            attrs: {
+                              color: "teal darken-1",
+                              name: "paro_forzoso",
+                              label: "Paro Forzoso",
+                              id: "paro_forzoso",
+                              readonly: ""
+                            },
+                            model: {
+                              value: _vm.base.paro_forzoso,
+                              callback: function($$v) {
+                                _vm.$set(_vm.base, "paro_forzoso", $$v)
+                              },
+                              expression: "base.paro_forzoso"
+                            }
+                          })
+                        ],
+                        1
+                      ),
+                      _vm._v(" "),
+                      _c(
+                        "v-card-actions",
+                        [
+                          _c("v-spacer"),
+                          _vm._v(" "),
+                          _c(
+                            "v-btn",
+                            {
+                              attrs: { color: "blue darken-1", flat: "" },
+                              nativeOn: {
+                                click: function($event) {
+                                  _vm.dialogVer = false
+                                }
+                              }
+                            },
+                            [_vm._v("Cerrar")]
+                          )
+                        ],
+                        1
+                      )
+                    ],
+                    1
                   )
                 ],
                 1
@@ -20885,6 +21851,24 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
     this.allTrabajadores();
   },
 
+  computed: {
+    empresaId: function empresaId() {
+      var empresa = this.$store.state.empresa;
+      if (empresa == null) {
+        return empresa;
+      } else {
+        return empresa.id;
+      }
+    },
+    empresaName: function empresaName() {
+      var empresa = this.$store.state.empresa;
+      if (empresa == null) {
+        return empresa;
+      } else {
+        return empresa.nombre;
+      }
+    }
+  },
   methods: {
     newTrabajador: function newTrabajador() {
       this.$router.push({ path: '/trabajadores/nuevo' });
@@ -20892,7 +21876,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
     allTrabajadores: function allTrabajadores() {
       var vm = this;
 
-      __WEBPACK_IMPORTED_MODULE_0_axios___default.a.get('http://payroll.com.local/api/trabajadores/all/' + vm.idE).then(function (res) {
+      __WEBPACK_IMPORTED_MODULE_0_axios___default.a.get('http://payroll.com.local/api/trabajadores/all/' + vm.empresaId).then(function (res) {
         vm.$data.trabajadores = res.data.trabajadores;
       }).catch(function (err) {
         console.log(err);
@@ -21434,10 +22418,28 @@ var Trabajador = function Trabajador() {
     };
   },
 
+  computed: {
+    empresaId: function empresaId() {
+      var empresa = this.$store.state.empresa;
+      if (empresa == null) {
+        return empresa;
+      } else {
+        return empresa.id;
+      }
+    },
+    empresaName: function empresaName() {
+      var empresa = this.$store.state.empresa;
+      if (empresa == null) {
+        return empresa;
+      } else {
+        return empresa.nombre;
+      }
+    }
+  },
   methods: {
     addTrabajador: function addTrabajador() {
       var vm = this;
-      __WEBPACK_IMPORTED_MODULE_0_axios___default.a.post('http://payroll.com.local/api/trabajadores/' + vm.idE, vm.$data.trabajador).then(function (res) {
+      __WEBPACK_IMPORTED_MODULE_0_axios___default.a.post('http://payroll.com.local/api/trabajadores/' + vm.empresaId, vm.$data.trabajador).then(function (res) {
 
         if (!res.data.error) {
 

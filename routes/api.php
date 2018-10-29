@@ -29,6 +29,10 @@ Route::post('/empresas', 'Api\EmpresaController@agregar');
 
 // Routes para modulo de bases legales
 Route::get('/bases/all/{id}', 'Api\BasesController@verTodas');
+Route::get('/bases/{id}', 'Api\BasesController@verMod');
+Route::get('/bases/ver/{id}', 'Api\BasesController@ver');
+Route::post('/bases/{id}', 'Api\BasesController@registrar');
+Route::put('/bases/{id}', 'Api\BasesController@modificar');
 
 //Routes para modulo de trabajadores
 Route::get('/trabajadores/all/{id}', 'Api\TrabajadorController@verTodos');

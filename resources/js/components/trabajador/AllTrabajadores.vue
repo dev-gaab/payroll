@@ -91,6 +91,24 @@
     created () {
       this.allTrabajadores();
     },
+    computed: {
+      empresaId () {
+        let empresa = this.$store.state.empresa;
+        if (empresa == null) {
+          return empresa;
+        } else {
+          return empresa.id;
+        }
+      },
+      empresaName () {
+        let empresa = this.$store.state.empresa;
+        if (empresa == null) {
+          return empresa;
+        } else {
+          return empresa.nombre;
+        }
+      }
+    },
     methods: {
       newTrabajador () {
         this.$router.push({path: '/trabajadores/nuevo'});
@@ -98,7 +116,7 @@
       allTrabajadores () {
         const vm = this;
 
-        axios.get(`http://payroll.com.local/api/trabajadores/all/${vm.idE}`)
+        axios.get(`http://payroll.com.local/api/trabajadores/all/${vm.empresaId}`)
           .then((res) => {
             vm.$data.trabajadores = res.data.trabajadores;
             
