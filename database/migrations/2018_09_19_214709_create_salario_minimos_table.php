@@ -15,11 +15,19 @@ class CreateSalarioMinimosTable extends Migration
     {
         Schema::create('salario_minimo', function (Blueprint $table) {
             $table->increments('id');
+            $table->integer('empresa_id')->unsigned();
             $table->float('monto');
             $table->string('tipo');
             $table->date('desde');
             $table->date('hasta')->nullable();
             $table->string('estatus', 12);
+
+            
+            $table->foreign('empresa_id')
+                ->references('id')
+                ->on('empresa')
+                ->onUpdate('cascade')
+                ->onDelete('cascade');
         });
     }
 
