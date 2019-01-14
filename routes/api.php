@@ -12,20 +12,25 @@ use Illuminate\Http\Request;
 | is assigned the "api" middleware group. Enjoy building your API!
 |
 */
+Route::group(['prefix' => 'auth'], function () {
+    Route::post('login', 'AuthController@login');
+    Route::post('signup', 'AuthController@signup');
 
-Route::middleware('auth:api')->get('/user', function (Request $request) {
-    return $request->user();
-});
-
-Route::get('/users', function () {
-    return factory('App\User', 10)->make();
+    Route::group(['middleware' => 'auth:api'], function() {
+        Route::get('logout', 'AuthController@logout');
+        Route::get('user', 'AuthController@user');
+    });
 });
 
 // Routes para modulo de empresas
-Route::get('/empresas', 'Api\EmpresaController@verTodas');
-Route::get('/empresas/{id}', 'Api\EmpresaController@ver');
-Route::put('/empresas/{id}', 'Api\EmpresaController@modificar');
-Route::post('/empresas', 'Api\EmpresaController@agregar');
+
+Route::group(['prefix' => 'empresas', 'middleware' => 'auth:api'], function() {
+    Route::get('/', 'Api\EmpresaController@verTodas');
+    Route::get('/{id}', 'Api\EmpresaController@ver');
+    Route::post('/', 'Api\EmpresaController@agregar')->middleware('check.rol');
+    Route::put('/{id}', 'Api\EmpresaController@modificar');
+});
+
 
 // Routes para modulo de bases legales
 Route::get('/bases/all/{id}', 'Api\BasesController@verTodas');
@@ -40,21 +45,3 @@ Route::post('/trabajadores/{id}', 'Api\TrabajadorController@agregar');
 
 // Routes Nomina
 Route::post('nominas/generar/{id}', 'Api\NominaController@generar');
-
-
-// Prueba wsdl
-
-Route::get('/clima', function () {
-    $opts = array(
-        'ssl' => array('verify_peer'=>false, 'verify_peer_name'=>false, 'allow_self_signed' => true)
-    );
-    $params = array ('encoding' => 'UTF-8', 'verifypeer' => false, 'verifyhost' => false, 'soap_version' => SOAP_1_2, 'trace' => 1, 'exceptions' => 1, "connection_timeout" => 180, 'stream_context' => stream_context_create($opts) );
-    $url = "http://skycol.com.co:8080/ADInterface/services/ModelADService?wsdl";
-    try{
-        $client = new SoapClient($url,$params);
-        dd($client->__getTypes());
-    }
-    catch(SoapFault $fault) {
-        echo '<br>'.$fault;
-    }
-});
