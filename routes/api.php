@@ -41,7 +41,9 @@ Route::put('/bases/{id}', 'Api\BasesController@modificar');
 
 //Routes para modulo de trabajadores
 Route::get('/trabajadores/all/{id}', 'Api\TrabajadorController@verTodos');
+Route::get('/trabajadores/{id}', 'Api\TrabajadorController@ver');
 Route::post('/trabajadores/{id}', 'Api\TrabajadorController@agregar');
+Route::put('/trabajadores/{id}', 'Api\TrabajadorController@modificar');
 
 // Routes Nomina
 Route::post('nominas/generar/{id}', 'Api\NominaController@generar');

@@ -15,19 +15,11 @@ class CreateCestaTicketsTable extends Migration
     {
         Schema::create('cesta_ticket', function (Blueprint $table) {
             $table->increments('id');
-            $table->integer('empresa_id')->unsigned();
             $table->float('cantidad');
             $table->float('unidad_tributaria');
             $table->date('desde');
             $table->date('hasta')->nullable();
             $table->string('estatus', 12);
-
-            
-            $table->foreign('empresa_id')
-                ->references('id')
-                ->on('empresa')
-                ->onUpdate('cascade')
-                ->onDelete('cascade');
         });
     }
 

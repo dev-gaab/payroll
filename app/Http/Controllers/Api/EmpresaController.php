@@ -46,22 +46,30 @@ class EmpresaController extends Controller
     {
         $user = $request->user();
 
-        if ($this->empresaUsuario($id, $user->id)) {
+        if (!$this->empresaUsuario($id, $user->id))
+            return response()->json(["error" => 'Unauthorized']);
 
-            $empresa = Empresa::find($id);
-            $empresa->rif = $request->rif;
-            $empresa->razon_social = $request->razon_social;
-            $empresa->direccion = $request->direccion;
-            $empresa->num_afiliacion_ivss = $request->num_afiliacion_ivss;
-            $empresa->fecha_inscripcion_ivss = $request->fecha_inscripcion_ivss;
+        $empresa = Empresa::find($id);
 
-            $empresa->save();
+        $validate_rif = Empresa::where('rif', $request->rif)
+            ->where('id','<>', $id)
+            ->first();
 
-            return response()->json(['res' => "Modificado"]);
+        if($validate_rif !== null)
+            return response()->json(["error" => 'Rif Existente']);
 
-        }
+        $empresa->rif = $request->rif;
+        $empresa->razon_social = $request->razon_social;
+        $empresa->direccion = $request->direccion;
+        $empresa->num_afiliacion_ivss = $request->num_afiliacion_ivss;
+        $empresa->fecha_inscripcion_ivss = $request->fecha_inscripcion_ivss;
+        $empresa->riesgo_ivss = $request->riesgo_ivss;
+        $empresa->num_afiliacion_faov = $request->num_afiliacion_faov;
+        $empresa->num_afiliacion_inces = $request->num_afiliacion_inces;
 
-        return response()->json(["error" => 'Unauthorized']);
+        $empresa->save();
+
+        return response()->json(['res' => 'Empresa Modificada']);
 
     }
 
@@ -88,6 +96,16 @@ class EmpresaController extends Controller
         }
 
         return response()->json(['error' => "Error al registrar empresa"]);
+    }
+
+//    Funcion para deshabilitar una empresa
+    public function dishabilitar($id, Request $request) {
+        $empresa = Empresa::find($id);
+
+        $empresa->estatus = 'inactiva';
+        $empresa->save();
+
+        return response()->json(["res" => "Empresa deshabilitada"]);
     }
 
     // Funcion para relacionar empresa y usuarios
@@ -117,4 +135,5 @@ class EmpresaController extends Controller
 
         return true;
     }
+
 }

@@ -15,20 +15,12 @@ class CreateAsignacionesTable extends Migration
     {
         Schema::create('asignaciones', function (Blueprint $table) {
             $table->increments('id');
-            $table->integer('empresa_id')->unsigned();
             $table->float('he_diurnas');
             $table->float('he_nocturnas');
             $table->float('feriados');
             $table->date('desde');
             $table->date('hasta')->nullable();
             $table->string('estatus', 12);
-
-            
-            $table->foreign('empresa_id')
-                ->references('id')
-                ->on('empresa')
-                ->onUpdate('cascade')
-                ->onDelete('cascade');
         });
     }
 
