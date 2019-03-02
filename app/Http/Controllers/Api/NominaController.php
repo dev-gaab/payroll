@@ -11,8 +11,23 @@ use App\Models\Salario;
 
 class NominaController extends Controller
 {
-    public function generar($id, Request $request)
-    {
-        
+  public function verTodas($id)
+  {
+    $nominas = Nomina::where('empresa_id', $id)->get();
+
+    return response()->json($nominas);
+  }
+  public function generar($id, Request $request)
+  {
+    $nominas = Nomina::where('empresa_id', $id)->get();
+
+    if(sizeof($nominas) > 0) {
+      $nomina_activa = Nomina::where('empresa_id', $id)
+        ->where('estatus', 'activa')
+        ->first();
+
+      $fecha_inicio = explode($nomina_activa->desde);
+
     }
+  }
 }

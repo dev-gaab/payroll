@@ -32,18 +32,17 @@ Route::group(['prefix' => 'empresas', 'middleware' => 'auth:api'], function() {
 });
 
 
-// Routes para modulo de bases legales
-Route::get('/bases/all/{id}', 'Api\BasesController@verTodas');
-Route::get('/bases/{id}', 'Api\BasesController@verMod');
-Route::get('/bases/ver/{id}', 'Api\BasesController@ver');
-Route::post('/bases/{id}', 'Api\BasesController@registrar');
-Route::put('/bases/{id}', 'Api\BasesController@modificar');
-
 //Routes para modulo de trabajadores
-Route::get('/trabajadores/all/{id}', 'Api\TrabajadorController@verTodos');
-Route::get('/trabajadores/{id}', 'Api\TrabajadorController@ver');
-Route::post('/trabajadores/{id}', 'Api\TrabajadorController@agregar');
-Route::put('/trabajadores/{id}', 'Api\TrabajadorController@modificar');
+Route::group(['prefix' => 'trabajadores', 'middleware' => 'auth:api'], function() {
+  Route::get('/all/{id}', 'Api\TrabajadorController@verTodos');
+  Route::get('/{id}', 'Api\TrabajadorController@ver');
+  Route::post('/{id}', 'Api\TrabajadorController@agregar');
+  Route::put('/{id}', 'Api\TrabajadorController@modificar');
+});
+
 
 // Routes Nomina
-Route::post('nominas/generar/{id}', 'Api\NominaController@generar');
+Route::group(['prefix' => 'nominas', 'middleware' => 'auth:api'], function() {
+  Route::get('/{id}', 'Api\NominaController@verTodas');
+  Route::post('/generar/{id}', 'Api\NominaController@generar');
+});

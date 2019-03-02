@@ -4301,16 +4301,6 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
 
 /* harmony default export */ __webpack_exports__["default"] = ({
   name: 'AllNominas',
@@ -4354,8 +4344,8 @@ __webpack_require__.r(__webpack_exports__);
     },
     allTrabajadores: function allTrabajadores() {
       var vm = this;
-      axios__WEBPACK_IMPORTED_MODULE_0___default.a.get("http://payroll.com.local/api/trabajadores/all/".concat(vm.idE)).then(function (res) {
-        vm.$data.trabajadores = res.data.trabajadores;
+      axios__WEBPACK_IMPORTED_MODULE_0___default.a.get("http://payroll.com.local/api/nomina/".concat(vm.idE)).then(function (res) {
+        vm.$data.nominas = res.data.nominas;
       }).catch(function (err) {
         console.log(err);
       });
@@ -27131,8 +27121,6 @@ var render = function() {
                           _vm._v(" "),
                           _c("td", [_vm._v(_vm._s(props.item.hasta) + " ")]),
                           _vm._v(" "),
-                          _c("td", [_vm._v(_vm._s(props.item.tipo))]),
-                          _vm._v(" "),
                           _c("td", [
                             _vm._v(
                               _vm._s(_vm._f("capitalize")(props.item.estatus))
@@ -27163,53 +27151,7 @@ var render = function() {
                                   ])
                                 ],
                                 1
-                              ),
-                              _vm._v(" "),
-                              _c(
-                                "v-btn",
-                                {
-                                  attrs: {
-                                    icon: "",
-                                    small: "",
-                                    color: "warning"
-                                  },
-                                  on: {
-                                    click: function($event) {
-                                      _vm.editNomina(props.item.id)
-                                    }
-                                  }
-                                },
-                                [
-                                  _c("v-icon", { attrs: { small: "" } }, [
-                                    _vm._v("fa-edit")
-                                  ])
-                                ],
-                                1
-                              ),
-                              _vm._v(" "),
-                              props.item.estatus == "activo"
-                                ? _c(
-                                    "v-btn",
-                                    {
-                                      attrs: {
-                                        icon: "",
-                                        small: "",
-                                        color: "error"
-                                      },
-                                      on: {
-                                        click: function($event) {
-                                          _vm.inaNomina(props.item.id)
-                                        }
-                                      }
-                                    },
-                                    [
-                                      _c("v-icon", { attrs: { small: "" } }, [
-                                        _vm._v("fa-lock")
-                                      ])
-                                    ],
-                                    1
-                                  )
-                                : _vm._e()
+                              )
                             ],
                             1
                           )

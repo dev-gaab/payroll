@@ -28,18 +28,11 @@
             <td>{{ props.item.codigo }}</td>
             <td>{{ props.item.desde }} </td>
             <td>{{ props.item.hasta }} </td>
-            <td>{{props.item.tipo}}</td>
             <td>{{ props.item.estatus | capitalize}}</td>
             <!-- Acciones -->
             <td class="justify-center layout px-0">
               <v-btn @click="verNomina(props.item.id)" icon small color="primary">
                 <v-icon small>fa-eye</v-icon>
-              </v-btn>
-              <v-btn @click="editNomina(props.item.id)" icon small color="warning">
-                <v-icon small>fa-edit</v-icon>
-              </v-btn>
-              <v-btn @click="inaNomina(props.item.id)" v-if="props.item.estatus == 'activo'" icon small color="error">
-                <v-icon small>fa-lock</v-icon>
               </v-btn>
             </td>
           </template>
@@ -50,10 +43,7 @@
         </v-data-table>
       </v-card>
     </v-flex>
-    <!-- Componente para ver modal de ver empresa -->
-    <!-- <VerTrabajador :dialog="dialogVer" :trabajador="trabajador"></VerTrabajador> -->
-    <!-- componente modal para editar empresa -->
-    <!-- <EditTrabajador :dialog="dialogUpd" :trabajador="trabajador" v-on:updSuccess='updSuc'></EditTrabajador> -->
+
   </v-layout>
 
 </template>
@@ -91,10 +81,10 @@
       allTrabajadores () {
         const vm = this;
 
-        axios.get(`http://payroll.com.local/api/trabajadores/all/${vm.idE}`)
+        axios.get(`http://payroll.com.local/api/nomina/${vm.idE}`)
           .then((res) => {
-            vm.$data.trabajadores = res.data.trabajadores;
-            
+            vm.$data.nominas = res.data.nominas;
+
           })
           .catch((err) => {
             console.log(err);
