@@ -305,7 +305,7 @@ export default {
         { text: "Acciones", align: "center", value: "rif", sortable: false }
       ],
       empresas: [],
-      idE: 0,
+      idE: this.$store.state.empresa ? this.$store.state.empresa.id : null,
       dialogVer: false,
       dialogUpd: false,
       empresa: {},

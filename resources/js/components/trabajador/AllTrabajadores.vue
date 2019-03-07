@@ -374,7 +374,7 @@ export default {
       axios
         .get(`http://payroll.com.local/api/trabajadores/all/${vm.idE}`, {
           headers: {
-            Authorization: `Bearer ${vm.$store.state.currentUser.token}`
+            'Authorization': `Bearer ${vm.$store.state.currentUser.token}`
           }
         })
         .then(res => {
@@ -392,7 +392,7 @@ export default {
       axios
         .get(`http://payroll.com.local/api/trabajadores/${id}`, {
           headers: {
-            Authorization: `Bearer ${vm.$store.state.currentUser.token}`
+            'Authorization': `Bearer ${vm.$store.state.currentUser.token}`
           }
         })
         .then(res => {
@@ -411,7 +411,7 @@ export default {
       axios
         .get(`http://payroll.com.local/api/trabajadores/${id}`, {
           headers: {
-            Authorization: `Bearer ${vm.$store.state.currentUser.token}`
+            'Authorization': `Bearer ${vm.$store.state.currentUser.token}`
           }
         })
         .then(res => {
@@ -437,7 +437,7 @@ export default {
 
       axios.put(`http://payroll.com.local/api/trabajadores/${id}`, data,
         { headers: {
-            Authorization: `Bearer ${vm.$store.state.currentUser.token}`
+            'Authorization': `Bearer ${vm.$store.state.currentUser.token}`
           }
         }
         )

@@ -3659,7 +3659,7 @@ __webpack_require__.r(__webpack_exports__);
         sortable: false
       }],
       empresas: [],
-      idE: 0,
+      idE: this.$store.state.empresa ? this.$store.state.empresa.id : null,
       dialogVer: false,
       dialogUpd: false,
       empresa: {},
@@ -4301,6 +4301,9 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
 
 /* harmony default export */ __webpack_exports__["default"] = ({
   name: 'AllNominas',
@@ -4317,9 +4320,6 @@ __webpack_require__.r(__webpack_exports__);
         text: 'Hasta',
         value: 'hasta'
       }, {
-        text: 'Tipo',
-        value: 'tipo'
-      }, {
         text: 'Estatus',
         value: 'estatus'
       }, {
@@ -4329,25 +4329,33 @@ __webpack_require__.r(__webpack_exports__);
         sortable: false
       }],
       nominas: [],
-      idE: 1
+      idE: this.$store.state.empresa.id
     };
   },
   components: {},
   created: function created() {
-    this.allTrabajadores();
+    this.listNominas();
   },
   methods: {
-    newNomina: function newNomina() {
-      this.$router.push({
-        path: '/nominas/nueva'
+    listNominas: function listNominas() {
+      var vm = this;
+      axios__WEBPACK_IMPORTED_MODULE_0___default.a.get("http://payroll.com.local/api/nominas/".concat(vm.idE), {
+        headers: {
+          'Authorization': "Bearer ".concat(vm.$store.state.currentUser.token)
+        }
+      }).then(function (res) {
+        vm.nominas = res.data;
       });
     },
-    allTrabajadores: function allTrabajadores() {
+    generarNomina: function generarNomina() {
       var vm = this;
-      axios__WEBPACK_IMPORTED_MODULE_0___default.a.get("http://payroll.com.local/api/nomina/".concat(vm.idE)).then(function (res) {
-        vm.$data.nominas = res.data.nominas;
-      }).catch(function (err) {
-        console.log(err);
+      axios__WEBPACK_IMPORTED_MODULE_0___default.a.post("http://payroll.com.local/api/nominas/generar/".concat(vm.idE), {}, {
+        headers: {
+          'Authorization': "Bearer ".concat(vm.$store.state.currentUser.token)
+        }
+      }).then(function (res) {
+        console.log(res.data);
+        vm.listNominas();
       });
     }
   },
@@ -4990,7 +4998,7 @@ var moment = __webpack_require__(/*! moment */ "./node_modules/moment/moment.js"
       var vm = this;
       axios__WEBPACK_IMPORTED_MODULE_0___default.a.get("http://payroll.com.local/api/trabajadores/all/".concat(vm.idE), {
         headers: {
-          Authorization: "Bearer ".concat(vm.$store.state.currentUser.token)
+          'Authorization': "Bearer ".concat(vm.$store.state.currentUser.token)
         }
       }).then(function (res) {
         vm.$data.trabajadores = res.data.trabajadores;
@@ -5003,7 +5011,7 @@ var moment = __webpack_require__(/*! moment */ "./node_modules/moment/moment.js"
       var vm = this;
       axios__WEBPACK_IMPORTED_MODULE_0___default.a.get("http://payroll.com.local/api/trabajadores/".concat(id), {
         headers: {
-          Authorization: "Bearer ".concat(vm.$store.state.currentUser.token)
+          'Authorization': "Bearer ".concat(vm.$store.state.currentUser.token)
         }
       }).then(function (res) {
         vm.$data.trabajador = res.data.trabajador;
@@ -5017,7 +5025,7 @@ var moment = __webpack_require__(/*! moment */ "./node_modules/moment/moment.js"
       var vm = this;
       axios__WEBPACK_IMPORTED_MODULE_0___default.a.get("http://payroll.com.local/api/trabajadores/".concat(id), {
         headers: {
-          Authorization: "Bearer ".concat(vm.$store.state.currentUser.token)
+          'Authorization': "Bearer ".concat(vm.$store.state.currentUser.token)
         }
       }).then(function (res) {
         vm.$data.trabajador = res.data.trabajador;
@@ -5043,7 +5051,7 @@ var moment = __webpack_require__(/*! moment */ "./node_modules/moment/moment.js"
       var id = vm.$data.idTrabajadorEdit;
       axios__WEBPACK_IMPORTED_MODULE_0___default.a.put("http://payroll.com.local/api/trabajadores/".concat(id), data, {
         headers: {
-          Authorization: "Bearer ".concat(vm.$store.state.currentUser.token)
+          'Authorization': "Bearer ".concat(vm.$store.state.currentUser.token)
         }
       }).then(function (res) {
         //Mostrar alertas
@@ -5311,7 +5319,7 @@ var Trabajador = function Trabajador() {
   methods: {
     addTrabajador: function addTrabajador() {
       var vm = this;
-      axios__WEBPACK_IMPORTED_MODULE_0___default.a.post("http://payroll.com.local/api/trabajadores/".concat(vm.empresaId), vm.$data.trabajador, {
+      axios__WEBPACK_IMPORTED_MODULE_0___default.a.post("http://payroll.com.local/api/trabajadores/".concat(vm.empresaId), vm.trabajador, {
         headers: {
           'Authorization': "Bearer ".concat(vm.$store.state.currentUser.token)
         }
@@ -27092,10 +27100,13 @@ var render = function() {
                   _c(
                     "v-btn",
                     {
-                      attrs: { icon: "", color: "teal accent-4", dark: "" },
-                      on: { click: _vm.newNomina }
+                      attrs: { color: "teal accent-4", dark: "" },
+                      on: { click: _vm.generarNomina }
                     },
-                    [_c("v-icon", [_vm._v("add")])],
+                    [
+                      _vm._v("\n          Generar\n          "),
+                      _c("v-icon", [_vm._v("add")])
+                    ],
                     1
                   )
                 ],
@@ -69065,8 +69076,8 @@ if (!currentEmpresa) {
 /*! no static exports found */
 /***/ (function(module, exports, __webpack_require__) {
 
-__webpack_require__(/*! /home/gaab-dev/Apps/PSTIV/payroll/resources/js/app.js */"./resources/js/app.js");
-module.exports = __webpack_require__(/*! /home/gaab-dev/Apps/PSTIV/payroll/resources/sass/app.scss */"./resources/sass/app.scss");
+__webpack_require__(/*! S:\xampp\htdocs\apps\payroll\resources\js\app.js */"./resources/js/app.js");
+module.exports = __webpack_require__(/*! S:\xampp\htdocs\apps\payroll\resources\sass\app.scss */"./resources/sass/app.scss");
 
 
 /***/ })

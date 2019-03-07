@@ -16,7 +16,10 @@
             hide-details
           ></v-text-field>
           <v-spacer></v-spacer>
-          <v-btn icon color="teal accent-4" dark @click="newNomina"><v-icon>add</v-icon></v-btn>
+          <v-btn color="teal accent-4" dark @click="generarNomina">
+            Generar
+            <v-icon>add</v-icon>
+          </v-btn>
         </v-card-title>
         <v-data-table
           :headers="headers"
@@ -51,7 +54,6 @@
 <script>
   import axios from 'axios';
 
-
   export default {
     name: 'AllNominas',
     data () {
@@ -61,33 +63,35 @@
           { text: 'Código', value: 'codigo' },
           { text: 'Desde', value: 'desde' },
           { text: 'Hasta', value: 'hasta' },
-          { text: 'Tipo', value: 'tipo' },
           { text: 'Estatus', value: 'estatus' },
           { text: 'Acciones', align: 'center', value: 'codigo', sortable: false}
         ],
         nominas: [],
-        idE: 1
+        idE: this.$store.state.empresa.id
       }
     },
     components: {
     },
     created () {
-      this.allTrabajadores();
+      this.listNominas();
     },
     methods: {
-      newNomina () {
-        this.$router.push({path: '/nominas/nueva'});
+    	listNominas() {
+    		const vm = this;
+    		axios.get(`http://payroll.com.local/api/nominas/${vm.idE}`,
+			    {headers: {'Authorization' : `Bearer ${vm.$store.state.currentUser.token}`}})
+          .then(res => {
+          	vm.nominas = res.data;
+          });
       },
-      allTrabajadores () {
+      generarNomina () {
         const vm = this;
-
-        axios.get(`http://payroll.com.local/api/nomina/${vm.idE}`)
-          .then((res) => {
-            vm.$data.nominas = res.data.nominas;
-
-          })
-          .catch((err) => {
-            console.log(err);
+        axios.post(`http://payroll.com.local/api/nominas/generar/${vm.idE}`,
+          {},
+	        {headers: {'Authorization' : `Bearer ${vm.$store.state.currentUser.token}`}})
+          .then(res => {
+          	console.log(res.data);
+          	vm.listNominas();
           });
       }
     },

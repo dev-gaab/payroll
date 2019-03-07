@@ -24,7 +24,6 @@ class CreateNominaDetallesTable extends Migration
             $table->boolean('ivss');
             $table->boolean('faov');
             $table->boolean('paro_forzoso');
-            $table->boolean('vac_colectivas');
             $table->json('montos');
 
             $table->foreign('trabajador_id')

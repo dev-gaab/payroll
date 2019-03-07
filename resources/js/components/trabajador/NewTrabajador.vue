@@ -211,7 +211,7 @@
     methods: {
       addTrabajador () {
         const vm = this;
-        axios.post(`http://payroll.com.local/api/trabajadores/${vm.empresaId}`, vm.$data.trabajador,
+        axios.post(`http://payroll.com.local/api/trabajadores/${vm.empresaId}`, vm.trabajador,
         {headers: {'Authorization' : `Bearer ${vm.$store.state.currentUser.token}`}})
           .then((res) => {
 

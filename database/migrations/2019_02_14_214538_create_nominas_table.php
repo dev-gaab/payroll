@@ -25,7 +25,8 @@ class CreateNominasTable extends Migration
             $table->date('hasta');
             $table->string('tipo');
             $table->string('estatus', 12);
-
+            $table->boolean('vac_colectivas')->nullable(); 
+            
             $table->foreign('empresa_id')
                 ->references('id')
                 ->on('empresa')
