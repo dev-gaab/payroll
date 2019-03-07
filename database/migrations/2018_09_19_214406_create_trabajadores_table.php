@@ -18,9 +18,9 @@ class CreateTrabajadoresTable extends Migration
             $table->integer('empresa_id')->unsigned();
             $table->string('cedula', 10);
             $table->string('nombre1');
-            $table->string('nombre2');
+            $table->string('nombre2')->nullable();
             $table->string('apellido1');
-            $table->string('apellido2');
+            $table->string('apellido2')->nullable();
             $table->string('cargo');
             $table->date('fecha_nacimiento');
             $table->string('sexo');
