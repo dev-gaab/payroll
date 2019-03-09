@@ -8,7 +8,6 @@ import AllBases from '../components/bases/AllBases'
 import AllTrabajadores from '../components/trabajador/AllTrabajadores'
 import NewTrabajador from '../components/trabajador/NewTrabajador'
 import AllNominas from '../components/nomina/AllNominas'
-import NewNomina from '../components/nomina/NewNomina'
 import NominaDetalle from '../components/nomina/NominaDetalle'
 
 Vue.use(Router)
@@ -77,15 +76,7 @@ export default new Router({
         requiresAuth: true
       }
     },
-    // Rutas para nomina
-    {
-      path: '/nominas/nueva',
-      name: 'NewNominas',
-      component: NewNomina,
-      meta: {
-        requiresAuth: true
-      }
-    },
+    // Rutas para nomin
     {
       path: '/nominas',
       name: 'Nominas',

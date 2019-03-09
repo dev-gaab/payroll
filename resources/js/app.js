@@ -11,11 +11,7 @@ import 'vuetify/dist/vuetify.min.css'
 // roboto fontface
 import 'roboto-fontface/css/roboto/roboto-fontface.css'
 import 'material-design-icons-iconfont/dist/material-design-icons.css'
-// // Bootstrap y jquery
-// import 'bootstrap/dist/css/bootstrap.min.css'
-// import 'jquery/dist/jquery.min.js'
-// import 'bootstrap/dist/js/bootstrap.min.js'
-// fontawesome icons..
+
 import '@fortawesome/fontawesome-free/css/all.css'
 // // custom css
 // import './assets/css/index.css'

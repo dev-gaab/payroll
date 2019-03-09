@@ -4370,111 +4370,6 @@ __webpack_require__.r(__webpack_exports__);
 
 /***/ }),
 
-/***/ "./node_modules/babel-loader/lib/index.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/components/nomina/NewNomina.vue?vue&type=script&lang=js&":
-/*!***************************************************************************************************************************************************************************!*\
-  !*** ./node_modules/babel-loader/lib??ref--4-0!./node_modules/vue-loader/lib??vue-loader-options!./resources/js/components/nomina/NewNomina.vue?vue&type=script&lang=js& ***!
-  \***************************************************************************************************************************************************************************/
-/*! exports provided: default */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-__webpack_require__.r(__webpack_exports__);
-/* harmony import */ var axios__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! axios */ "./node_modules/axios/index.js");
-/* harmony import */ var axios__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(axios__WEBPACK_IMPORTED_MODULE_0__);
-function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
-
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-
-
-var Nomina = function Nomina() {
-  _classCallCheck(this, Nomina);
-
-  this.desde = '';
-  this.hasta = '';
-  this.tipo = '';
-};
-
-/* harmony default export */ __webpack_exports__["default"] = ({
-  name: 'NewNomina',
-  data: function data() {
-    return {
-      idE: 1,
-      nomina: new Nomina(),
-      tipo: ['Semanal', 'Quincenal', 'Mensual']
-    };
-  },
-  methods: {
-    generar: function generar() {
-      var vm = this;
-      axios__WEBPACK_IMPORTED_MODULE_0___default.a.post("http://payroll.com.local/api/nominas/generar/".concat(vm.idE), vm.$data.nomina).then(function (res) {
-        if (!res.data.error) {
-          vm.$data.nomina = new Trabajador();
-          id = res.data.id;
-          vm.$router.push({
-            path: "/nominas/detalle/".concat(id)
-          });
-        } else {
-          console.log(res.data.error);
-        }
-      }).catch(function (err) {
-        console.log(err);
-      });
-    }
-  }
-});
-
-/***/ }),
-
 /***/ "./node_modules/babel-loader/lib/index.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/components/nomina/NominaDetalle.vue?vue&type=script&lang=js&":
 /*!*******************************************************************************************************************************************************************************!*\
   !*** ./node_modules/babel-loader/lib??ref--4-0!./node_modules/vue-loader/lib??vue-loader-options!./resources/js/components/nomina/NominaDetalle.vue?vue&type=script&lang=js& ***!
@@ -4562,18 +4457,18 @@ __webpack_require__.r(__webpack_exports__);
         sortable: false
       }],
       nominas: [],
-      idE: 1
+      idE: this.$store.state.empresa.id
     };
   },
   components: {},
   created: function created() {
-    this.all();
+    this.allNominasDetalle();
   },
   methods: {
-    all: function all() {
+    allNominasDetalle: function allNominasDetalle() {
       var vm = this;
-      axios__WEBPACK_IMPORTED_MODULE_0___default.a.get("http://payroll.com.local/api/trabajadores/all/".concat(vm.idE)).then(function (res) {
-        vm.$data.trabajadores = res.data.trabajadores;
+      axios__WEBPACK_IMPORTED_MODULE_0___default.a.get("http://payroll.com.local/api/nominas/detalle/all/".concat(vm.idE)).then(function (res) {
+        vm.nominas = res.data;
       }).catch(function (err) {
         console.log(err);
       });
@@ -27190,151 +27085,6 @@ var render = function() {
                           '" no encontro resultados.\n        '
                       )
                     ]
-                  )
-                ],
-                1
-              )
-            ],
-            1
-          )
-        ],
-        1
-      )
-    ],
-    1
-  )
-}
-var staticRenderFns = []
-render._withStripped = true
-
-
-
-/***/ }),
-
-/***/ "./node_modules/vue-loader/lib/loaders/templateLoader.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/components/nomina/NewNomina.vue?vue&type=template&id=73ec1f3c&":
-/*!*******************************************************************************************************************************************************************************************************************!*\
-  !*** ./node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!./node_modules/vue-loader/lib??vue-loader-options!./resources/js/components/nomina/NewNomina.vue?vue&type=template&id=73ec1f3c& ***!
-  \*******************************************************************************************************************************************************************************************************************/
-/*! exports provided: render, staticRenderFns */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-__webpack_require__.r(__webpack_exports__);
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "render", function() { return render; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "staticRenderFns", function() { return staticRenderFns; });
-var render = function() {
-  var _vm = this
-  var _h = _vm.$createElement
-  var _c = _vm._self._c || _h
-  return _c(
-    "v-layout",
-    { attrs: { row: "", wrap: "" } },
-    [
-      _c(
-        "v-flex",
-        { attrs: { xs6: "" } },
-        [
-          _c(
-            "v-card",
-            { staticClass: "elevation-12" },
-            [
-              _c(
-                "v-toolbar",
-                { attrs: { dark: "", color: "teal darken-1", dense: "" } },
-                [
-                  _c("v-toolbar-title", [_vm._v("Nomina")]),
-                  _vm._v(" "),
-                  _c("v-spacer")
-                ],
-                1
-              ),
-              _vm._v(" "),
-              _c(
-                "form",
-                {
-                  on: {
-                    submit: function($event) {
-                      $event.preventDefault()
-                      return _vm.generar($event)
-                    }
-                  }
-                },
-                [
-                  _c(
-                    "v-card-text",
-                    [
-                      _c("v-text-field", {
-                        attrs: {
-                          color: "teal darken-1",
-                          label: "Desde",
-                          name: "desde",
-                          id: "desde",
-                          type: "month"
-                        },
-                        model: {
-                          value: _vm.nomina.desde,
-                          callback: function($$v) {
-                            _vm.$set(_vm.nomina, "desde", $$v)
-                          },
-                          expression: "nomina.desde"
-                        }
-                      }),
-                      _vm._v(" "),
-                      _c("v-text-field", {
-                        attrs: {
-                          color: "teal darken-1",
-                          label: "Hasta",
-                          name: "hasta",
-                          id: "hasta",
-                          type: "week"
-                        },
-                        model: {
-                          value: _vm.nomina.hasta,
-                          callback: function($$v) {
-                            _vm.$set(_vm.nomina, "hasta", $$v)
-                          },
-                          expression: "nomina.hasta"
-                        }
-                      }),
-                      _vm._v(" "),
-                      _c("v-select", {
-                        attrs: {
-                          items: _vm.tipo,
-                          color: "teal darken-1",
-                          label: "Tipo de Pago",
-                          name: "tipo",
-                          id: "tipo"
-                        },
-                        model: {
-                          value: _vm.nomina.tipo,
-                          callback: function($$v) {
-                            _vm.$set(_vm.nomina, "tipo", $$v)
-                          },
-                          expression: "nomina.tipo"
-                        }
-                      })
-                    ],
-                    1
-                  ),
-                  _vm._v(" "),
-                  _c(
-                    "v-card-actions",
-                    [
-                      _c("v-spacer"),
-                      _vm._v(" "),
-                      _c(
-                        "v-btn",
-                        {
-                          attrs: {
-                            type: "submit",
-                            dark: "",
-                            color: "teal darken-1"
-                          }
-                        },
-                        [_vm._v("Generar")]
-                      )
-                    ],
-                    1
                   )
                 ],
                 1
@@ -67765,11 +67515,6 @@ __webpack_require__.r(__webpack_exports__);
  // roboto fontface
 
 
- // // Bootstrap y jquery
-// import 'bootstrap/dist/css/bootstrap.min.css'
-// import 'jquery/dist/jquery.min.js'
-// import 'bootstrap/dist/js/bootstrap.min.js'
-// fontawesome icons..
 
  // // custom css
 // import './assets/css/index.css'
@@ -68524,75 +68269,6 @@ __webpack_require__.r(__webpack_exports__);
 
 /***/ }),
 
-/***/ "./resources/js/components/nomina/NewNomina.vue":
-/*!******************************************************!*\
-  !*** ./resources/js/components/nomina/NewNomina.vue ***!
-  \******************************************************/
-/*! exports provided: default */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-__webpack_require__.r(__webpack_exports__);
-/* harmony import */ var _NewNomina_vue_vue_type_template_id_73ec1f3c___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./NewNomina.vue?vue&type=template&id=73ec1f3c& */ "./resources/js/components/nomina/NewNomina.vue?vue&type=template&id=73ec1f3c&");
-/* harmony import */ var _NewNomina_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./NewNomina.vue?vue&type=script&lang=js& */ "./resources/js/components/nomina/NewNomina.vue?vue&type=script&lang=js&");
-/* empty/unused harmony star reexport *//* harmony import */ var _node_modules_vue_loader_lib_runtime_componentNormalizer_js__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../../../../node_modules/vue-loader/lib/runtime/componentNormalizer.js */ "./node_modules/vue-loader/lib/runtime/componentNormalizer.js");
-
-
-
-
-
-/* normalize component */
-
-var component = Object(_node_modules_vue_loader_lib_runtime_componentNormalizer_js__WEBPACK_IMPORTED_MODULE_2__["default"])(
-  _NewNomina_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_1__["default"],
-  _NewNomina_vue_vue_type_template_id_73ec1f3c___WEBPACK_IMPORTED_MODULE_0__["render"],
-  _NewNomina_vue_vue_type_template_id_73ec1f3c___WEBPACK_IMPORTED_MODULE_0__["staticRenderFns"],
-  false,
-  null,
-  null,
-  null
-  
-)
-
-/* hot reload */
-if (false) { var api; }
-component.options.__file = "resources/js/components/nomina/NewNomina.vue"
-/* harmony default export */ __webpack_exports__["default"] = (component.exports);
-
-/***/ }),
-
-/***/ "./resources/js/components/nomina/NewNomina.vue?vue&type=script&lang=js&":
-/*!*******************************************************************************!*\
-  !*** ./resources/js/components/nomina/NewNomina.vue?vue&type=script&lang=js& ***!
-  \*******************************************************************************/
-/*! exports provided: default */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-__webpack_require__.r(__webpack_exports__);
-/* harmony import */ var _node_modules_babel_loader_lib_index_js_ref_4_0_node_modules_vue_loader_lib_index_js_vue_loader_options_NewNomina_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! -!../../../../node_modules/babel-loader/lib??ref--4-0!../../../../node_modules/vue-loader/lib??vue-loader-options!./NewNomina.vue?vue&type=script&lang=js& */ "./node_modules/babel-loader/lib/index.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/components/nomina/NewNomina.vue?vue&type=script&lang=js&");
-/* empty/unused harmony star reexport */ /* harmony default export */ __webpack_exports__["default"] = (_node_modules_babel_loader_lib_index_js_ref_4_0_node_modules_vue_loader_lib_index_js_vue_loader_options_NewNomina_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_0__["default"]); 
-
-/***/ }),
-
-/***/ "./resources/js/components/nomina/NewNomina.vue?vue&type=template&id=73ec1f3c&":
-/*!*************************************************************************************!*\
-  !*** ./resources/js/components/nomina/NewNomina.vue?vue&type=template&id=73ec1f3c& ***!
-  \*************************************************************************************/
-/*! exports provided: render, staticRenderFns */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-__webpack_require__.r(__webpack_exports__);
-/* harmony import */ var _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_NewNomina_vue_vue_type_template_id_73ec1f3c___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! -!../../../../node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!../../../../node_modules/vue-loader/lib??vue-loader-options!./NewNomina.vue?vue&type=template&id=73ec1f3c& */ "./node_modules/vue-loader/lib/loaders/templateLoader.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/components/nomina/NewNomina.vue?vue&type=template&id=73ec1f3c&");
-/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "render", function() { return _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_NewNomina_vue_vue_type_template_id_73ec1f3c___WEBPACK_IMPORTED_MODULE_0__["render"]; });
-
-/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "staticRenderFns", function() { return _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_NewNomina_vue_vue_type_template_id_73ec1f3c___WEBPACK_IMPORTED_MODULE_0__["staticRenderFns"]; });
-
-
-
-/***/ }),
-
 /***/ "./resources/js/components/nomina/NominaDetalle.vue":
 /*!**********************************************************!*\
   !*** ./resources/js/components/nomina/NominaDetalle.vue ***!
@@ -68838,9 +68514,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _components_trabajador_AllTrabajadores__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! ../components/trabajador/AllTrabajadores */ "./resources/js/components/trabajador/AllTrabajadores.vue");
 /* harmony import */ var _components_trabajador_NewTrabajador__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(/*! ../components/trabajador/NewTrabajador */ "./resources/js/components/trabajador/NewTrabajador.vue");
 /* harmony import */ var _components_nomina_AllNominas__WEBPACK_IMPORTED_MODULE_9__ = __webpack_require__(/*! ../components/nomina/AllNominas */ "./resources/js/components/nomina/AllNominas.vue");
-/* harmony import */ var _components_nomina_NewNomina__WEBPACK_IMPORTED_MODULE_10__ = __webpack_require__(/*! ../components/nomina/NewNomina */ "./resources/js/components/nomina/NewNomina.vue");
-/* harmony import */ var _components_nomina_NominaDetalle__WEBPACK_IMPORTED_MODULE_11__ = __webpack_require__(/*! ../components/nomina/NominaDetalle */ "./resources/js/components/nomina/NominaDetalle.vue");
-
+/* harmony import */ var _components_nomina_NominaDetalle__WEBPACK_IMPORTED_MODULE_10__ = __webpack_require__(/*! ../components/nomina/NominaDetalle */ "./resources/js/components/nomina/NominaDetalle.vue");
 
 
 
@@ -68910,15 +68584,8 @@ vue__WEBPACK_IMPORTED_MODULE_0___default.a.use(vue_router__WEBPACK_IMPORTED_MODU
     meta: {
       requiresAuth: true
     }
-  }, // Rutas para nomina
+  }, // Rutas para nomin
   {
-    path: '/nominas/nueva',
-    name: 'NewNominas',
-    component: _components_nomina_NewNomina__WEBPACK_IMPORTED_MODULE_10__["default"],
-    meta: {
-      requiresAuth: true
-    }
-  }, {
     path: '/nominas',
     name: 'Nominas',
     component: _components_nomina_AllNominas__WEBPACK_IMPORTED_MODULE_9__["default"],
@@ -68928,7 +68595,7 @@ vue__WEBPACK_IMPORTED_MODULE_0___default.a.use(vue_router__WEBPACK_IMPORTED_MODU
   }, {
     path: '/nominas/detalle/:id',
     name: 'NominaDetalle',
-    component: _components_nomina_NominaDetalle__WEBPACK_IMPORTED_MODULE_11__["default"],
+    component: _components_nomina_NominaDetalle__WEBPACK_IMPORTED_MODULE_10__["default"],
     meta: {
       requiresAuth: true
     }

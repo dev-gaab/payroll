@@ -66,22 +66,21 @@
           { text: 'Acciones', align: 'center', value: 'codigo', sortable: false}
         ],
         nominas: [],
-        idE: 1
+        idE: this.$store.state.empresa.id,
       }
     },
     components: {
     },
     created () {
-      this.all();
+      this.allNominasDetalle();
     },
     methods: {
-      all () {
+      allNominasDetalle () {
         const vm = this;
 
-        axios.get(`http://payroll.com.local/api/trabajadores/all/${vm.idE}`)
+        axios.get(`http://payroll.com.local/api/nominas/detalle/all/${vm.idE}`)
           .then((res) => {
-            vm.$data.trabajadores = res.data.trabajadores;
-            
+            vm.nominas = res.data;
           })
           .catch((err) => {
             console.log(err);
