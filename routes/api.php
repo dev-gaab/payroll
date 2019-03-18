@@ -40,4 +40,8 @@ Route::group(['prefix' => 'trabajadores', 'middleware' => 'auth:api'], function(
 Route::group(['prefix' => 'nominas', 'middleware' => 'auth:api'], function() {
   Route::get('/{id}', 'Api\NominaController@verTodas');
   Route::post('/generar/{id}', 'Api\NominaController@generar');
+  // Nomina detalle
+  Route::get('/detalle/{id}', 'Api\NominaController@allNominaDetalle');
+  Route::get('/detalle/find/{id}', 'Api\NominaController@verNominaDetalle');
+  Route::put('/detalle/{nomina_id}/{trabajador_id}', 'Api\NominaController@modificarNominaDetalle');
 });

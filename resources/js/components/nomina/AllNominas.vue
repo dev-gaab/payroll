@@ -93,6 +93,9 @@
           	console.log(res.data);
           	vm.listNominas();
           });
+      },
+      verNomina(id) {
+    		this.$router.push({path: `nominas/detalle/${id}`});
       }
     },
     filters: {

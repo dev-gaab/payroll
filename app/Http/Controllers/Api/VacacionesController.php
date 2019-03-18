@@ -39,10 +39,29 @@ class VacacionesController extends Controller
       if ($dias_disfrute > 30) $dias_disfrute = 30;
       if ($bono_vacacional > 30) $bono_vacacional = 30;
 
-//      TODO: buscar funcion la cual permita acceder al calendario de venezuela y ver los dias feriados del año.
       $fecha = $request->fecha_inicio;
+
       $dias_validos = $dias_disfrute;
       $dias_feriados = 0;
+//      TODO: Separar en una funcion
+      $feriados = [
+        '01-01',
+        '04-03',
+        '05-03',
+        '10-02',
+        '21-05',
+        '29-06',
+        '16-07',
+        '15-08',
+        '18-09',
+        '19-09',
+        '12-10',
+        '31-10',
+        '01-11',
+        '08-12',
+        '13-12',
+        '25-12'
+      ];
       while ($dias_validos > 0) {
         $weekday = date('w', strtotime($fecha));
         if($weekday == 0 || $weekday == 6) {
@@ -50,14 +69,17 @@ class VacacionesController extends Controller
           $fecha = date("d-m-Y", strtotime($fecha . "+ 1 day"));
         } else {
 //          TODO: aqui va la funcion de el calendario para calcular los dias feriados.
-          if($is_feriado = true) {
-            $dias_feriados ++;
-            $fecha = date("d-m-Y", strtotime($fecha . "+ 1 day"));
-          } else {
-            $dias_validos --;
-          }
-        }
+          $fecha_separada = explode("-", $fecha);
+          $dia_mes = $fecha_separada[2]."-".$fecha_separada[1]; // deberia devolver DIA-MES
 
+          if(in_array($dia_mes, $feriados)){
+            return false;
+          }
+          else{
+            return true;
+          }
+
+        }
       }
 
       $fecha_final = $fecha;

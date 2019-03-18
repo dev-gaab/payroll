@@ -4357,6 +4357,11 @@ __webpack_require__.r(__webpack_exports__);
         console.log(res.data);
         vm.listNominas();
       });
+    },
+    verNomina: function verNomina(id) {
+      this.$router.push({
+        path: "nominas/detalle/".concat(id)
+      });
     }
   },
   filters: {
@@ -4432,6 +4437,327 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 
 /* harmony default export */ __webpack_exports__["default"] = ({
   name: 'NominaDetalle',
@@ -4448,7 +4774,19 @@ __webpack_require__.r(__webpack_exports__);
         text: 'Dias Trab.',
         value: 'dias'
       }, {
-        text: 'Total',
+        text: 'Salario',
+        value: 'salario'
+      }, {
+        text: 'Total Asignaciones',
+        value: 'asignaciones'
+      }, {
+        text: 'Total Deducciones',
+        value: 'deducciones'
+      }, {
+        text: 'Cesta Ticket',
+        value: 'cesta_ticket'
+      }, {
+        text: 'Total a pagar',
         value: 'total'
       }, {
         text: 'Acciones',
@@ -4457,7 +4795,13 @@ __webpack_require__.r(__webpack_exports__);
         sortable: false
       }],
       nominas: [],
-      idE: this.$store.state.empresa.id
+      idE: this.$store.state.empresa.id,
+      idNomina: this.$route.params.id,
+      nominaDetalle: {
+        montos: {}
+      },
+      dialogVer: false,
+      dialogUpd: false
     };
   },
   components: {},
@@ -4467,18 +4811,43 @@ __webpack_require__.r(__webpack_exports__);
   methods: {
     allNominasDetalle: function allNominasDetalle() {
       var vm = this;
-      axios__WEBPACK_IMPORTED_MODULE_0___default.a.get("http://payroll.com.local/api/nominas/detalle/all/".concat(vm.idE)).then(function (res) {
+      axios__WEBPACK_IMPORTED_MODULE_0___default.a.get("/api/nominas/detalle/".concat(vm.idNomina), {
+        headers: {
+          'Authorization': "Bearer ".concat(vm.$store.state.currentUser.token)
+        }
+      }).then(function (res) {
         vm.nominas = res.data;
       }).catch(function (err) {
-        console.log(err);
+        return console.log(err);
       });
-    }
+    },
+    verNominaDetalle: function verNominaDetalle(id) {
+      var vm = this;
+      axios__WEBPACK_IMPORTED_MODULE_0___default.a.get("/api/nominas/detalle/find/".concat(id), {
+        headers: {
+          'Authorization': "Bearer ".concat(vm.$store.state.currentUser.token)
+        }
+      }).then(function (res) {
+        vm.nominaDetalle = res.data.nomina;
+        vm.dialogVer = true;
+      }).catch(function (err) {
+        return console.log(err);
+      });
+    },
+    editNominaDetalle: function editNominaDetalle(id) {}
   },
   filters: {
     capitalize: function capitalize(value) {
       if (!value) return '';
       value = value.toString();
       return value.charAt(0).toUpperCase() + value.slice(1);
+    },
+    numberFormat: function numberFormat(value) {
+      value = new Intl.NumberFormat("es-VE", {
+        style: "currency",
+        currency: "VES"
+      }).format(value);
+      return value;
     }
   }
 });
@@ -27176,17 +27545,119 @@ var render = function() {
                         return [
                           _c("td", [_vm._v(_vm._s(props.item.cedula))]),
                           _vm._v(" "),
-                          _c("td", [_vm._v(_vm._s(props.item.nombre) + " ")]),
+                          _c("td", [
+                            _vm._v(
+                              _vm._s(props.item.nombre) +
+                                " " +
+                                _vm._s(props.item.apellido) +
+                                " "
+                            )
+                          ]),
                           _vm._v(" "),
                           _c("td", [
                             _vm._v(_vm._s(props.item.dias_trabajados) + " ")
                           ]),
                           _vm._v(" "),
-                          _c("td", [_vm._v(_vm._s(props.item.total))]),
+                          _c("td", [
+                            _vm._v(
+                              _vm._s(
+                                _vm._f("numberFormat")(
+                                  props.item.montos.pago_salario
+                                )
+                              ) + " "
+                            )
+                          ]),
                           _vm._v(" "),
-                          _c("td", {
-                            staticClass: "justify-center layout px-0"
-                          })
+                          _c("td", [
+                            _vm._v(
+                              _vm._s(
+                                _vm._f("numberFormat")(
+                                  props.item.montos.total_asignaciones
+                                )
+                              )
+                            )
+                          ]),
+                          _vm._v(" "),
+                          _c("td", [
+                            _vm._v(
+                              _vm._s(
+                                _vm._f("numberFormat")(
+                                  props.item.montos.total_deducciones
+                                )
+                              )
+                            )
+                          ]),
+                          _vm._v(" "),
+                          _c("td", [
+                            _vm._v(
+                              _vm._s(
+                                _vm._f("numberFormat")(
+                                  props.item.montos.cesta_ticket
+                                )
+                              )
+                            )
+                          ]),
+                          _vm._v(" "),
+                          _c("td", [
+                            _vm._v(
+                              _vm._s(
+                                _vm._f("numberFormat")(
+                                  props.item.montos.monto_total
+                                )
+                              )
+                            )
+                          ]),
+                          _vm._v(" "),
+                          _c(
+                            "td",
+                            { staticClass: "justify-center layout px-0" },
+                            [
+                              _c(
+                                "v-btn",
+                                {
+                                  attrs: {
+                                    icon: "",
+                                    small: "",
+                                    color: "primary"
+                                  },
+                                  on: {
+                                    click: function($event) {
+                                      _vm.verNominaDetalle(props.item.id)
+                                    }
+                                  }
+                                },
+                                [
+                                  _c("v-icon", { attrs: { small: "" } }, [
+                                    _vm._v("fa-eye")
+                                  ])
+                                ],
+                                1
+                              ),
+                              _vm._v(" "),
+                              _c(
+                                "v-btn",
+                                {
+                                  attrs: {
+                                    icon: "",
+                                    small: "",
+                                    color: "warning"
+                                  },
+                                  on: {
+                                    click: function($event) {
+                                      _vm.editNominaDetalle(props.item.id)
+                                    }
+                                  }
+                                },
+                                [
+                                  _c("v-icon", { attrs: { small: "" } }, [
+                                    _vm._v("fa-edit")
+                                  ])
+                                ],
+                                1
+                              )
+                            ],
+                            1
+                          )
                         ]
                       }
                     }
@@ -27211,6 +27682,640 @@ var render = function() {
                           '" no encontro resultados.\n        '
                       )
                     ]
+                  )
+                ],
+                1
+              )
+            ],
+            1
+          )
+        ],
+        1
+      ),
+      _vm._v(" "),
+      _c(
+        "v-layout",
+        { attrs: { row: "", "justify-center": "" } },
+        [
+          _c(
+            "v-dialog",
+            {
+              attrs: { persistent: "", "max-width": "500" },
+              model: {
+                value: _vm.dialogVer,
+                callback: function($$v) {
+                  _vm.dialogVer = $$v
+                },
+                expression: "dialogVer"
+              }
+            },
+            [
+              _c(
+                "v-card",
+                [
+                  _c(
+                    "v-toolbar",
+                    { attrs: { dark: "", color: "teal darken-1", dense: "" } },
+                    [
+                      _c("v-toolbar-title", [
+                        _vm._v(
+                          _vm._s(_vm.nominaDetalle.cedula) +
+                            " - " +
+                            _vm._s(_vm.nominaDetalle.nombre) +
+                            " " +
+                            _vm._s(_vm.nominaDetalle.apellido)
+                        )
+                      ]),
+                      _vm._v(" "),
+                      _c("v-spacer")
+                    ],
+                    1
+                  ),
+                  _vm._v(" "),
+                  _c(
+                    "v-list",
+                    { attrs: { "two-line": "" } },
+                    [
+                      _c(
+                        "v-list-tile",
+                        [
+                          _c(
+                            "v-list-tile-content",
+                            [
+                              _c("v-list-tile-title", [
+                                _vm._v("Dias Trabajados")
+                              ]),
+                              _vm._v(" "),
+                              _c(
+                                "v-list-tile-sub-title",
+                                [
+                                  _c(
+                                    "v-layout",
+                                    { attrs: { row: "" } },
+                                    [
+                                      _c("v-flex", { attrs: { xs6: "" } }, [
+                                        _c(
+                                          "span",
+                                          { staticClass: "text--primary" },
+                                          [
+                                            _vm._v(
+                                              _vm._s(
+                                                _vm.nominaDetalle
+                                                  .dias_trabajados
+                                              )
+                                            )
+                                          ]
+                                        )
+                                      ]),
+                                      _vm._v(" "),
+                                      _c("v-flex", { attrs: { xs6: "" } }, [
+                                        _c(
+                                          "span",
+                                          { staticClass: "text--primary" },
+                                          [
+                                            _vm._v(
+                                              "Monto: " +
+                                                _vm._s(
+                                                  _vm._f("numberFormat")(
+                                                    _vm.nominaDetalle.montos
+                                                      .pago_salario
+                                                  )
+                                                )
+                                            )
+                                          ]
+                                        )
+                                      ])
+                                    ],
+                                    1
+                                  )
+                                ],
+                                1
+                              )
+                            ],
+                            1
+                          )
+                        ],
+                        1
+                      ),
+                      _vm._v(" "),
+                      _c("v-divider"),
+                      _vm._v(" "),
+                      _c(
+                        "v-list-tile",
+                        [
+                          _c(
+                            "v-list-tile-content",
+                            [
+                              _c("v-list-tile-title", [
+                                _vm._v("Horas extras diurnas")
+                              ]),
+                              _vm._v(" "),
+                              _c(
+                                "v-list-tile-sub-title",
+                                [
+                                  _c(
+                                    "v-layout",
+                                    { attrs: { row: "" } },
+                                    [
+                                      _c("v-flex", { attrs: { xs6: "" } }, [
+                                        _c(
+                                          "span",
+                                          { staticClass: "text--primary" },
+                                          [
+                                            _vm._v(
+                                              _vm._s(
+                                                _vm.nominaDetalle.he_diurnas
+                                              )
+                                            )
+                                          ]
+                                        )
+                                      ]),
+                                      _vm._v(" "),
+                                      _c("v-flex", { attrs: { xs6: "" } }, [
+                                        _c(
+                                          "span",
+                                          { staticClass: "text--primary" },
+                                          [
+                                            _vm._v(
+                                              "Monto: " +
+                                                _vm._s(
+                                                  _vm._f("numberFormat")(
+                                                    _vm.nominaDetalle.montos
+                                                      .he_diurnas
+                                                  )
+                                                )
+                                            )
+                                          ]
+                                        )
+                                      ])
+                                    ],
+                                    1
+                                  )
+                                ],
+                                1
+                              )
+                            ],
+                            1
+                          )
+                        ],
+                        1
+                      ),
+                      _vm._v(" "),
+                      _c("v-divider"),
+                      _vm._v(" "),
+                      _c(
+                        "v-list-tile",
+                        [
+                          _c(
+                            "v-list-tile-content",
+                            [
+                              _c("v-list-tile-title", [
+                                _vm._v("Horas extras nocturnas")
+                              ]),
+                              _vm._v(" "),
+                              _c(
+                                "v-list-tile-sub-title",
+                                [
+                                  _c(
+                                    "v-layout",
+                                    { attrs: { row: "" } },
+                                    [
+                                      _c("v-flex", { attrs: { xs6: "" } }, [
+                                        _c(
+                                          "span",
+                                          { staticClass: "text--primary" },
+                                          [
+                                            _vm._v(
+                                              _vm._s(
+                                                _vm.nominaDetalle.he_nocturnas
+                                              )
+                                            )
+                                          ]
+                                        )
+                                      ]),
+                                      _vm._v(" "),
+                                      _c("v-flex", { attrs: { xs6: "" } }, [
+                                        _c(
+                                          "span",
+                                          { staticClass: "text--primary" },
+                                          [
+                                            _vm._v(
+                                              "Montos: " +
+                                                _vm._s(
+                                                  _vm._f("numberFormat")(
+                                                    _vm.nominaDetalle.montos
+                                                      .he_nocturnas
+                                                  )
+                                                )
+                                            )
+                                          ]
+                                        )
+                                      ])
+                                    ],
+                                    1
+                                  )
+                                ],
+                                1
+                              )
+                            ],
+                            1
+                          )
+                        ],
+                        1
+                      ),
+                      _vm._v(" "),
+                      _c("v-divider"),
+                      _vm._v(" "),
+                      _c(
+                        "v-list-tile",
+                        [
+                          _c(
+                            "v-list-tile-content",
+                            [
+                              _c("v-list-tile-title", [
+                                _vm._v("Días feriados")
+                              ]),
+                              _vm._v(" "),
+                              _c(
+                                "v-list-tile-sub-title",
+                                [
+                                  _c(
+                                    "v-layout",
+                                    { attrs: { row: "" } },
+                                    [
+                                      _c("v-flex", { attrs: { xs6: "" } }, [
+                                        _c(
+                                          "span",
+                                          { staticClass: "text--primary" },
+                                          [
+                                            _vm._v(
+                                              _vm._s(_vm.nominaDetalle.feriados)
+                                            )
+                                          ]
+                                        )
+                                      ]),
+                                      _vm._v(" "),
+                                      _c("v-flex", { attrs: { xs6: "" } }, [
+                                        _c(
+                                          "span",
+                                          { staticClass: "text--primary" },
+                                          [
+                                            _vm._v(
+                                              "Monto: " +
+                                                _vm._s(
+                                                  _vm._f("numberFormat")(
+                                                    _vm.nominaDetalle.montos
+                                                      .feriados
+                                                  )
+                                                )
+                                            )
+                                          ]
+                                        )
+                                      ])
+                                    ],
+                                    1
+                                  )
+                                ],
+                                1
+                              )
+                            ],
+                            1
+                          )
+                        ],
+                        1
+                      ),
+                      _vm._v(" "),
+                      _c("v-divider"),
+                      _vm._v(" "),
+                      _c(
+                        "v-list-tile",
+                        [
+                          _c(
+                            "v-list-tile-content",
+                            [
+                              _c("v-list-tile-title", [_vm._v("IVSS")]),
+                              _vm._v(" "),
+                              _c(
+                                "v-list-tile-sub-title",
+                                [
+                                  _c(
+                                    "v-layout",
+                                    { attrs: { row: "" } },
+                                    [
+                                      _c("v-flex", { attrs: { xs6: "" } }, [
+                                        _c(
+                                          "span",
+                                          { staticClass: "text--primary" },
+                                          [
+                                            _vm._v(
+                                              _vm._s(
+                                                _vm.nominaDetalle.ivss
+                                                  ? "Si"
+                                                  : "No"
+                                              )
+                                            )
+                                          ]
+                                        )
+                                      ]),
+                                      _vm._v(" "),
+                                      _c("v-flex", { attrs: { xs6: "" } }, [
+                                        _c(
+                                          "span",
+                                          { staticClass: "text--primary" },
+                                          [
+                                            _vm._v(
+                                              "Monto: " +
+                                                _vm._s(
+                                                  _vm._f("numberFormat")(
+                                                    _vm.nominaDetalle.montos
+                                                      .ivss
+                                                  )
+                                                )
+                                            )
+                                          ]
+                                        )
+                                      ])
+                                    ],
+                                    1
+                                  )
+                                ],
+                                1
+                              )
+                            ],
+                            1
+                          )
+                        ],
+                        1
+                      ),
+                      _vm._v(" "),
+                      _c("v-divider"),
+                      _vm._v(" "),
+                      _c(
+                        "v-list-tile",
+                        [
+                          _c(
+                            "v-list-tile-content",
+                            [
+                              _c("v-list-tile-title", [_vm._v("FAOV")]),
+                              _vm._v(" "),
+                              _c(
+                                "v-list-tile-sub-title",
+                                [
+                                  _c(
+                                    "v-layout",
+                                    { attrs: { row: "" } },
+                                    [
+                                      _c("v-flex", { attrs: { xs6: "" } }, [
+                                        _c(
+                                          "span",
+                                          { staticClass: "text--primary" },
+                                          [
+                                            _vm._v(
+                                              _vm._s(
+                                                _vm.nominaDetalle.faov
+                                                  ? "Si"
+                                                  : "No"
+                                              )
+                                            )
+                                          ]
+                                        )
+                                      ]),
+                                      _vm._v(" "),
+                                      _c("v-flex", { attrs: { xs6: "" } }, [
+                                        _c(
+                                          "span",
+                                          { staticClass: "text--primary" },
+                                          [
+                                            _vm._v(
+                                              "Monto: " +
+                                                _vm._s(
+                                                  _vm._f("numberFormat")(
+                                                    _vm.nominaDetalle.montos
+                                                      .faov
+                                                  )
+                                                )
+                                            )
+                                          ]
+                                        )
+                                      ])
+                                    ],
+                                    1
+                                  )
+                                ],
+                                1
+                              )
+                            ],
+                            1
+                          )
+                        ],
+                        1
+                      ),
+                      _vm._v(" "),
+                      _c("v-divider"),
+                      _vm._v(" "),
+                      _c(
+                        "v-list-tile",
+                        [
+                          _c(
+                            "v-list-tile-content",
+                            [
+                              _c("v-list-tile-title", [_vm._v("Paro Forzoso")]),
+                              _vm._v(" "),
+                              _c(
+                                "v-list-tile-sub-title",
+                                [
+                                  _c(
+                                    "v-layout",
+                                    { attrs: { row: "" } },
+                                    [
+                                      _c("v-flex", { attrs: { xs6: "" } }, [
+                                        _c(
+                                          "span",
+                                          { staticClass: "text--primary" },
+                                          [
+                                            _vm._v(
+                                              _vm._s(
+                                                _vm.nominaDetalle.paro_forzoso
+                                                  ? "Si"
+                                                  : "No"
+                                              )
+                                            )
+                                          ]
+                                        )
+                                      ]),
+                                      _vm._v(" "),
+                                      _c("v-flex", { attrs: { xs6: "" } }, [
+                                        _c(
+                                          "span",
+                                          { staticClass: "text--primary" },
+                                          [
+                                            _vm._v(
+                                              "Monto: " +
+                                                _vm._s(
+                                                  _vm._f("numberFormat")(
+                                                    _vm.nominaDetalle.montos
+                                                      .paro_forzoso
+                                                  )
+                                                )
+                                            )
+                                          ]
+                                        )
+                                      ])
+                                    ],
+                                    1
+                                  )
+                                ],
+                                1
+                              )
+                            ],
+                            1
+                          )
+                        ],
+                        1
+                      ),
+                      _vm._v(" "),
+                      _c("v-divider"),
+                      _vm._v(" "),
+                      _c(
+                        "v-list-tile",
+                        [
+                          _c(
+                            "v-list-tile-content",
+                            [
+                              _c("v-list-tile-title", [_vm._v("Cesta Ticket")]),
+                              _vm._v(" "),
+                              _c("v-list-tile-sub-title", [
+                                _c("span", { staticClass: "text--primary" }, [
+                                  _vm._v(
+                                    _vm._s(
+                                      _vm._f("numberFormat")(
+                                        _vm.nominaDetalle.montos.cesta_ticket
+                                      )
+                                    )
+                                  )
+                                ])
+                              ])
+                            ],
+                            1
+                          )
+                        ],
+                        1
+                      ),
+                      _vm._v(" "),
+                      _c("v-divider"),
+                      _vm._v(" "),
+                      _c(
+                        "v-list-tile",
+                        [
+                          _c(
+                            "v-list-tile-content",
+                            [
+                              _c("v-list-tile-title", [
+                                _vm._v("Total asignaciones")
+                              ]),
+                              _vm._v(" "),
+                              _c("v-list-tile-sub-title", [
+                                _c("span", { staticClass: "text--primary" }, [
+                                  _vm._v(
+                                    _vm._s(
+                                      _vm._f("numberFormat")(
+                                        _vm.nominaDetalle.montos
+                                          .total_asignaciones
+                                      )
+                                    )
+                                  )
+                                ])
+                              ])
+                            ],
+                            1
+                          )
+                        ],
+                        1
+                      ),
+                      _vm._v(" "),
+                      _c("v-divider"),
+                      _vm._v(" "),
+                      _c(
+                        "v-list-tile",
+                        [
+                          _c(
+                            "v-list-tile-content",
+                            [
+                              _c("v-list-tile-title", [
+                                _vm._v("Total deducciones")
+                              ]),
+                              _vm._v(" "),
+                              _c("v-list-tile-sub-title", [
+                                _c("span", { staticClass: "text--primary" }, [
+                                  _vm._v(
+                                    _vm._s(
+                                      _vm._f("numberFormat")(
+                                        _vm.nominaDetalle.montos
+                                          .total_deducciones
+                                      )
+                                    )
+                                  )
+                                ])
+                              ])
+                            ],
+                            1
+                          )
+                        ],
+                        1
+                      ),
+                      _vm._v(" "),
+                      _c("v-divider"),
+                      _vm._v(" "),
+                      _c(
+                        "v-list-tile",
+                        [
+                          _c(
+                            "v-list-tile-content",
+                            [
+                              _c("v-list-tile-title", [
+                                _vm._v("Total a pagar")
+                              ]),
+                              _vm._v(" "),
+                              _c("v-list-tile-sub-title", [
+                                _c("span", { staticClass: "text--primary" }, [
+                                  _vm._v(
+                                    _vm._s(
+                                      _vm._f("numberFormat")(
+                                        _vm.nominaDetalle.montos.monto_total
+                                      )
+                                    )
+                                  )
+                                ])
+                              ])
+                            ],
+                            1
+                          )
+                        ],
+                        1
+                      )
+                    ],
+                    1
+                  ),
+                  _vm._v(" "),
+                  _c(
+                    "v-card-actions",
+                    [
+                      _c("v-spacer"),
+                      _vm._v(" "),
+                      _c(
+                        "v-btn",
+                        {
+                          attrs: { color: "blue darken-1", flat: "" },
+                          nativeOn: {
+                            click: function($event) {
+                              _vm.dialogVer = false
+                            }
+                          }
+                        },
+                        [_vm._v("Cerrar")]
+                      )
+                    ],
+                    1
                   )
                 ],
                 1
@@ -67557,7 +68662,7 @@ new vue__WEBPACK_IMPORTED_MODULE_0___default.a({
 /*! no static exports found */
 /***/ (function(module, exports) {
 
-module.exports = "/images/Logo.png?3f0ea8be604168741a9007b16d649d41";
+module.exports = "/images/Logo.png?81282b14855c200991baaf82f213696b";
 
 /***/ }),
 

@@ -69,7 +69,9 @@ class NominaController extends Controller
     // cesta ticket
     $monto_cest = ($cest->cantidad / 30) * $datos['dias_trabajados'];
 
-    $monto_total = ($pago + $monto_he_diurnas + $monto_he_noct + $monto_feriados) - ($monto_ivss + $monto_faov + $monto_paro);
+    $total_asignaciones = $pago + $monto_he_diurnas + $monto_he_noct + $monto_feriados;
+    $total_deducciones = $monto_ivss + $monto_faov + $monto_paro;
+    $monto_total = ($total_asignaciones - $total_deducciones) + $monto_cest;
 
     $montos = [
       "he_diurnas" => $monto_he_diurnas,
@@ -79,6 +81,11 @@ class NominaController extends Controller
       "ivss" => $monto_ivss,
       "faov" => $monto_faov,
       "paro_forzoso" => $monto_paro,
+      "pago_salario" => $pago,
+      "salario_diario"  => $salario->salario_diario,
+      "cesta_ticket_mensual" => $cest->cantidad,
+      "total_asignaciones" => $total_asignaciones,
+      "total_deducciones" => $total_deducciones,
       "monto_total" => $monto_total
     ];
 
@@ -249,8 +256,9 @@ class NominaController extends Controller
 
     // cesta ticket
     $monto_cest = ($cest->cantidad / 30) * $request->dias_trabajados;
-
-    $monto_total = ($pago + $monto_he_diurnas + $monto_he_noct + $monto_feriados) - ($monto_ivss + $monto_faov + $monto_paro);
+    $total_asignaciones = $pago + $monto_he_diurnas + $monto_he_noct + $monto_feriados;
+    $total_deducciones = $monto_ivss + $monto_faov + $monto_paro;
+    $monto_total = ($total_asignaciones - $total_deducciones) + $monto_cest;
 
     $montos = [
       "he_diurnas" => $monto_he_diurnas,
@@ -260,6 +268,11 @@ class NominaController extends Controller
       "ivss" => $monto_ivss,
       "faov" => $monto_faov,
       "paro_forzoso" => $monto_paro,
+      "pago_salario" => $pago,
+      "salario_diario"  => $salario->salario_diario,
+      "cesta_ticket_mensual" => $cest->cantidad,
+      "total_asignaciones" => $total_asignaciones,
+      "total_deducciones" => $total_deducciones,
       "monto_total" => $monto_total
     ];
 
@@ -284,16 +297,25 @@ class NominaController extends Controller
     $nominas = DB::table('nomina_detalle')
       ->join('trabajador', 'nomina_detalle.trabajador_id', '=', 'trabajador.id')
       ->where("nomina_id", $id)
+      ->select('trabajador.id as trabajador_id', 'trabajador.cedula', 'trabajador.nombre1 as nombre', 'trabajador.apellido1 as apellido', 'nomina_detalle.*')
       ->get();
 
+    for($i = 0 ; $i < sizeof($nominas); $i++) {
+      $nominas[$i]->montos = json_decode($nominas[$i]->montos);
+    }
     return response()->json($nominas);
   }
 
   public function verNominaDetalle($id)
   {
-    $nomina = NominaDetalle::find($id);
-    $trabajador = Trabajador::find($nomina->trabajador_id);
-    return response()->json(["nomina" => $nomina, "trabajador" => $trabajador]);
+    $nomina = DB::table('nomina_detalle')
+      ->join('trabajador', 'nomina_detalle.trabajador_id', '=', 'trabajador.id')
+      ->where("nomina_detalle.id", $id)
+      ->select('trabajador.id as trabajador_id', 'trabajador.cedula', 'trabajador.nombre1 as nombre', 'trabajador.apellido1 as apellido', 'nomina_detalle.*')
+      ->first();
+    $nomina->montos = json_decode($nomina->montos);
+
+    return response()->json(["nomina" => $nomina]);
   }
 
 }
