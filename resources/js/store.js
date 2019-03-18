@@ -71,6 +71,7 @@ export default {
       sessionStorage.clear()
       state.isLoggedIn = false
       state.currentUser = null
+      state.empresa = null
     },
 
     activarEmpresa(state, payload) {

@@ -1,7 +1,7 @@
 <template>
   <v-app id="inspire">
     <!-- Navbar -->
-    <v-navigation-drawer dark v-model="drawer" fixed app clipped v-if="$store.state.isLoggedIn">
+    <v-navigation-drawer dark v-model="drawer" fixed app clipped v-if="$store.state.empresa != null">
       <v-list dense>
 
         <v-list-tile @click="routHome">
@@ -94,7 +94,7 @@
     <!-- Toolbar -->
     <v-toolbar color="teal darken-1" dark fixed app clipped-left v-if="$store.state.isLoggedIn">
 
-      <v-toolbar-side-icon @click.stop="drawer = !drawer"></v-toolbar-side-icon>
+      <v-toolbar-side-icon v-if="$store.state.empresa != null" @click.stop="drawer = !drawer"></v-toolbar-side-icon>
       <v-toolbar-title><img src="../assets/Logo.png" height="40"></v-toolbar-title>
       <v-spacer></v-spacer>
       <h1>{{nombreEmpresa}}</h1>

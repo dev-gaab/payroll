@@ -21,7 +21,7 @@ Vue.use(Vuetify);
 
 const store = new Vuex.Store(storeData);
 
-router.beforeEach( (to, from, next) => {
+router.beforeEach((to, from, next) => {
 	const requiresAuth = to.matched.some(record => record.meta.requiresAuth);
 	const currentUser = store.state.currentUser;
 
@@ -29,12 +29,26 @@ router.beforeEach( (to, from, next) => {
 		next('/login');
 	} else if(to.path == '/login' && currentUser){
 		next('/');
-	} else{
+	} else {
 		next();
 	}
 
-})
+});
 
+router.afterEach((to, from) => {
+	const requiresAuth = to.matched.some(record => record.meta.requiresAuth);
+	const currentUser = store.state.currentUser;
+	const empresa =  store.state.empresa;
+	if(requiresAuth 
+		&& currentUser 
+		&& to.path != '/login' 
+		&& to.path != '/' 
+		&& !empresa) {
+		// si es una ruta diferente de "login", diferente de la ruta "/", ya esta logueado pero no existe una empresa activa.
+		router.push({path: '/'})
+	}
+	
+});
 /* eslint-disable no-new */
 new Vue({
 	el: '#app',

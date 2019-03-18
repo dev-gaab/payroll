@@ -14,9 +14,12 @@ Vue.use(Router)
 /**
  * [routes description]
  * @type {Array}
- *
- * #TODO
- * *Crear rutas para empresas y agregarlas en el layout..
+ */
+
+/**
+ * TODO:
+ * [] La ruta "/" sera donde se seleccione la primera vez la empresa a usar.
+ * [] Cambiar ruta "/" por home
  */
 export default new Router({
   routes: [

@@ -1,20 +1,21 @@
 <template>
   <v-container fluid fill-height>
-    <v-layout row wrap>
+    <v-layout row wrap v-if="$store.state.empresa != null">
       <v-flex xs12>
         Esto es el componente Home
       </v-flex>
     </v-layout>
+    <ActivateEmpresa v-else></ActivateEmpresa>
   </v-container>
 </template>
 
 <script>
-import Layout from './Layout.vue'
+import ActivateEmpresa from './empresa/ActivateEmpresa';
 
 export default {
   name: 'Home',
   components: {
-    Layout
+    ActivateEmpresa
   }
 }
 </script>

@@ -318,8 +318,10 @@ export default {
     EditEmpresa
   },
   created() {
-
     this.allEmpresas();
+  },
+  mounted() {
+
   },
   computed: {
     empresaId () {

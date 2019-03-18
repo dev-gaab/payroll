@@ -1,6 +1,13 @@
 <template>
   <v-layout align-center justify-center>
     <v-flex xs12 sm8 md4>
+      <v-alert
+        v-model="alert"
+        dismissible
+        :type= "alertType"
+      >
+        {{alertMessage}}
+      </v-alert>
       <v-card class="elevation-12">
         <!-- Header card -->
         <v-toolbar dark color="teal accent-4">
@@ -30,17 +37,19 @@
     name: 'Login',
     data(){
       return {
-
         form:{
           username: '',
           password: ''
-        }
+        },
+        alert: false,
+        alertType: "error",
+        alertMessage: ""
       }
     },
     methods: {
       auth(){
         this.$store.dispatch('login');
-
+        const vm = this;
         axios.post('http://payroll.com.local/api/auth/login', this.$data.form)
           .then( async (res) => {
             if (res.data.error) {
@@ -51,11 +60,14 @@
                 token: res.data.user.token
               });
               
-              window.location.href = "/";
+              vm.$router.push({path: '/'});
             }
 
           })
           .catch((error) => {
+            console.log(error);
+            this.alertMessage = "¡Usuario o Contraseña incorrecta!";
+            this.alert = true;
             this.$store.commit('loginFailed', {error})
           });
       }
