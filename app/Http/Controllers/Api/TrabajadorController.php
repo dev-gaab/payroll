@@ -160,4 +160,13 @@ class TrabajadorController extends Controller
       return response()->json(['error' => 'trabajador']);
     }
   }
+
+  public function inhabilitar ($id, Request $request) {
+    $trabajador = Trabajador::find($id);
+
+    $trabajador->estatus = 'inhabilitado';
+    $trabajador->save();
+
+    return response()->json(["message" => "done!"]);
+  }
 }

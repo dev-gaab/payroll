@@ -9,6 +9,7 @@ import AllTrabajadores from '../components/trabajador/AllTrabajadores'
 import NewTrabajador from '../components/trabajador/NewTrabajador'
 import AllNominas from '../components/nomina/AllNominas'
 import NominaDetalle from '../components/nomina/NominaDetalle'
+import User from '../components/users/User'
 
 Vue.use(Router)
 /**
@@ -35,7 +36,7 @@ export default new Router({
       path: '/login',
       name: 'Login',
       component: Login,
-      
+
     },
     {
       path: '/empresas',
@@ -92,6 +93,15 @@ export default new Router({
       path: '/nominas/detalle/:id',
       name: 'NominaDetalle',
       component: NominaDetalle,
+      meta: {
+        requiresAuth: true
+      }
+    },
+    // users
+    {
+      path: '/users',
+      name: 'Users',
+      component: User,
       meta: {
         requiresAuth: true
       }

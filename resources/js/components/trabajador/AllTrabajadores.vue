@@ -21,7 +21,11 @@
             <v-icon>add</v-icon>
           </v-btn>
         </v-card-title>
-        <v-data-table :headers="headers" :items="trabajadores" :search="search">
+        <v-data-table
+          :headers="headers"
+          :items="trabajadores"
+          :search="search"
+        >
           <template slot="items" slot-scope="props">
             <td>{{ props.item.cedula }}</td>
             <td>{{ props.item.nombre1 }} {{props.item.nombre2}}</td>
@@ -357,7 +361,7 @@ export default {
       idTrabajadorEdit: null,
       salario: {},
       isSalarioMinimo: null,
-      sexo: ['Masculino', 'Femenino'],
+      sexo: ["Masculino", "Femenino"]
     };
   },
   components: {},
@@ -374,7 +378,7 @@ export default {
       axios
         .get(`http://payroll.com.local/api/trabajadores/all/${vm.idE}`, {
           headers: {
-            'Authorization': `Bearer ${vm.$store.state.currentUser.token}`
+            Authorization: `Bearer ${vm.$store.state.currentUser.token}`
           }
         })
         .then(res => {
@@ -392,7 +396,7 @@ export default {
       axios
         .get(`http://payroll.com.local/api/trabajadores/${id}`, {
           headers: {
-            'Authorization': `Bearer ${vm.$store.state.currentUser.token}`
+            Authorization: `Bearer ${vm.$store.state.currentUser.token}`
           }
         })
         .then(res => {
@@ -404,14 +408,13 @@ export default {
         });
     },
     editTrabajadorModal(id) {
-
       this.idTrabajadorEdit = id;
       const vm = this;
 
       axios
         .get(`http://payroll.com.local/api/trabajadores/${id}`, {
           headers: {
-            'Authorization': `Bearer ${vm.$store.state.currentUser.token}`
+            Authorization: `Bearer ${vm.$store.state.currentUser.token}`
           }
         })
         .then(res => {
@@ -427,7 +430,7 @@ export default {
     },
     editTrabajador() {
       const vm = this;
-      const {trabajador, isSalarioMinimo, salario} = vm.$data;
+      const { trabajador, isSalarioMinimo, salario } = vm.$data;
       const data = {
         ...trabajador,
         salario: salario.salario,
@@ -435,12 +438,12 @@ export default {
       };
       const id = vm.$data.idTrabajadorEdit;
 
-      axios.put(`http://payroll.com.local/api/trabajadores/${id}`, data,
-        { headers: {
-            'Authorization': `Bearer ${vm.$store.state.currentUser.token}`
+      axios
+        .put(`http://payroll.com.local/api/trabajadores/${id}`, data, {
+          headers: {
+            Authorization: `Bearer ${vm.$store.state.currentUser.token}`
           }
-        }
-        )
+        })
         .then(res => {
           //Mostrar alertas
           vm.allTrabajadores();

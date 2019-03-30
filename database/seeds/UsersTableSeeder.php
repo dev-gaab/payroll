@@ -16,8 +16,8 @@ class UsersTableSeeder extends Seeder
         ->insert([
           'username' => 'AdminGabo',
           'password' => bcrypt('PayrollAdmin00'),
-          'nombre'  => 'Gabriel',
-          'apellido' => 'Arias',
+          'nombre'  => 'Developers',
+          'apellido' => 'Users',
           'email' => 'gabojr05@gmail.com',
           'rol' => 'admin',
           'estatus' => 'activo'

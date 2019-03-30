@@ -19,12 +19,7 @@ class EmpresaController extends Controller
     {
         $user = $request->user();
 
-        $empresas = DB::table('usuario_empresa')
-            ->join('empresa', 'usuario_empresa.empresa_id', '=', 'empresa.id')
-            ->join('usuario', 'usuario_empresa.usuario_id', '=', 'usuario.id')
-            ->where('usuario.id', '=', $user->id)
-            ->select('empresa.*')
-            ->get();
+        $empresas = Empresa::orderBy('estatus', 'desc')->get();
 
         return response()->json(["empresas" => $empresas]);
     }
@@ -99,7 +94,7 @@ class EmpresaController extends Controller
     }
 
 //    Funcion para deshabilitar una empresa
-    public function dishabilitar($id, Request $request) {
+    public function deshabilitar($id, Request $request) {
         $empresa = Empresa::find($id);
 
         $empresa->estatus = 'inactiva';

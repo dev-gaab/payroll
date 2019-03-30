@@ -3,7 +3,7 @@ import Main from './Main'
 import router from './router'
 import storeData from './store'
 import Vuex from 'vuex'
-
+import VeeValidate from 'vee-validate'
 // Vuetify
 import Vuetify from 'vuetify'
 // css vuetify
@@ -18,6 +18,7 @@ import '@fortawesome/fontawesome-free/css/all.css'
 
 Vue.use(Vuex);
 Vue.use(Vuetify);
+Vue.use(VeeValidate);
 
 const store = new Vuex.Store(storeData);
 
@@ -39,15 +40,15 @@ router.afterEach((to, from) => {
 	const requiresAuth = to.matched.some(record => record.meta.requiresAuth);
 	const currentUser = store.state.currentUser;
 	const empresa =  store.state.empresa;
-	if(requiresAuth 
-		&& currentUser 
-		&& to.path != '/login' 
-		&& to.path != '/' 
+	if(requiresAuth
+		&& currentUser
+		&& to.path != '/login'
+		&& to.path != '/'
 		&& !empresa) {
 		// si es una ruta diferente de "login", diferente de la ruta "/", ya esta logueado pero no existe una empresa activa.
 		router.push({path: '/'})
 	}
-	
+
 });
 /* eslint-disable no-new */
 new Vue({

@@ -4,8 +4,9 @@ use Illuminate\Http\Request;
 
 /**
  * TODO:
- * [] Realizar las rutas para nomina.
- * [] Probar las rutas con POSTMAN antes de con la API.
+ *
+ * ![] Realizar las rutas para usuario
+ * ![] Probar las rutas con POSTMAN antes de con la API.
  */
 Route::group(['prefix' => 'auth'], function () {
     Route::post('login', 'AuthController@login');
@@ -15,6 +16,14 @@ Route::group(['prefix' => 'auth'], function () {
         Route::get('logout', 'AuthController@logout');
         Route::get('user', 'AuthController@user');
     });
+});
+
+Route::group(['prefix' => 'users', 'middleware' => 'auth:api'], function () {
+  Route::get('/', 'Api\UserController@all');
+  Route::get('/{id}', 'Api\UserController@find');
+  Route::put('/{id}', 'Api\UserController@update');
+  Route::put('/enable/{id}', 'Api\UserController@enable');
+  Route::put('/disable/{id}', 'Api\UserController@disable');
 });
 
 // Routes para modulo de empresas
