@@ -342,9 +342,6 @@ export default {
     // or use the instance method
     this.$validator.localize("es", dict);
   },
-  mounted() {
-    console.log(logo);
-  },
   computed: {
     empresaId() {
       let empresa = this.$store.state.empresa;
@@ -384,13 +381,12 @@ export default {
         });
     },
     verEmpresa(id) {
-      this.idE = id;
       this.dialogVer = true;
 
       const vm = this;
 
       axios
-        .get(`http://payroll.com.local/api/empresas/${vm.idE}`, {
+        .get(`http://payroll.com.local/api/empresas/${id}`, {
           headers: {
             Authorization: `Bearer ${vm.$store.state.currentUser.token}`
           }
