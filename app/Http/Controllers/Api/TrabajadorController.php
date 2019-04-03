@@ -11,7 +11,7 @@ use App\Models\BaseLegal;
 
 class TrabajadorController extends Controller
 {
-    // Funcion de ver todos los trabajadores de una empresa
+  // Funcion de ver todos los trabajadores de una empresa
   public function verTodos($id)
   {
     $trabajadores = Trabajador::where('empresa_id', $id)
@@ -33,7 +33,7 @@ class TrabajadorController extends Controller
 
     $salario_minimo = SalarioMinimo::where('estatus', 'activo')->first();
 
-    if($salario_minimo->monto == $salario->salario)
+    if ($salario_minimo->monto == $salario->salario)
       $is_salario_minimo = true;
     else
       $is_salario_minimo = false;
@@ -48,13 +48,21 @@ class TrabajadorController extends Controller
     } else {
       return response()->json(['error' => 'No se encontro']);
     }
-
   }
-    // Recibir el id de la empresa para poder seleccionar el salario minimo
+  // Recibir el id de la empresa para poder seleccionar el salario minimo
   public function modificar($id, Request $request)
   {
-
     $trabajador = Trabajador::find($id);
+
+    //  validar cedula
+    $validate_cedula = Trabajador::where('cedula', $request->cedula)
+      ->where('empresa_id', $trabajador->empresa_id)
+      ->where('estatus', 'activo')
+      ->where('id', '<>', $id)
+      ->first();
+
+    if($validate_cedula != null)
+      return response()->json(['error' => 'Ya existe un trabajador con la misma cedula']);
 
     $sal = Salario::where('trabajador_id', $id)
       ->where('estatus', 'activo')
@@ -64,13 +72,12 @@ class TrabajadorController extends Controller
 
       $salarioMin = SalarioMinimo::where('estatus', 'activo')->first();
       $salarioMen = $salarioMin->monto;
-
     } else {
       $salarioMen = $request->salario;
     }
 
 
-    if($sal->salario !== $salarioMen){
+    if ($sal->salario !== $salarioMen) {
 
       date_default_timezone_set('America/Caracas');
 
@@ -112,6 +119,16 @@ class TrabajadorController extends Controller
 
   public function agregar($id, Request $request)
   {
+
+    // Validar Cedula existente
+    $validate_cedula = Trabajador::where('cedula', $request->cedula)
+      ->where('empresa_id', $id)
+      ->where('estatus', 'activo')
+      ->first();
+
+    if($validate_cedula != null)
+      return response()->json(['error' => 'Ya existe un trabajador con la misma cedula']);
+
     $trabajador = new Trabajador();
 
     $trabajador->empresa_id = $id;
@@ -151,17 +168,16 @@ class TrabajadorController extends Controller
       $salario->desde = date("d-m-Y");
       $salario->estatus = 'activo';
 
-      if ($salario->save()) {
-        return response()->json(['message' => 'ok']);
-      } else {
-        return response()->json(['error' => 'salario']);
-      }
+      $salario->save();
+
+      return response()->json(['message' => 'ok']);
     } else {
       return response()->json(['error' => 'trabajador']);
     }
   }
 
-  public function inhabilitar ($id, Request $request) {
+  public function inhabilitar($id, Request $request)
+  {
     $trabajador = Trabajador::find($id);
 
     $trabajador->estatus = 'inhabilitado';

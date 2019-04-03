@@ -38,9 +38,6 @@ class EmpresaController extends Controller
   {
     $user = $request->user();
 
-    if (!$this->empresaUsuario($id, $user->id))
-      return response()->json(["error" => 'Unauthorized']);
-
     $empresa = Empresa::find($id);
 
     $validate_rif = Empresa::where('rif', $request->rif)
@@ -48,7 +45,7 @@ class EmpresaController extends Controller
       ->first();
 
     if ($validate_rif !== null)
-      return response()->json(["error" => 'Rif Existente']);
+      return response()->json(["error" => $validate_rif]);
 
     $empresa->rif = $request->rif;
     $empresa->razon_social = $request->razon_social;
@@ -66,6 +63,13 @@ class EmpresaController extends Controller
 
   public function agregar(Request $request)
   {
+    $validate_rif = Empresa::where('rif', $request->rif)
+      ->where('estatus', 'activa')
+      ->first();
+
+    if($validate_rif != null)
+      return response()->json(["error" => 'Rif Existente']);
+
     $empresa = new Empresa();
     $empresa->rif = $request->rif;
     $empresa->razon_social = $request->razon_social;
@@ -77,16 +81,11 @@ class EmpresaController extends Controller
     $empresa->num_afiliacion_inces = $request->num_afiliacion_inces;
     $empresa->estatus = 'activa';
 
-    if ($empresa->save()) {
-      $user = $request->user();
-      if ($this->createEmpresaUsuario($empresa->id, $user->id)) {
-        return response()->json(['message' => "Registrado"]);
-      }
+    $empresa->save();
 
-      return response()->json(['error' => "Error al vincular empresa con usuario"]);
-    }
+    return response()->json(['error' => "Error al vincular empresa con usuario"]);
 
-    return response()->json(['error' => "Error al registrar empresa"]);
+
   }
 
   //    Funcion para deshabilitar una empresa

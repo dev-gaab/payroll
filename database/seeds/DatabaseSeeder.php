@@ -52,7 +52,7 @@ class DatabaseSeeder extends Seeder
         'monto' => 18000,
         'tipo' => 'mensual',
         'desde' => '01-01-2019',
-        'estatus' => 'activa'
+        'estatus' => 'activo'
       ]);
   }
 }

@@ -56,7 +56,8 @@ export default {
 
       state.currentUser = {
         user: payload.user,
-        token: payload.token
+        token: payload.token,
+        isAdmin: payload.isAdmin
       };
 
       await sessionStorage.setItem("user", JSON.stringify(state.currentUser));

@@ -57,9 +57,10 @@
             }else{
               await this.$store.commit('loginSuccess', {
                 user: res.data.user,
-                token: res.data.user.token
+                token: res.data.user.token,
+                isAdmin: res.data.isAdmin
               });
-              
+
               vm.$router.push({path: '/'});
             }
 

@@ -18,7 +18,7 @@
             hide-details
           ></v-text-field>
           <v-spacer></v-spacer>
-          <v-btn icon color="teal accent-4" dark @click="newEmpresa">
+          <v-btn v-if="$store.state.currentUser.isAdmin" icon color="teal accent-4" dark @click="newEmpresa">
             <v-icon>add</v-icon>
           </v-btn>
           <v-btn icon color="teal accent-4" dark @click="printAll">
