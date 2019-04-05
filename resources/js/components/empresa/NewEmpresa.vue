@@ -8,6 +8,8 @@
           <v-toolbar-title>Empresa</v-toolbar-title>
           <v-spacer></v-spacer>
         </v-toolbar>
+        <!-- Alerta -->
+        <v-alert v-model="alert" dismissible :type="alertType">{{alertMessage}}</v-alert>
         <!-- formulario -->
         <form @submit.prevent="addEmpresa">
           <v-card-text>
@@ -174,7 +176,10 @@ export default {
         { text: "Rif", value: "rif" },
         { text: "Razon Social", value: "razon_social" }
       ],
-      empresas: []
+      empresas: [],
+      alert: false,
+      alertType: 'error',
+      alertMsg: ''
     };
   },
   created() {
@@ -225,6 +230,10 @@ export default {
           })
           .then(res => {
             if (!res.data.error) {
+              vm.alert= true;
+              vm.alertType = 'success';
+              vm.alertMsg = 'Empresa Registrada';
+
               vm.$data.empresas.push({
                 rif: vm.$data.empresa.rif,
                 razon_social: vm.$data.empresa.razon_social
@@ -232,7 +241,9 @@ export default {
 
               vm.$data.empresa = new Empresa();
             } else {
-              console.log(res.data.error);
+              vm.alert= true;
+              vm.alertType = 'error';
+              vm.alertMsg = vm.data.error;
             }
           })
           .catch(err => {

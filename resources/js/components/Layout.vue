@@ -63,7 +63,7 @@
         <img src="../assets/Logo.png" height="40">
       </v-toolbar-title>
       <v-spacer></v-spacer>
-      <h1>{{nombreEmpresa}}</h1>
+      <h3>{{nombreEmpresa}}</h3>
       <v-spacer></v-spacer>
 
       <v-toolbar-items>

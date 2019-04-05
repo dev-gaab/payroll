@@ -267,41 +267,44 @@
 
           <form @submit.prevent="updateNominaDetalle">
             <v-card-text>
-              <!-- TODO: cambiar a type number min=0 max=15 -->
+
               <v-text-field
                 color="teal darken-1"
                 v-model="nominaDetalleUpd.dias_trabajados"
                 name="dias_trabajados"
                 label="Dias trabajados"
                 id="dias_trabajados"
+                v-validate="'required|numeric|min_value:0|max_value:15'"
               ></v-text-field>
 
-              <!-- TODO: cambiar a type number -->
+
               <v-text-field
                 color="teal darken-1"
                 v-model="nominaDetalleUpd.he_diurnas"
                 name="he_diurnas"
                 label="Horas extras diurnas"
                 id="he_diurnas"
+                v-validate="'numeric|min_value:0'"
               ></v-text-field>
 
-              <!-- TODO: cambiar a type number -->
-              <v-textarea
+
+              <v-text-field
                 color="teal darken-1"
                 v-model="nominaDetalleUpd.he_nocturnas"
                 name="he_nocturnas"
                 label="Horas extras nocturnas"
                 id="he_nocturnas"
-                rows="2"
-              ></v-textarea>
+                v-validate="'numeric|min_value:0'"
+              ></v-text-field>
 
-              <!-- TODO: cambiar a type number -->
+
               <v-text-field
                 color="teal darken-1"
                 v-model="nominaDetalleUpd.feriados"
                 name="feriados"
                 label="Dias Feriados"
                 id="feriados"
+                v-validate="'numeric|min_value:0|max_value:15'"
               ></v-text-field>
 
               <v-checkbox v-model="nominaDetalleUpd.ivss" label="IVSS"></v-checkbox>

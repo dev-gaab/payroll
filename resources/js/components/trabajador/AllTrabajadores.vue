@@ -4,6 +4,7 @@
   <v-layout row wrap>
     <!-- Tabla de datos -->
     <v-flex xs12>
+      <v-alert v-model="alertSuc" dismissible type="success">{{messageSuc}}</v-alert>
       <v-card>
         <v-card-title>
           <h3>Trabajadores</h3>
@@ -21,11 +22,7 @@
             <v-icon>add</v-icon>
           </v-btn>
         </v-card-title>
-        <v-data-table
-          :headers="headers"
-          :items="trabajadores"
-          :search="search"
-        >
+        <v-data-table :headers="headers" :items="trabajadores" :search="search">
           <template slot="items" slot-scope="props">
             <td>{{ props.item.cedula }}</td>
             <td>{{ props.item.nombre1 }} {{props.item.nombre2}}</td>
@@ -212,6 +209,7 @@
               <v-icon medium>fa-times-circle</v-icon>
             </v-btn>
           </v-toolbar>
+          <v-alert v-model="alertUpd" dismissible type="error">{{alertUpdMsg}}</v-alert>
           <!-- formulario -->
           <form @submit.prevent="editTrabajador">
             <v-card-text>
@@ -221,7 +219,9 @@
                 name="cedula"
                 label="Cédula"
                 id="cedula"
+                v-validate="{required: true, regex: '^([V|E]{1})([0-9]{7,8})$'}"
               ></v-text-field>
+              <v-alert v-show="errors.has('cedula')" type="error">{{errors.first('cedula')}}</v-alert>
 
               <v-text-field
                 color="teal darken-1"
@@ -229,7 +229,9 @@
                 name="nombre1"
                 label="Primer Nombre"
                 id="nombre1"
+                v-validate="'required|alpha'"
               ></v-text-field>
+              <v-alert v-show="errors.has('nombre1')" type="error">{{errors.first('nombre1')}}</v-alert>
 
               <v-text-field
                 color="teal darken-1"
@@ -237,7 +239,9 @@
                 name="nombre2"
                 label="Segundo Nombre"
                 id="nombre2"
+                v-validate="'alpha'"
               ></v-text-field>
+              <v-alert v-show="errors.has('nombre2')" type="error">{{errors.first('nombre2')}}</v-alert>
 
               <v-text-field
                 color="teal darken-1"
@@ -245,7 +249,9 @@
                 name="apellido1"
                 label="Primer Apellido"
                 id="apellido1"
+                v-validate="'required|alpha'"
               ></v-text-field>
+              <v-alert v-show="errors.has('apellido1')" type="error">{{errors.first('apellido1')}}</v-alert>
 
               <v-text-field
                 color="teal darken-1"
@@ -253,7 +259,9 @@
                 name="apellido2"
                 label="Segundo Apellido"
                 id="apellido2"
+                v-validate="'alpha'"
               ></v-text-field>
+              <v-alert v-show="errors.has('apellido2')" type="error">{{errors.first('apellido2')}}</v-alert>
 
               <v-text-field
                 color="teal darken-1"
@@ -261,7 +269,9 @@
                 name="cargo"
                 label="Cargo"
                 id="cargo"
+                v-validate="{required: true, regex: /[a-zA-Z0-9\.\,\#\-\_\/\sáéíóú]+$/}"
               ></v-text-field>
+              <v-alert v-show="errors.has('cargo')" type="error">{{errors.first('cargo')}}</v-alert>
 
               <v-text-field
                 color="teal darken-1"
@@ -270,7 +280,12 @@
                 name="fecha_nacimiento"
                 id="fecha_nacimiento"
                 type="date"
+                v-validate="'required'"
               ></v-text-field>
+              <v-alert
+                v-show="errors.has('fecha_nacimiento')"
+                type="error"
+              >{{errors.first('fecha_nacimiento')}}</v-alert>
 
               <v-select
                 :items="sexo"
@@ -279,7 +294,9 @@
                 label="Sexo"
                 name="sexo"
                 id="sexo"
+                v-validate="'required'"
               ></v-select>
+              <v-alert v-show="errors.has('sexo')" type="error">{{errors.first('sexo')}}</v-alert>
 
               <v-textarea
                 color="teal darken-1"
@@ -288,7 +305,9 @@
                 label="Direccion"
                 id="direccion"
                 rows="2"
+                v-validate="{required: true, regex: /[a-zA-Z0-9\.\,\#\/\sáéíóú]+$/}"
               ></v-textarea>
+              <v-alert v-show="errors.has('direccion')" type="error">{{errors.first('direccion')}}</v-alert>
 
               <v-text-field
                 color="teal darken-1"
@@ -296,7 +315,12 @@
                 name="telefono_fijo"
                 label="Telefono Fijo"
                 id="telefono_fijo"
+                v-validate="{regex: /(02)([1-9]{2})([0-9]{7})$/}"
               ></v-text-field>
+              <v-alert
+                v-show="errors.has('telefono_fijo')"
+                type="error"
+              >{{errors.first('telefono_fijo')}}</v-alert>
 
               <v-text-field
                 color="teal darken-1"
@@ -304,7 +328,12 @@
                 name="telefono_celular"
                 label="Telefono Celular"
                 id="telefono_celular"
+                v-validate="{regex: /(04)(12|14|24|16|26)([0-9]{7})$/}"
               ></v-text-field>
+              <v-alert
+                v-show="errors.has('telefono_celular')"
+                type="error"
+              >{{errors.first('telefono_celular')}}</v-alert>
 
               <v-toolbar dark color="teal darken-1" dense>
                 <v-toolbar-title>Salario</v-toolbar-title>
@@ -319,6 +348,7 @@
                 label="Salario mensual"
                 name="salario"
                 id="salario"
+                v-validate="`${isSalarioMinimo ? '' : 'required'}|decimal:2`"
               ></v-text-field>
             </v-card-text>
             <v-card-actions>
@@ -361,11 +391,70 @@ export default {
       idTrabajadorEdit: null,
       salario: {},
       isSalarioMinimo: null,
-      sexo: ["Masculino", "Femenino"]
+      sexo: ["Masculino", "Femenino"],
+      alertSuc: false,
+      messageSuc: null,
+      alertUpd: false,
+      alertUpdMsg: ""
     };
   },
   components: {},
   created() {
+    const dict = {
+      custom: {
+        cedula: {
+          required: "No debe ser vacio",
+          regex:
+            "Debe cumplir con el formato especificado. Ej: Vxxxxxxxx, Exxxxxxxx"
+        },
+        nombre1: {
+          required: "No debe ser vacio",
+          alpha: "Solo debe contener letras."
+        },
+        nombre2: {
+          required: "No debe ser vacio",
+          alpha: "Solo debe contener letras."
+        },
+        apellido1: {
+          required: "No debe ser vacio",
+          alpha: "Solo debe contener letras."
+        },
+        apellido2: {
+          required: "No debe ser vacio",
+          alpha: "Solo debe contener letras."
+        },
+        direccion: {
+          required: "No debe ser vacio",
+          regex:
+            "Solo se permite el uso de letras, numeros y los caracteres (, . / #) "
+        },
+        fecha_nacimiento: {
+          required: "No debe ser vacio"
+        },
+        cargo: {
+          required: "No debe ser vacio",
+          regex: "No se permiten caracteres especiales."
+        },
+        sexo: {
+          required: "No debe ser vacio"
+        },
+        telefono_fijo: {
+          regex: "Escriba un formato de telefóno válido. Ej: 02xx-xxxxxxx"
+        },
+        telefono_celular: {
+          regex: "Escriba un formato de telefóno válido. Ej: 04xx-xxxxxxx"
+        },
+        fecha_ingreso: {
+          required: "No debe ser vacio"
+        },
+        salario: {
+          required: "No debe ser vacio",
+          decimal: "Debe ser un monto con solo dos decimales. Ej: xxxx.xx"
+        }
+      }
+    };
+    // or use the instance method
+    this.$validator.localize("es", dict);
     this.allTrabajadores();
   },
   methods: {
@@ -437,20 +526,31 @@ export default {
         salario_minimo: isSalarioMinimo
       };
       const id = vm.$data.idTrabajadorEdit;
-
-      axios
-        .put(`http://payroll.com.local/api/trabajadores/${id}`, data, {
-          headers: {
-            Authorization: `Bearer ${vm.$store.state.currentUser.token}`
-          }
-        })
-        .then(res => {
-          //Mostrar alertas
-          vm.allTrabajadores();
-          vm.$data.dialogUpd = false;
-          console.log(res.data);
-        })
-        .catch(err => console.log(err));
+      this.$validator.validate().then(valid => {
+        if (!valid) {
+          // do stuff if not valid.
+          return;
+        }
+        axios
+          .put(`http://payroll.com.local/api/trabajadores/${id}`, data, {
+            headers: {
+              Authorization: `Bearer ${vm.$store.state.currentUser.token}`
+            }
+          })
+          .then(res => {
+            if (!res.data.error) {
+              vm.alertSuc = true;
+              vm.messageSuc = "Trabajador Modificado";
+              vm.allTrabajadores();
+              vm.$data.dialogUpd = false;
+            } else {
+              vm.alertUpd = true;
+              vm.alertUpdMsg = res.data.error;
+              document.getElementById("cedula").focus();
+            }
+          })
+          .catch(err => console.log(err));
+      });
     },
     updSuc() {
       console.log("se modifico");

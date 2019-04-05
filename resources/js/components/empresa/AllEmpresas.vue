@@ -179,6 +179,7 @@
               <v-icon medium>fa-times-circle</v-icon>
             </v-btn>
           </v-toolbar>
+          <v-alert v-model="alertUpd" dismissible type="error">{{alertUpdMsg}}</v-alert>
           <!-- formulario -->
           <form @submit.prevent="save">
             <v-card-text>
@@ -234,7 +235,6 @@
                 label="Fecha de inscripcion IVSS"
                 id="fecha_ivss"
                 type="date"
-                v-validate="'required'"
               ></v-text-field>
 
               <v-text-field
@@ -299,7 +299,9 @@ export default {
       dialogUpd: false,
       empresa: {},
       alertSuc: false,
-      messageSuc: null
+      messageSuc: null,
+      alertUpd: false,
+      alertUpdMsg: ''
     };
   },
   components: {
@@ -436,10 +438,15 @@ export default {
           )
           .then(res => {
             if (!res.data.error) {
+              vm.alertSuc = true;
+              vm.messageSuc = 'Empresa Modificada';
               vm.dialogUpd = false;
               vm.allEmpresas();
+
             } else {
-              console.log(res.data.error);
+              vm.alertUpd = true;
+              vm.alertUpdMsg  = res.data.error;
+              document.getElementById("rif").focus();
             }
           })
           .catch(err => {
