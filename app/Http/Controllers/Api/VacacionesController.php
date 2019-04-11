@@ -31,6 +31,14 @@ class VacacionesController extends Controller
         ->first();
 
       // TODO: calcular años de servicio con la fecha de ingreso del trabajador y la fecha de inicio de las vacaciones.
+      /**
+        * $fecha1 = new DateTime($fecha1);
+        * $fecha2 = new DateTime($fecha2);
+        * $diferencia = $fecha1->diff($fecha2);
+        * $diferencia->y; #años de diferencia entre dos fechas.
+      */
+
+
       $years_servicio = 1; #un ejemplo
 
       $dias_disfrute = (15 * $years_servicio) - 1;
