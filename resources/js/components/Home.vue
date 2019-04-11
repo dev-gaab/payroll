@@ -1,9 +1,7 @@
 <template>
   <v-container fluid fill-height>
-    <v-layout row wrap v-if="$store.state.empresa != null">
-      <v-flex xs12>
-        Esto es el componente Home
-      </v-flex>
+    <v-layout v-if="$store.state.empresa != null">
+        <img src="../assets/fondo.png" id="background_img" alt="imagen de fondo">
     </v-layout>
     <ActivateEmpresa v-else></ActivateEmpresa>
   </v-container>
@@ -19,3 +17,10 @@ export default {
   }
 }
 </script>
+
+<style>
+ #background_img {
+   margin: 0;
+   width: 300px;
+ }
+</style>

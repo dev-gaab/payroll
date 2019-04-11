@@ -267,7 +267,6 @@
 
           <form @submit.prevent="updateNominaDetalle">
             <v-card-text>
-
               <v-text-field
                 color="teal darken-1"
                 v-model="nominaDetalleUpd.dias_trabajados"
@@ -276,7 +275,10 @@
                 id="dias_trabajados"
                 v-validate="'required|numeric|min_value:0|max_value:15'"
               ></v-text-field>
-
+              <v-alert
+                v-show="errors.has('dias_trabajados')"
+                type="error"
+              >{{errors.first('dias_trabajados')}}</v-alert>
 
               <v-text-field
                 color="teal darken-1"
@@ -286,7 +288,7 @@
                 id="he_diurnas"
                 v-validate="'numeric|min_value:0'"
               ></v-text-field>
-
+              <v-alert v-show="errors.has('he_diurnas')" type="error">{{errors.first('he_diurnas')}}</v-alert>
 
               <v-text-field
                 color="teal darken-1"
@@ -296,7 +298,10 @@
                 id="he_nocturnas"
                 v-validate="'numeric|min_value:0'"
               ></v-text-field>
-
+              <v-alert
+                v-show="errors.has('he_nocturnas')"
+                type="error"
+              >{{errors.first('he_nocturnas')}}</v-alert>
 
               <v-text-field
                 color="teal darken-1"
@@ -306,6 +311,7 @@
                 id="feriados"
                 v-validate="'numeric|min_value:0|max_value:15'"
               ></v-text-field>
+              <v-alert v-show="errors.has('feriados')" type="error">{{errors.first('feriados')}}</v-alert>
 
               <v-checkbox v-model="nominaDetalleUpd.ivss" label="IVSS"></v-checkbox>
 
@@ -358,6 +364,31 @@ export default {
   components: {},
   created() {
     this.allNominasDetalle();
+    const dict = {
+      custom: {
+        dias_trabajados: {
+          required: "No debe ser vacio",
+          numeric: "Solo se aceptan numeros",
+          min_value: "Valor mínimo 0",
+          max_value: "Valor máximo 15"
+        },
+        he_diurnas: {
+          numeric: "Solo se aceptan numeros",
+          min_value: "Valor minimo 0"
+        },
+        he_nocturnas: {
+          numeric: "Solo se aceptan numeros",
+          min_value: "Valor minimo 0"
+        },
+        feriados: {
+          numeric: "Solo se aceptan numeros",
+          min_value: "Valor minimo 0",
+          max_value: "Valor máximo 15"
+        }
+      }
+    };
+
+    this.$validator.localize("es", dict);
   },
   methods: {
     allNominasDetalle() {
@@ -404,23 +435,30 @@ export default {
     },
     updateNominaDetalle() {
       const vm = this;
-      axios
-        .put(
-          `/api/nominas/detalle/${vm.nominaDetalleUpd.id}/${
-            vm.nominaDetalleUpd.trabajador_id
-          }`,
-          vm.nominaDetalleUpd,
-          {
-            headers: {
-              Authorization: `Bearer ${vm.$store.state.currentUser.token}`
+
+      this.$validator.validate().then(valid => {
+        if (!valid) {
+          // do stuff if not valid.
+          return;
+        }
+        axios
+          .put(
+            `/api/nominas/detalle/${vm.nominaDetalleUpd.id}/${
+              vm.nominaDetalleUpd.trabajador_id
+            }`,
+            vm.nominaDetalleUpd,
+            {
+              headers: {
+                Authorization: `Bearer ${vm.$store.state.currentUser.token}`
+              }
             }
-          }
-        )
-        .then(res => {
-          vm.allNominasDetalle();
-          vm.dialogUpd = false;
-        })
-        .catch(err => console.log(err));
+          )
+          .then(res => {
+            vm.allNominasDetalle();
+            vm.dialogUpd = false;
+          })
+          .catch(err => console.log(err));
+      });
     }
   },
   filters: {

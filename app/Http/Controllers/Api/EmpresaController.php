@@ -18,7 +18,6 @@ class EmpresaController extends Controller
 {
   public function verTodas(Request $request)
   {
-    $user = $request->user();
 
     $empresas = Empresa::orderBy('estatus', 'desc')->get();
 
@@ -27,7 +26,6 @@ class EmpresaController extends Controller
 
   public function ver(Request $request, $id)
   {
-    $user = $request->user();
 
     $empresa =  Empresa::find($id);
 
@@ -36,7 +34,6 @@ class EmpresaController extends Controller
 
   public function modificar($id, Request $request)
   {
-    $user = $request->user();
 
     $empresa = Empresa::find($id);
 
