@@ -10,6 +10,7 @@ import NewTrabajador from '../components/trabajador/NewTrabajador'
 import AllNominas from '../components/nomina/AllNominas'
 import NominaDetalle from '../components/nomina/NominaDetalle'
 import User from '../components/users/User'
+import NewUser from '../components/users/NewUser'
 
 Vue.use(Router)
 /**
@@ -19,8 +20,8 @@ Vue.use(Router)
 
 /**
  * TODO:
- * [] La ruta "/" sera donde se seleccione la primera vez la empresa a usar.
- * [] Cambiar ruta "/" por home
+ * [x] La ruta "/" sera donde se seleccione la primera vez la empresa a usar.
+ * [x] Cambiar ruta "/" por home
  */
 export default new Router({
   routes: [
@@ -102,6 +103,14 @@ export default new Router({
       path: '/users',
       name: 'Users',
       component: User,
+      meta: {
+        requiresAuth: true
+      }
+    },
+    {
+      path: '/users/nuevo',
+      name: 'NewUser',
+      component: NewUser,
       meta: {
         requiresAuth: true
       }

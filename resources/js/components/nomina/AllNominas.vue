@@ -64,7 +64,7 @@ export default {
         { text: "Acciones", align: "center", value: "codigo", sortable: false }
       ],
       nominas: [],
-      isVacioTrabajadores: false,
+      isVacioTrabajadores: true,
       alert: false,
       alertType: 'success',
       alertMsg: '',
@@ -111,7 +111,8 @@ export default {
     generarNomina() {
       const vm = this;
       // TODO: Realizar validacion de si la empresa posee trabajadores activos o no.
-      axios
+      if(!vm.isVacioTrabajadores) {
+        axios
         .post(
           `http://payroll.com.local/api/nominas/generar/${vm.idE}`,
           {},
@@ -125,6 +126,7 @@ export default {
           console.log(res.data);
           vm.listNominas();
         });
+      }
     },
     verNomina(id) {
       this.$router.push({ path: `nominas/detalle/${id}` });

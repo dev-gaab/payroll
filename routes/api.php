@@ -55,3 +55,6 @@ Route::group(['prefix' => 'nominas', 'middleware' => 'auth:api'], function() {
   Route::get('/detalle/find/{id}', 'Api\NominaController@verNominaDetalle');
   Route::put('/detalle/{nomina_id}/{trabajador_id}', 'Api\NominaController@modificarNominaDetalle');
 });
+
+
+Route::get('/vacaciones/{trabajador_id}/{fecha_vacaciones}', 'Api\VacacionesController@validarDisponibilidadVacaciones');

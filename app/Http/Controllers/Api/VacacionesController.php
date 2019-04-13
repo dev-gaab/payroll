@@ -13,7 +13,7 @@ use Illuminate\Support\Facades\DB;
 class VacacionesController extends Controller
 {
     public function index($empresa_id) {
-      $vacaciones = Vacaciones::where('empresa_id', $empresa_id);
+      $vacaciones = Vacaciones::where('empresa_id', $empresa_id)->get();
 
       return response()->json(["vacaciones" => $vacaciones]);
     }
@@ -25,6 +25,8 @@ class VacacionesController extends Controller
     }
 
     public function agregar(Request $request) {
+
+      // TODO: funcion que valide si los trabajadores estan disponible para tomar vacaciones
       $salario = Salario::where('trabajador_id'. $request->id)
         ->where('estatus', 'activo')
         ->select('salario_diario')
@@ -103,4 +105,35 @@ class VacacionesController extends Controller
 //      TODO: Guardar todos los datos en la tabla de vacaciones.
 //      TODO: Guardar los montos en un json al igual que en nomina detalle
     }
+
+    public function validarDisponibilidadVacaciones($trabajador_id, $fecha_vacaciones)
+    {
+      $vacaciones_trabajador = Vacaciones::where('trabajador_id', $trabajador_id)
+        ->orderBy('fecha_inicial', 'DESC')
+        ->first();
+      $trabajador = Trabajador::find($trabajador_id);
+
+      if ($vacaciones_trabajador == null) {
+        $fecha_ingreso_trabajador = explode('-', $trabajador->fecha_ingreso);
+        $fecha_vacaciones_explode = explode('-',$fecha_vacaciones);
+
+        if($fecha_ingreso_trabajador[0] >= $fecha_vacaciones_explode[0]) return response()->json(['res'=> false]);
+
+        if($fecha_ingreso_trabajador[1] < $fecha_vacaciones_explode[1]) return response()->json(['res'=> false]);
+
+        if($fecha_ingreso_trabajador[2] < $fecha_vacaciones_explode[2]) return response()->json(['res'=> false]);
+
+        return response()->json(['res'=> true]);
+      }
+
+      $fecha_ultimas_vacaciones = new DateTime($vacaciones_trabajador->fecha_inicial);
+      $fecha_nuevas_vacaciones = new DateTime($fecha_vacaciones);
+      $diferencia_fechas = $fecha_ultimas_vacaciones->diff($fecha_nuevas_vacaciones);
+
+      if($diferencia_fechas->y == 0) return response()->json(['res'=> false]);
+
+      return response()->json(['res'=> true]);
+    }
+
 }
+

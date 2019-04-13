@@ -227,7 +227,9 @@ export default {
     this.$validator.localize("es", dict);
   },
   methods: {
-    newUser() {},
+    newUser() {
+      this.$router.push({path: '/users/nuevo'})
+    },
     allUsers() {
       const vm = this;
 
