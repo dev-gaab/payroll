@@ -1,5 +1,5 @@
 <template>
-  <v-container id="cont" pa-0 ma-0>
+  <v-container fluid fill-height>
     <v-layout v-if="$store.state.empresa != null">
         <img src="../assets/fondo.png" id="background_img" alt="imagen de fondo">
     </v-layout>
@@ -20,8 +20,6 @@ export default {
 
 <style>
  #background_img {
-   margin: 0;
-   padding: 0;
    width: 100%;
  }
 </style>

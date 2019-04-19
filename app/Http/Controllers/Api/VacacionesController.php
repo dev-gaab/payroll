@@ -9,6 +9,7 @@ use App\Models\Vacaciones;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\DB;
+use Faker\Provider\cs_CZ\DateTime;
 
 class VacacionesController extends Controller
 {
@@ -26,84 +27,61 @@ class VacacionesController extends Controller
 
     public function agregar(Request $request) {
 
-      // TODO: funcion que valide si los trabajadores estan disponible para tomar vacaciones
+      $validar_disponibilidad = $this->validarDisponibilidadVacaciones($request->id, $request->fecha_inicio);
+
+      if(!$validar_disponibilidad)
+        return response()->json(["error" => "Trabajador no cumple con el tiempo para el beneficio de vacaciones"]);
+
       $salario = Salario::where('trabajador_id'. $request->id)
         ->where('estatus', 'activo')
         ->select('salario_diario')
         ->first();
 
-      // TODO: calcular años de servicio con la fecha de ingreso del trabajador y la fecha de inicio de las vacaciones.
-      /**
-        * $fecha1 = new DateTime($fecha1);
-        * $fecha2 = new DateTime($fecha2);
-        * $diferencia = $fecha1->diff($fecha2);
-        * $diferencia->y; #años de diferencia entre dos fechas.
-      */
+      $trabajador = Trabajador::find($request->id);
 
+      $fecha_ingreso = new DateTime($trabajador->fecha_ingreso);
+      $fecha_actual = new Datetime(date('Y-m-d'));
+      $diferencia = $fecha_ingreso->diff($fecha_actual);
+      $years_servicio = $diferencia->y;
 
-      $years_servicio = 1; #un ejemplo
-
-      $dias_disfrute = (15 * $years_servicio) - 1;
-      $bono_vacacional = 15 + $years_servicio;
+      $dias_disfrute = (15 + $years_servicio) - 1;
+      // $bono_vacacional = 15 + $years_servicio;
 
       if ($dias_disfrute > 30) $dias_disfrute = 30;
-      if ($bono_vacacional > 30) $bono_vacacional = 30;
+      // if ($bono_vacacional > 30) $bono_vacacional = 30;
 
-      $fecha = $request->fecha_inicio;
+      $fecha_final = $this->calcularFechaFinal($dias_disfrute, $request->dias_feriados, $request->fecha_inicio);
 
-      $dias_validos = $dias_disfrute;
-      $dias_feriados = 0;
-//      TODO: Separar en una funcion
-      $feriados = [
-        '01-01',
-        '04-03',
-        '05-03',
-        '10-02',
-        '21-05',
-        '29-06',
-        '16-07',
-        '15-08',
-        '18-09',
-        '19-09',
-        '12-10',
-        '31-10',
-        '01-11',
-        '08-12',
-        '13-12',
-        '25-12'
-      ];
-      while ($dias_validos > 0) {
-        $weekday = date('w', strtotime($fecha));
-        if($weekday == 0 || $weekday == 6) {
-          $dias_feriados ++;
-          $fecha = date("d-m-Y", strtotime($fecha . "+ 1 day"));
-        } else {
-//          TODO: aqui va la funcion de el calendario para calcular los dias feriados.
-          $fecha_separada = explode("-", $fecha);
-          $dia_mes = $fecha_separada[2]."-".$fecha_separada[1]; // deberia devolver DIA-MES
+      $total_dias_vac = $dias_disfrute + $fecha_final["dias_feriados"];
+      // $dias_a_pagar = $total_dias_vac + $bono_vacacional;
 
-          if(in_array($dia_mes, $feriados)){
-            return false;
-          }
-          else{
-            return true;
-          }
+      // $cesta_ticket = CestaTicket::where('estatus', 'activa')->first();
 
-        }
-      }
+      // $monto_cesta_ticket = ($cesta_ticket->cantidad/30) * $dias_disfrute;
 
-      $fecha_final = $fecha;
-      $total_dias_vac = $dias_disfrute + $dias_feriados;
-      $dias_a_pagar = $total_dias_vac + $bono_vacacional;
-
-      $cesta_ticket = CestaTicket::where('estatus', 'activa')->first();
-
-      $monto_cesta_ticket = ($cesta_ticket->cantidad/30) * $dias_disfrute;
-
-      $total_pagar = ($dias_a_pagar * $salario->salario_diario) + $monto_cesta_ticket;
+      $total_pagar = $dias_disfrute * $salario->salario_diario;
 
 //      TODO: Guardar todos los datos en la tabla de vacaciones.
 //      TODO: Guardar los montos en un json al igual que en nomina detalle
+
+      $montos = [
+        "total_dias_vacaciones" => $total_dias_vac,
+        "total_pagar" => $total_pagar
+      ];
+
+      $vacaciones = new Vacaciones;
+      $vacaciones->trabajador_id = $request->id;
+      $vacaciones->a_servicio = $years_servicio;
+      $vacaciones->dias_disfrute = $dias_disfrute;
+      $vacaciones->dias_feriados = $fecha_final["dias_feriados"];
+      $vacaciones->fecha_inicial = $request->fecha_inicio;
+      $vacaciones->fecha_final = $fecha_final["fecha_final"];
+      $vacaciones->montos = json_encode($montos);
+
+      $vacaciones->save();
+
+      return response()->json(["res" => "Done!"]);
+
     }
 
     public function validarDisponibilidadVacaciones($trabajador_id, $fecha_vacaciones)
@@ -133,6 +111,21 @@ class VacacionesController extends Controller
       if($diferencia_fechas->y == 0) return response()->json(['res'=> false]);
 
       return response()->json(['res'=> true]);
+    }
+
+    public function calcularFechaFinal($dias_validos, $fecha) {
+      $dias_feriados = 0;
+      while ($dias_validos > 0) {
+        $weekday = date('w', strtotime($fecha));
+        if($weekday == 0 || $weekday == 6) {
+          $dias_feriados ++;
+          $fecha = date("Y-m-d", strtotime($fecha . "+ 1 day"));
+        } else {
+          $dias_validos --;
+        }
+      }
+
+      return ["fecha_final" => $fecha, "dias_feriados" => $dias_feriados];
     }
 
 }
