@@ -57,7 +57,7 @@
       </v-list>
     </v-navigation-drawer>
     <!-- Toolbar -->
-    <v-toolbar color="light-blue darken-4" dark fixed app clipped-left v-if="$store.state.isLoggedIn">
+    <v-toolbar color="teal darken-4" dark fixed app clipped-left v-if="$store.state.isLoggedIn">
       <v-toolbar-side-icon v-if="$store.state.empresa != null" @click.stop="drawer = !drawer"></v-toolbar-side-icon>
       <v-toolbar-title>
         <img src="../assets/Logo.png" height="40">
@@ -147,6 +147,8 @@ export default {
 
 <style>
 #container {
-  background-color: #E0F2F1
+  background-image: url("../assets/fondo.png");
+  background-size: cover;
+
 }
 </style>

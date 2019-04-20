@@ -84,6 +84,31 @@ class VacacionesController extends Controller
 
     }
 
+    public function agregarDiasFeriados ($id, Request $request) {
+      $vacaciones = Vacaciones::find($id);
+      $fecha = $vacaciones->fecha_final;
+      $feriados_adicionales = $request->feriados;
+
+      while ($feriados_adicionales > 0) {
+        $weekday = date('w', strtotime($fecha));
+
+        if($weekday == 0 || $weekday == 6) {
+          $vacaciones->feriados ++;
+        } else {
+          $feriados_adicionales --;
+        }
+
+        $fecha = date("Y-m-d", strtotime($fecha . "+ 1 day"));
+      }
+
+      $vacaciones->fecha_final = $fecha;
+
+      $vacaciones->save();
+
+      return response()->json(["res" => "Done!"]);
+
+    }
+
     public function validarDisponibilidadVacaciones($trabajador_id, $fecha_vacaciones)
     {
       $vacaciones_trabajador = Vacaciones::where('trabajador_id', $trabajador_id)
@@ -113,20 +138,39 @@ class VacacionesController extends Controller
       return response()->json(['res'=> true]);
     }
 
-    public function calcularFechaFinal($dias_validos, $fecha) {
-      $dias_feriados = 0;
+    public function calcularFechaFinal($dias_validos, $dias_feriados, $fecha) {
+      $feriados_iniciales = $dias_feriados;
+
+      while ($feriados_iniciales > 0) {
+        $weekday = date('w', strtotime($fecha));
+
+        if($weekday == 0 || $weekday == 6) {
+          $dias_feriados ++;
+        } else {
+          $feriados_iniciales --;
+        }
+
+        $fecha = date("Y-m-d", strtotime($fecha . "+ 1 day"));
+      }
+
       while ($dias_validos > 0) {
         $weekday = date('w', strtotime($fecha));
+
         if($weekday == 0 || $weekday == 6) {
           $dias_feriados ++;
           $fecha = date("Y-m-d", strtotime($fecha . "+ 1 day"));
         } else {
           $dias_validos --;
+
+          if($dias_validos > 0 ) {
+            $fecha = date("Y-m-d", strtotime($fecha . "+ 1 day"));
+
+          }
         }
+
       }
 
       return ["fecha_final" => $fecha, "dias_feriados" => $dias_feriados];
     }
-
 }
 

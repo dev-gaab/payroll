@@ -1,7 +1,7 @@
 <template>
   <v-container fluid fill-height>
-    <v-layout v-if="$store.state.empresa != null">
-        <img src="../assets/fondo.png" id="background_img" alt="imagen de fondo">
+    <v-layout v-if="$store.state.empresa != null" >
+        <!-- <img src="../assets/fondo.png" id="background-img" alt="imagen de fondo"> -->
     </v-layout>
     <ActivateEmpresa v-else></ActivateEmpresa>
   </v-container>
@@ -19,7 +19,4 @@ export default {
 </script>
 
 <style>
- #background_img {
-   width: 100%;
- }
 </style>

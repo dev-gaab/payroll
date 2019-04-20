@@ -92,7 +92,10 @@ export default {
           this.alertType = "warning";
           this.alertMsg = `No se encontrarón registros de trabajadores activos.
             Para poder generar una nomina debe tener trabajadores activos.`;
+        } else {
+          this.isVacioTrabajadores = false;
         }
+
       });
   },
   methods: {
