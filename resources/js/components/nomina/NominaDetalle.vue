@@ -6,7 +6,7 @@
           <h3>Nomina Detalle</h3>
           <v-spacer></v-spacer>
           <v-text-field
-            color="teal accent-4"
+            color="teal darken-4"
             v-model="search"
             append-icon="fa-search"
             label="Search"

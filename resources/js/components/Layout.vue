@@ -19,12 +19,30 @@
           </v-list-tile-content>
         </v-list-tile>
 
+        <v-list-tile @click="routAllNominas">
+          <v-list-tile-action>
+            <v-icon>work</v-icon>
+          </v-list-tile-action>
+          <v-list-tile-content>
+            <v-list-tile-title>Nomina</v-list-tile-title>
+          </v-list-tile-content>
+        </v-list-tile>
+
         <v-list-tile @click="routAllEmpresas">
           <v-list-tile-action>
             <v-icon>fa-building</v-icon>
           </v-list-tile-action>
           <v-list-tile-content>
-            <v-list-tile-title>Empresa</v-list-tile-title>
+            <v-list-tile-title>Empresas</v-list-tile-title>
+          </v-list-tile-content>
+        </v-list-tile>
+
+        <v-list-tile @click="routAllVacaciones">
+          <v-list-tile-action>
+            <v-icon>flight_takeoff</v-icon>
+          </v-list-tile-action>
+          <v-list-tile-content>
+            <v-list-tile-title>Vacaciones</v-list-tile-title>
           </v-list-tile-content>
         </v-list-tile>
 
@@ -37,12 +55,21 @@
           </v-list-tile-content>
         </v-list-tile>
 
-        <v-list-tile @click="routAllNominas">
+        <v-list-tile @click>
           <v-list-tile-action>
-            <v-icon>work</v-icon>
+            <v-icon>print</v-icon>
           </v-list-tile-action>
           <v-list-tile-content>
-            <v-list-tile-title>Nomina</v-list-tile-title>
+            <v-list-tile-title>Reportes</v-list-tile-title>
+          </v-list-tile-content>
+        </v-list-tile>
+
+        <v-list-tile @click>
+          <v-list-tile-action>
+            <v-icon>fa-calculator</v-icon>
+          </v-list-tile-action>
+          <v-list-tile-content>
+            <v-list-tile-title>Base de Cálculo</v-list-tile-title>
           </v-list-tile-content>
         </v-list-tile>
 
@@ -69,7 +96,8 @@
       <v-toolbar-items>
         <v-menu offset-y>
           <v-btn slot="activator" flat>
-            <v-icon>fa-user</v-icon>&nbsp
+            <v-icon>fa-user</v-icon>
+            &nbsp
             {{$store.state.currentUser.user.name}}
           </v-btn>
 
@@ -137,6 +165,9 @@ export default {
     routUsers() {
       this.$router.push({ path: "/users" });
     },
+    routAllVacaciones() {
+      this.$router.push({ path: "/vacaciones" });
+    },
     logout() {
       this.$store.commit("logout");
       this.$router.push({ path: "/login" });
@@ -147,8 +178,9 @@ export default {
 
 <style>
 #container {
-  background-image: url("../assets/fondo.png");
-  background-size: cover;
-
+  /* background-image: url("../assets/fondo.png"); */
+  /* background-size: cover; */
+  background: #E8F5E9; /* fallback for old browsers */
+  
 }
 </style>

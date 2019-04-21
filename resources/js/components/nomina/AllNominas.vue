@@ -9,7 +9,7 @@
           <h3>Nominas</h3>
           <v-spacer></v-spacer>
           <v-text-field
-            color="teal accent-4"
+            color="teal darken-4"
             v-model="search"
             append-icon="fa-search"
             label="Search"
@@ -17,7 +17,7 @@
             hide-details
           ></v-text-field>
           <v-spacer></v-spacer>
-          <v-btn v-if="!isVacioTrabajadores" color="teal accent-4" dark @click="generarNomina">
+          <v-btn v-if="!isVacioTrabajadores" color="teal darken-4" dark @click="generarNomina">
             Generar
             <v-icon>add</v-icon>
           </v-btn>
