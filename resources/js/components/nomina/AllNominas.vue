@@ -19,7 +19,6 @@
           <v-spacer></v-spacer>
           <v-btn v-if="!isVacioTrabajadores" color="teal darken-4" dark @click="generarNomina">
             Generar
-            <v-icon>add</v-icon>
           </v-btn>
         </v-card-title>
         <v-data-table :headers="headers" :items="nominas" :search="search">
