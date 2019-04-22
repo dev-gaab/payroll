@@ -74,7 +74,7 @@ class AuthController extends Controller
             'isAdmin' => $isAdmin,
             'user' => [
                 'token' => $tokenResult->accessToken,
-                'name' => $user->nombre.' '.$user->apellido,
+                'name' => $user->nombre,
                 'email' => $user->email
             ]
         ]);

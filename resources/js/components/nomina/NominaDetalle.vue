@@ -6,7 +6,7 @@
           <h3>Nomina Detalle</h3>
           <v-spacer></v-spacer>
           <v-text-field
-            color="teal accent-4"
+            color="teal darken-4"
             v-model="search"
             append-icon="fa-search"
             label="Search"
@@ -267,42 +267,51 @@
 
           <form @submit.prevent="updateNominaDetalle">
             <v-card-text>
-              <!-- TODO: cambiar a type number min=0 max=15 -->
               <v-text-field
                 color="teal darken-1"
                 v-model="nominaDetalleUpd.dias_trabajados"
                 name="dias_trabajados"
                 label="Dias trabajados"
                 id="dias_trabajados"
+                v-validate="'required|numeric|min_value:0|max_value:15'"
               ></v-text-field>
+              <v-alert
+                v-show="errors.has('dias_trabajados')"
+                type="error"
+              >{{errors.first('dias_trabajados')}}</v-alert>
 
-              <!-- TODO: cambiar a type number -->
               <v-text-field
                 color="teal darken-1"
                 v-model="nominaDetalleUpd.he_diurnas"
                 name="he_diurnas"
                 label="Horas extras diurnas"
                 id="he_diurnas"
+                v-validate="'numeric|min_value:0'"
               ></v-text-field>
+              <v-alert v-show="errors.has('he_diurnas')" type="error">{{errors.first('he_diurnas')}}</v-alert>
 
-              <!-- TODO: cambiar a type number -->
-              <v-textarea
+              <v-text-field
                 color="teal darken-1"
                 v-model="nominaDetalleUpd.he_nocturnas"
                 name="he_nocturnas"
                 label="Horas extras nocturnas"
                 id="he_nocturnas"
-                rows="2"
-              ></v-textarea>
+                v-validate="'numeric|min_value:0'"
+              ></v-text-field>
+              <v-alert
+                v-show="errors.has('he_nocturnas')"
+                type="error"
+              >{{errors.first('he_nocturnas')}}</v-alert>
 
-              <!-- TODO: cambiar a type number -->
               <v-text-field
                 color="teal darken-1"
                 v-model="nominaDetalleUpd.feriados"
                 name="feriados"
                 label="Dias Feriados"
                 id="feriados"
+                v-validate="'numeric|min_value:0|max_value:15'"
               ></v-text-field>
+              <v-alert v-show="errors.has('feriados')" type="error">{{errors.first('feriados')}}</v-alert>
 
               <v-checkbox v-model="nominaDetalleUpd.ivss" label="IVSS"></v-checkbox>
 
@@ -355,6 +364,31 @@ export default {
   components: {},
   created() {
     this.allNominasDetalle();
+    const dict = {
+      custom: {
+        dias_trabajados: {
+          required: "No debe ser vacio",
+          numeric: "Solo se aceptan numeros",
+          min_value: "Valor mínimo 0",
+          max_value: "Valor máximo 15"
+        },
+        he_diurnas: {
+          numeric: "Solo se aceptan numeros",
+          min_value: "Valor minimo 0"
+        },
+        he_nocturnas: {
+          numeric: "Solo se aceptan numeros",
+          min_value: "Valor minimo 0"
+        },
+        feriados: {
+          numeric: "Solo se aceptan numeros",
+          min_value: "Valor minimo 0",
+          max_value: "Valor máximo 15"
+        }
+      }
+    };
+
+    this.$validator.localize("es", dict);
   },
   methods: {
     allNominasDetalle() {
@@ -401,23 +435,30 @@ export default {
     },
     updateNominaDetalle() {
       const vm = this;
-      axios
-        .put(
-          `/api/nominas/detalle/${vm.nominaDetalleUpd.id}/${
-            vm.nominaDetalleUpd.trabajador_id
-          }`,
-          vm.nominaDetalleUpd,
-          {
-            headers: {
-              Authorization: `Bearer ${vm.$store.state.currentUser.token}`
+
+      this.$validator.validate().then(valid => {
+        if (!valid) {
+          // do stuff if not valid.
+          return;
+        }
+        axios
+          .put(
+            `/api/nominas/detalle/${vm.nominaDetalleUpd.id}/${
+              vm.nominaDetalleUpd.trabajador_id
+            }`,
+            vm.nominaDetalleUpd,
+            {
+              headers: {
+                Authorization: `Bearer ${vm.$store.state.currentUser.token}`
+              }
             }
-          }
-        )
-        .then(res => {
-          vm.allNominasDetalle();
-          vm.dialogUpd = false;
-        })
-        .catch(err => console.log(err));
+          )
+          .then(res => {
+            vm.allNominasDetalle();
+            vm.dialogUpd = false;
+          })
+          .catch(err => console.log(err));
+      });
     }
   },
   filters: {

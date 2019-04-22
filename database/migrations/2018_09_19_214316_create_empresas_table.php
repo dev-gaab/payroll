@@ -19,10 +19,10 @@ class CreateEmpresasTable extends Migration
             $table->string('razon_social');
             $table->text('direccion');
             $table->string('riesgo_ivss');
-            $table->string('num_afiliacion_ivss');
+            $table->string('num_afiliacion_ivss')->nullable();
             $table->string('num_afiliacion_faov')->nullable();
             $table->string('num_afiliacion_inces')->nullable();
-            $table->date('fecha_inscripcion_ivss');
+            $table->date('fecha_inscripcion_ivss')->nullable();
             $table->string('estatus', 12);
         });
     }

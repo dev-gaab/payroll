@@ -4,8 +4,9 @@ use Illuminate\Http\Request;
 
 /**
  * TODO:
- * [] Realizar las rutas para nomina.
- * [] Probar las rutas con POSTMAN antes de con la API.
+ *
+ * ![] Realizar las rutas para usuario
+ * ![] Probar las rutas con POSTMAN antes de con la API.
  */
 Route::group(['prefix' => 'auth'], function () {
     Route::post('login', 'AuthController@login');
@@ -15,6 +16,14 @@ Route::group(['prefix' => 'auth'], function () {
         Route::get('logout', 'AuthController@logout');
         Route::get('user', 'AuthController@user');
     });
+});
+
+Route::group(['prefix' => 'users', 'middleware' => 'auth:api'], function () {
+  Route::get('/', 'Api\UserController@all');
+  Route::get('/{id}', 'Api\UserController@find');
+  Route::put('/{id}', 'Api\UserController@update');
+  Route::put('/enable/{id}', 'Api\UserController@enable');
+  Route::put('/disable/{id}', 'Api\UserController@disable');
 });
 
 // Routes para modulo de empresas
@@ -40,8 +49,12 @@ Route::group(['prefix' => 'trabajadores', 'middleware' => 'auth:api'], function(
 Route::group(['prefix' => 'nominas', 'middleware' => 'auth:api'], function() {
   Route::get('/{id}', 'Api\NominaController@verTodas');
   Route::post('/generar/{id}', 'Api\NominaController@generar');
+  Route::get('/validar/trabajadores/{empresa_id}', 'Api\NominaController@validarTrabajadores');
   // Nomina detalle
   Route::get('/detalle/{id}', 'Api\NominaController@allNominaDetalle');
   Route::get('/detalle/find/{id}', 'Api\NominaController@verNominaDetalle');
   Route::put('/detalle/{nomina_id}/{trabajador_id}', 'Api\NominaController@modificarNominaDetalle');
 });
+
+
+Route::get('/vacaciones/{trabajador_id}/{fecha_vacaciones}', 'Api\VacacionesController@validarDisponibilidadVacaciones');

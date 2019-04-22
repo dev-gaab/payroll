@@ -318,4 +318,17 @@ class NominaController extends Controller
     return response()->json(["nomina" => $nomina]);
   }
 
+  // Validar si existen trabajadores activos a la empresa que se desea generar la nomina.
+  public function validarTrabajadores($empresa_id)
+  {
+    $trabajadores = Trabajador::where('empresa_id', $empresa_id)
+      ->where('estatus', 'activo')
+      ->first();
+
+    if($trabajadores == null)
+      return response()->json(['error' => 'No hay trabajadores activos.']);
+
+    return response()->json(['msg' => 'Done!']);
+  }
+
 }

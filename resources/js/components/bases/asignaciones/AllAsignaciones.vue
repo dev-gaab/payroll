@@ -17,7 +17,7 @@
           <v-spacer></v-spacer>
 
           <v-text-field
-            color="teal accent-4"
+            color="teal darken-4"
             v-model="search"
             append-icon="fa-search"
             label="Buscar"
@@ -27,7 +27,7 @@
 
           <v-spacer></v-spacer>
 
-          <v-btn icon color="teal accent-4" dark @click="newSalario">
+          <v-btn icon color="teal darken-4" dark @click="newSalario">
 						<v-icon>add</v-icon>
 					</v-btn>
         </v-card-title>
