@@ -1,7 +1,7 @@
 <template>
-  <div>
-    NewVacaciones
-  </div>
+ <v-flex xs12>
+   //Lista de trabajores que pueden optar a vacaciones en un rango de un mes.k
+ </v-flex>
 </template>
 
 <script>
