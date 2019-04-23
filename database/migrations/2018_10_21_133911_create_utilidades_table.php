@@ -18,7 +18,7 @@ class CreateUtilidadesTable extends Migration
             $table->integer('trabajador_id')->unsigned();
             $table->date('fecha');
             $table->date('dias');
-            $table->integer('a_servicio');
+            $table->integer('meses_calculados')->nullable();
             $table->string('tipo');
             $table->float('monto');
             $table->float('sd_actual');

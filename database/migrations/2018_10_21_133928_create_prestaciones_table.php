@@ -19,9 +19,10 @@ class CreatePrestacionesTable extends Migration
             $table->increments('id');
             $table->integer('trabajador_id')->unsigned();
             $table->integer('a_servicio');
+            $table->integer('meses_servicio');
+            $table->integer('dias_servicio');
             $table->date('fecha');
             $table->json('montos');
-            $table->string('tipo');
 
             $table->foreign('trabajador_id')
                 ->references('id')

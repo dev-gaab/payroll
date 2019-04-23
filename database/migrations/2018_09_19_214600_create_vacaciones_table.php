@@ -18,9 +18,7 @@ class CreateVacacionesTable extends Migration
             $table->integer('trabajador_id')->unsigned();
             $table->integer('a_servicio');
             $table->integer('dias_disfrute');
-            $table->integer('bono_vacacional');
             $table->integer('dias_feriados');
-            $table->float('cesta_ticket');
             $table->json('montos');
             $table->date('fecha_inicial');
             $table->date('fecha_final');

@@ -15,7 +15,7 @@ class UtilidadesController extends Controller
     public function verTodas($empresa_id) {
       $utilidades = DB::table('utilidades')
         ->join('trabajador', 'utilidades.trabajador_id', 'trabajador.id')
-        ->join('empresa', 'trabajador.empresa_id', 'empresa.i')
+        ->join('empresa', 'trabajador.empresa_id', 'empresa.id')
         ->select('trabajador.cedula', 'trabajador.nombre1', 'trabajador.apellido1', 'utilidades.*')
         ->where('empresa.id', $empresa_id)
         ->get();
@@ -58,16 +58,22 @@ class UtilidadesController extends Controller
       $year_ingreso = $fecha[0];
       $tipo = 'fraccionada';
 
-      if($year_ingreso < date('Y')) {
-        $dias = ($request->dias_utilidades * (int) date('m')) / 12;
-        $monto =  $dias * $salario->salario_diario;
-        if(date('m') == 12) $tipo = 'completa';
+      if($request->fraccionada) {
+        if($year_ingreso < date('Y')) {
+          $dias = ($request->dias_utilidades * (int) date('m')) / 12;
+          if(date('m') == 12) $tipo = 'completa';
+        } else {
+          $meses = (int) date('m') - (int) $fecha[1];
+          $dias = ($request->dias_utilidades * $meses) / 12;
+
+          if($meses == 12) $tipo = 'completa';
+        }
       } else {
-        $meses = (int) date('m') - (int) $fecha[1];
-        $dias = ($request->dias_utilidades * $meses) / 12;
-        $monto = $dias * $salario->salario_diario;
-        if($meses == 12) $tipo = 'completa';
+        $dias = $request->dias_utilidades;
+        $tipo = 'completa';
       }
+
+      $monto = $dias * $salario->salario_diario;
 
       $utilidades = new Utilidades();
       $utilidades->trabajador_id = $trabajador_id;
@@ -76,6 +82,8 @@ class UtilidadesController extends Controller
       $utilidades->monto = $monto;
       $utilidades->sd_actual = $salario->salario_diario;
       $utilidades->tipo = $tipo;
+      $utilidades->meses_calculados = $meses;
+
 
       $utilidades->save();
 
