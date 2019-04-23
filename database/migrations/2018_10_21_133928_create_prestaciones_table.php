@@ -11,6 +11,8 @@ class CreatePrestacionesTable extends Migration
      *
      * @return void
      */
+
+    //  TODO: Reestrhcthrar las tablas de prestaciones y utilidades.
     public function up()
     {
         Schema::create('prestaciones', function (Blueprint $table) {
