@@ -84,21 +84,21 @@ export default {
         	if(!res.data.res) {
         		vm.trabajador = {
         			id,
-        			is_fraccionado = true,
+        			is_fraccionado: true,
         			meses: res.data.meses
-        		};
+        		}
         		vm.dialog = true;
 
         	} else {
         		v.trabajador = {
         			id,
-        			is_fraccionado = false
-        		};
+        			is_fraccionado: false
+        		}
         		vm.calcularVacaciones();
         	}
         })
         .catch(err => console.log(err));
   	}
-  } 
+  }
 }
 </script>

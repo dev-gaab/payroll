@@ -9,16 +9,16 @@ use App\Models\Vacaciones;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\DB;
-use Faker\Provider\cs_CZ\DateTime;
+// use Faker\Provider\cs_CZ\DateTime;
 
 class VacacionesController extends Controller
 {
     public function index($empresa_id) {
-      
+
       $vacaciones = DB::table('vacaciones')
-        ->join('empresa', 'vacaciones.empresa_id', 'empresa.id')
         ->join('trabajador', 'vacaciones.trabajador_id', 'trabajador.id')
-        ->select('trabajador.cedula', 'trabajador.nombre', 'trabajador.apellido', 'vacaciones.*')
+        ->join('empresa', 'trabajador.empresa_id', 'empresa.id')
+        ->select('trabajador.cedula', 'trabajador.nombre1', 'trabajador.apellido1', 'vacaciones.*')
         ->where('empresa.id', $empresa_id)
         ->get();
       return response()->json($vacaciones);
@@ -27,6 +27,7 @@ class VacacionesController extends Controller
     public function find($id) {
       $vacacion = DB::table('vacaciones')
         ->join('trabajador', 'vacaciones.trabajador_id', 'trabajador.id')
+        ->select('trabajador.cedula', 'trabajador.nombre1', 'trabajador.apellido1', 'vacaciones.*')
         ->where('vacaciones.id', $id)
         ->get();
       return response()->json($vacacion);
@@ -55,7 +56,7 @@ class VacacionesController extends Controller
       // $bono_vacacional = 15 + $years_servicio;
 
       if($request->isFraccionada) {
-        $dias_disfrute = ($dias_disfrute * $request->meses) / 12; 
+        $dias_disfrute = ($dias_disfrute * $request->meses) / 12;
       }
 
       if ($dias_disfrute > 30) $dias_disfrute = 30;
@@ -69,7 +70,7 @@ class VacacionesController extends Controller
       // $cesta_ticket = CestaTicket::where('estatus', 'activa')->first();
 
       // $monto_cesta_ticket = ($cesta_ticket->cantidad/30) * $dias_disfrute;
-      
+
       $total_pagar = $dias_disfrute * $salario->salario_diario;
 
       $montos = [
@@ -77,7 +78,7 @@ class VacacionesController extends Controller
         "total_pagar" => $total_pagar
       ];
 
-      $vacaciones = new Vacaciones;
+      $vacaciones = new Vacaciones();
       $vacaciones->trabajador_id = $request->id;
       $vacaciones->a_servicio = $years_servicio;
       $vacaciones->dias_disfrute = $dias_disfrute;
@@ -130,7 +131,7 @@ class VacacionesController extends Controller
         $diferencia = $fecha_ingreso_trabajador->diff($fecha_vacaciones);
 
         if($diferencia->y == 0) return response()->json(['res'=> false, 'meses' => $diferencia->m]);
-        
+
         return response()->json(['res'=> true]);
       }
 
