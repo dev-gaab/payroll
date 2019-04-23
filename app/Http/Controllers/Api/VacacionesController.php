@@ -118,7 +118,7 @@ class VacacionesController extends Controller
 
     }
 
-    public function validarDisponibilidadVacaciones($trabajador_id, Request $request)
+    public function validardDisponibilidadVacaciones($trabajador_id, $fecha_vacaciones)
     {
       $vacaciones_trabajador = Vacaciones::where('trabajador_id', $trabajador_id)
         ->orderBy('fecha_inicial', 'DESC')
@@ -127,19 +127,19 @@ class VacacionesController extends Controller
 
       if ($vacaciones_trabajador == null) {
         $fecha_ingreso_trabajador = new DateTime($trabajador->fecha_ingreso);
-        $fecha_vacaciones = new DateTime($request->fecha_vacaciones);
+        $fecha_vacaciones = new DateTime($fecha_vacaciones);
         $diferencia = $fecha_ingreso_trabajador->diff($fecha_vacaciones);
 
-        if($diferencia->y == 0) return response()->json(['res'=> false, 'meses' => $diferencia->m]);
+        if($diferencia->y == 0) return response()->json(['res'=> false,'meses' => $diferencia->m]);
 
         return response()->json(['res'=> true]);
       }
 
       $fecha_ultimas_vacaciones = new DateTime($vacaciones_trabajador->fecha_inicial);
-      $fecha_nuevas_vacaciones = new DateTime($request->fecha_vacaciones);
+      $fecha_nuevas_vacaciones = new DateTime($fecha_vacaciones);
       $diferencia_fechas = $fecha_ultimas_vacaciones->diff($fecha_nuevas_vacaciones);
 
-      if($diferencia_fechas->y == 0) return response()->json(['res'=> false, 'meses' => $diferencia_fechas->m]);
+      if($diferencia_fechas->y == 0) return response()->json(['res'=> false,'meses' => $diferencia_fechas->m]);
 
       return response()->json(['res'=> true]);
     }
