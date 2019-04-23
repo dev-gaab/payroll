@@ -33,7 +33,7 @@ class BasesController extends Controller
 
         $salario = new SalarioMinimo;
         $salario->monto = $request->monto;
-        $salario->estatus = 'activo',
+        $salario->estatus = 'activo';
         $salario->desde = date("d-m-Y");
         $salario->save();
 
