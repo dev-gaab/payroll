@@ -9,7 +9,7 @@
           <v-spacer></v-spacer>
         </v-toolbar>
         <!-- Alerta -->
-        <v-alert v-model="alert" dismissible :type="alertType">{{alertMessage}}</v-alert>
+        <v-alert v-model="alert" dismissible :type="alertType">{{alertMsg}}</v-alert>
         <!-- formulario -->
         <form @submit.prevent="addEmpresa">
           <v-card-text>

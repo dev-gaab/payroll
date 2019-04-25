@@ -24,7 +24,7 @@
             <v-icon>work</v-icon>
           </v-list-tile-action>
           <v-list-tile-content>
-            <v-list-tile-title>Nomina</v-list-tile-title>
+            <v-list-tile-title>Nómina</v-list-tile-title>
           </v-list-tile-content>
         </v-list-tile>
 
@@ -181,6 +181,6 @@ export default {
   /* background-image: url("../assets/fondo.png"); */
   /* background-size: cover; */
   background: #E8F5E9; /* fallback for old browsers */
-  
+
 }
 </style>

@@ -113,7 +113,7 @@
               name="telefono_fijo"
               label="Telefono Fijo"
               id="telefono_fijo"
-              v-validate="{regex: /(02)([1-9]{2})([0-9]{7})$/}"
+              v-validate="{regex: /(02)([1-9]{2})(-[0-9]{7})$/}"
             ></v-text-field>
             <v-alert v-show="errors.has('telefono_fijo')" type="error">{{errors.first('telefono_fijo')}}</v-alert>
 
@@ -123,7 +123,7 @@
               name="telefono_celular"
               label="Telefono Celular"
               id="telefono_celular"
-              v-validate="{regex: /(04)(12|14|24|16|26)([0-9]{7})$/}"
+              v-validate="{regex: /(04)(12|14|24|16|26)(-[0-9]{7})$/}"
             ></v-text-field>
             <v-alert v-show="errors.has('telefono_celular')" type="error">{{errors.first('telefono_celular')}}</v-alert>
 
@@ -197,6 +197,7 @@
 
 <script>
 import axios from "axios";
+const moment = require('moment');
 
 class Trabajador {
   constructor() {
@@ -290,6 +291,14 @@ export default {
     };
     // or use the instance method
     this.$validator.localize("es", dict);
+
+  },
+  mounted() {
+    let fechaNacimiento = moment().subtract(14, 'years').format('YYYY-MM-DD');
+    document.getElementById('fecha_nacimiento').max = fechaNacimiento;
+
+    let fechaIngreso = moment().format('YYYY-MM-DD');
+    document.getElementById('fecha_ingreso').max = fechaIngreso;
   },
   methods: {
     addTrabajador() {

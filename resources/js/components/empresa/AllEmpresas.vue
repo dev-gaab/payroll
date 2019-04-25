@@ -18,7 +18,13 @@
             hide-details
           ></v-text-field>
           <v-spacer></v-spacer>
-          <v-btn v-if="$store.state.currentUser.isAdmin" icon color="teal darken-4" dark @click="newEmpresa">
+          <v-btn
+            v-if="$store.state.currentUser.isAdmin"
+            icon
+            color="teal darken-4"
+            dark
+            @click="newEmpresa"
+          >
             <v-icon>add</v-icon>
           </v-btn>
           <v-btn icon color="teal darken-4" dark @click="printAll">
@@ -68,98 +74,105 @@
       <v-dialog v-model="dialogVer" persistent max-width="500">
         <v-card>
           <v-toolbar dark color="teal darken-1" dense>
-            <v-toolbar-title>{{empresa.razon_social}}</v-toolbar-title>
+            <v-toolbar-title>{{empresa.rif}} - {{empresa.razon_social}}</v-toolbar-title>
             <v-spacer></v-spacer>
           </v-toolbar>
 
-          <v-list two-line>
-            <v-list-tile>
-              <v-list-tile-content>
-                <v-list-tile-title>Rif</v-list-tile-title>
+          <v-card-text>
+            <v-container grid-list-md>
+              <v-layout wrap>
+                <v-flex xs6>
+                  <v-list-tile>
+                    <v-list-tile-content>
+                      <v-list-tile-title><strong>Riesgo IVSS</strong></v-list-tile-title>
 
-                <v-list-tile-sub-title>
-                  <span class="text--primary">{{empresa.rif}}</span>
-                </v-list-tile-sub-title>
-              </v-list-tile-content>
-            </v-list-tile>
-            <v-divider></v-divider>
+                      <v-list-tile-sub-title>
+                        <span class="text--primary">{{empresa.riesgo_ivss | capitalize}}</span>
+                      </v-list-tile-sub-title>
+                    </v-list-tile-content>
+                  </v-list-tile>
+                </v-flex>
+                <v-flex xs6>
+                  <v-list-tile>
+                    <v-list-tile-content>
+                      <v-list-tile-title><strong>Dirección</strong></v-list-tile-title>
 
-            <v-list-tile>
-              <v-list-tile-content>
-                <v-list-tile-title>Dirección</v-list-tile-title>
+                      <v-list-tile-sub-title>
+                        <span class="text--primary">{{empresa.direccion}}</span>
+                      </v-list-tile-sub-title>
+                    </v-list-tile-content>
+                  </v-list-tile>
+                </v-flex>
+              </v-layout>
+              <v-divider></v-divider>
 
-                <v-list-tile-sub-title>
-                  <span class="text--primary">{{empresa.direccion}}</span>
-                </v-list-tile-sub-title>
-              </v-list-tile-content>
-            </v-list-tile>
-            <v-divider></v-divider>
+              <v-layout wrap>
+                <v-flex xs6>
+                  <v-list-tile>
+                    <v-list-tile-content>
+                      <v-list-tile-title><strong>Num. Afiliación IVSS</strong></v-list-tile-title>
 
-            <v-list-tile>
-              <v-list-tile-content>
-                <v-list-tile-title>Riesgo IVSS</v-list-tile-title>
+                      <v-list-tile-sub-title>
+                        <span class="text--primary">{{empresa.num_afiliacion_ivss}}</span>
+                      </v-list-tile-sub-title>
+                    </v-list-tile-content>
+                  </v-list-tile>
+                </v-flex>
+                <v-flex xs6>
+                  <v-list-tile>
+                    <v-list-tile-content>
+                      <v-list-tile-title><strong>Fecha de Inscripción IVSS</strong></v-list-tile-title>
 
-                <v-list-tile-sub-title>
-                  <span class="text--primary">{{empresa.riesgo_ivss}}</span>
-                </v-list-tile-sub-title>
-              </v-list-tile-content>
-            </v-list-tile>
-            <v-divider></v-divider>
+                      <v-list-tile-sub-title>
+                        <span class="text--primary">{{empresa.fecha_inscripcion_ivss}}</span>
+                      </v-list-tile-sub-title>
+                    </v-list-tile-content>
+                  </v-list-tile>
+                </v-flex>
+              </v-layout>
+              <v-divider></v-divider>
 
-            <v-list-tile>
-              <v-list-tile-content>
-                <v-list-tile-title>Num. Afiliación IVSS</v-list-tile-title>
+              <v-layout wrap>
+                <v-flex xs6>
+                  <v-list-tile>
+                    <v-list-tile-content>
+                      <v-list-tile-title><strong>Num. Afiliación FAOV</strong></v-list-tile-title>
 
-                <v-list-tile-sub-title>
-                  <span class="text--primary">{{empresa.num_afiliacion_ivss}}</span>
-                </v-list-tile-sub-title>
-              </v-list-tile-content>
-            </v-list-tile>
-            <v-divider></v-divider>
+                      <v-list-tile-sub-title>
+                        <span class="text--primary">{{empresa.num_afiliacion_faov}}</span>
+                      </v-list-tile-sub-title>
+                    </v-list-tile-content>
+                  </v-list-tile>
+                </v-flex>
+                <v-flex xs6>
+                  <v-list-tile>
+                    <v-list-tile-content>
+                      <v-list-tile-title><strong>Num. Afiliación INCES</strong></v-list-tile-title>
 
-            <v-list-tile>
-              <v-list-tile-content>
-                <v-list-tile-title>Fecha de Inscripción IVSS</v-list-tile-title>
+                      <v-list-tile-sub-title>
+                        <span class="text--primary">{{empresa.num_afiliacion_inces}}</span>
+                      </v-list-tile-sub-title>
+                    </v-list-tile-content>
+                  </v-list-tile>
+                </v-flex>
+              </v-layout>
+              <v-divider></v-divider>
 
-                <v-list-tile-sub-title>
-                  <span class="text--primary">{{empresa.fecha_inscripcion_ivss}}</span>
-                </v-list-tile-sub-title>
-              </v-list-tile-content>
-            </v-list-tile>
-            <v-divider></v-divider>
+              <v-layout wrap>
+                <v-flex xs6>
+                  <v-list-tile>
+                    <v-list-tile-content>
+                      <v-list-tile-title> <strong> Estatus</strong></v-list-tile-title>
 
-            <v-list-tile>
-              <v-list-tile-content>
-                <v-list-tile-title>Num. Afiliación FAOV</v-list-tile-title>
-
-                <v-list-tile-sub-title>
-                  <span class="text--primary">{{empresa.num_afiliacion_faov}}</span>
-                </v-list-tile-sub-title>
-              </v-list-tile-content>
-            </v-list-tile>
-            <v-divider></v-divider>
-
-            <v-list-tile>
-              <v-list-tile-content>
-                <v-list-tile-title>Num. Afiliación INCES</v-list-tile-title>
-
-                <v-list-tile-sub-title>
-                  <span class="text--primary">{{empresa.num_afiliacion_inces}}</span>
-                </v-list-tile-sub-title>
-              </v-list-tile-content>
-            </v-list-tile>
-            <v-divider></v-divider>
-
-            <v-list-tile>
-              <v-list-tile-content>
-                <v-list-tile-title>Estatus</v-list-tile-title>
-
-                <v-list-tile-sub-title>
-                  <span class="text--primary">{{empresa.estatus}}</span>
-                </v-list-tile-sub-title>
-              </v-list-tile-content>
-            </v-list-tile>
-          </v-list>
+                      <v-list-tile-sub-title>
+                        <span class="text--primary">{{empresa.estatus | capitalize}}</span>
+                      </v-list-tile-sub-title>
+                    </v-list-tile-content>
+                  </v-list-tile>
+                </v-flex>
+              </v-layout>
+            </v-container>
+          </v-card-text>
           <v-card-actions>
             <v-spacer></v-spacer>
             <v-btn color="blue darken-1" flat @click.native="dialogVer = false">Cerrar</v-btn>
@@ -301,7 +314,7 @@ export default {
       alertSuc: false,
       messageSuc: null,
       alertUpd: false,
-      alertUpdMsg: ''
+      alertUpdMsg: ""
     };
   },
   components: {
@@ -439,13 +452,12 @@ export default {
           .then(res => {
             if (!res.data.error) {
               vm.alertSuc = true;
-              vm.messageSuc = 'Empresa Modificada';
+              vm.messageSuc = "Empresa Modificada";
               vm.dialogUpd = false;
               vm.allEmpresas();
-
             } else {
               vm.alertUpd = true;
-              vm.alertUpdMsg  = res.data.error;
+              vm.alertUpdMsg = res.data.error;
               document.getElementById("rif").focus();
             }
           })
@@ -481,59 +493,56 @@ export default {
       });
       const fecha = moment().format("DD-MM-YYYY");
 
-      this.toDataURL(
-        logo,
-        function(dataUrl) {
-          let dd = {
-            header: {
-              margin: 10,
-              columns: [
-                {
-                  // usually you would use a dataUri instead of the name for client-side printing
-                  // sampleImage.jpg however works inside playground so you can play with it
-                  image: dataUrl,
-                  width: 200,
-                  height: 30
-                },
-                {
-                  alignment: 'center',
-                  margin: [10, 0, 0, 10],
-                  text: 'Empresas',
-                  fontSize: 18,
-                  bold: true
-                },
-                {
-                  alignment: 'right',
-                  margin: [10, 0, 0, 10],
-                  text: fecha
-                }
-              ]
-            },
-            content: [
+      this.toDataURL(logo, function(dataUrl) {
+        let dd = {
+          header: {
+            margin: 10,
+            columns: [
               {
-                style: "table",
-                table: {
-                  headerRows: 1,
-                  body: body
-                },
-                layout: "lightHorizontalLines"
-              }
-            ],
-            styles: {
-              table: {
-                margin: [0, 40, 0, 15],
-                borderTop: "none"
+                // usually you would use a dataUri instead of the name for client-side printing
+                // sampleImage.jpg however works inside playground so you can play with it
+                image: dataUrl,
+                width: 200,
+                height: 30
               },
-              tableHeader: {
-                bold: true,
-                fontSize: 13,
-                color: "black"
+              {
+                alignment: "center",
+                margin: [10, 0, 0, 10],
+                text: "Empresas",
+                fontSize: 18,
+                bold: true
+              },
+              {
+                alignment: "right",
+                margin: [10, 0, 0, 10],
+                text: fecha
               }
+            ]
+          },
+          content: [
+            {
+              style: "table",
+              table: {
+                headerRows: 1,
+                body: body
+              },
+              layout: "lightHorizontalLines"
             }
-          };
-          pdfMake.createPdf(dd).open();
-        }
-      );
+          ],
+          styles: {
+            table: {
+              margin: [0, 40, 0, 15],
+              borderTop: "none"
+            },
+            tableHeader: {
+              bold: true,
+              fontSize: 13,
+              color: "black"
+            }
+          }
+        };
+        pdfMake.createPdf(dd).open();
+      });
     },
     activarEmpresa(id, nombre) {
       this.$store.commit("activarEmpresa", { id: id, nombre: nombre });

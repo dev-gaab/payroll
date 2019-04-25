@@ -65,130 +65,148 @@
       <v-dialog v-model="dialogVer" persistent max-width="500">
         <v-card>
           <v-toolbar dark color="teal darken-1" dense>
-            <v-toolbar-title>{{trabajador.nombre1}} {{trabajador.apellido1}}</v-toolbar-title>
+            <v-toolbar-title
+              class="align-center"
+            >{{trabajador.cedula}} - {{trabajador.nombre1}} {{trabajador.apellido1}}</v-toolbar-title>
             <v-spacer></v-spacer>
+            <v-btn @click.native="dialogVer = false" icon flat>
+              <v-icon medium>fa-times-circle</v-icon>
+            </v-btn>
           </v-toolbar>
 
-          <v-list two-line>
-            <v-list-tile>
-              <v-list-tile-content>
-                <v-list-tile-title>Cédula</v-list-tile-title>
+          <v-card-text>
+            <v-container grid-list-md>
+              <v-layout wrap>
+                <v-flex xs6>
+                  <v-list-tile>
+                    <v-list-tile-content>
+                      <v-list-tile-title><strong>Cargo</strong></v-list-tile-title>
 
-                <v-list-tile-sub-title>
-                  <span class="text--primary">{{trabajador.cedula}}</span>
-                </v-list-tile-sub-title>
-              </v-list-tile-content>
-            </v-list-tile>
-            <v-divider></v-divider>
+                      <v-list-tile-sub-title>
+                        <span class="text--primary">{{trabajador.cargo | capitalize}}</span>
+                      </v-list-tile-sub-title>
+                    </v-list-tile-content>
+                  </v-list-tile>
+                </v-flex>
+                <v-flex xs6>
+                  <v-list-tile>
+                    <v-list-tile-content>
+                      <v-list-tile-title><strong>Salario</strong></v-list-tile-title>
 
-            <v-list-tile>
-              <v-list-tile-content>
-                <v-list-tile-title>Cargo</v-list-tile-title>
+                      <v-list-tile-sub-title>
+                        <span class="text--primary">{{salario.salario | numberFormat}}</span>
+                      </v-list-tile-sub-title>
+                    </v-list-tile-content>
+                  </v-list-tile>
+                </v-flex>
+              </v-layout>
+              <v-divider></v-divider>
+              <v-layout wrap>
+                <v-flex xs6>
+                  <v-list-tile>
+                    <v-list-tile-content>
+                      <v-list-tile-title><strong>Fecha Nacimiento</strong></v-list-tile-title>
 
-                <v-list-tile-sub-title>
-                  <span class="text--primary">{{trabajador.cargo | capitalize}}</span>
-                </v-list-tile-sub-title>
-              </v-list-tile-content>
-            </v-list-tile>
-            <v-divider></v-divider>
+                      <v-list-tile-sub-title>
+                        <span class="text--primary">{{trabajador.fecha_nacimiento | dateFormat}}</span>
+                      </v-list-tile-sub-title>
+                    </v-list-tile-content>
+                  </v-list-tile>
+                </v-flex>
+                <v-flex xs6>
+                  <v-list-tile>
+                    <v-list-tile-content>
+                      <v-list-tile-title><strong>Sexo</strong></v-list-tile-title>
 
-            <v-list-tile>
-              <v-list-tile-content>
-                <v-list-tile-title>Salario</v-list-tile-title>
+                      <v-list-tile-sub-title>
+                        <span class="text--primary">{{trabajador.sexo | capitalize}}</span>
+                      </v-list-tile-sub-title>
+                    </v-list-tile-content>
+                  </v-list-tile>
+                </v-flex>
+              </v-layout>
 
-                <v-list-tile-sub-title>
-                  <span class="text--primary">{{salario.salario | numberFormat}}</span>
-                </v-list-tile-sub-title>
-              </v-list-tile-content>
-            </v-list-tile>
-            <v-divider></v-divider>
+              <v-divider></v-divider>
+              <v-layout wrap>
+                <v-flex xs12>
+                  <v-list-tile>
+                    <v-list-tile-content>
+                      <v-list-tile-title><strong>Dirección</strong></v-list-tile-title>
 
-            <v-list-tile>
-              <v-list-tile-content>
-                <v-list-tile-title>Fecha Nacimiento</v-list-tile-title>
+                      <v-list-tile-sub-title>
+                        <span class="text--primary">{{trabajador.direccion}}</span>
+                      </v-list-tile-sub-title>
+                    </v-list-tile-content>
+                  </v-list-tile>
+                </v-flex>
+              </v-layout>
 
-                <v-list-tile-sub-title>
-                  <span class="text--primary">{{trabajador.fecha_nacimiento | dateFormat}}</span>
-                </v-list-tile-sub-title>
-              </v-list-tile-content>
-            </v-list-tile>
-            <v-divider></v-divider>
+              <v-divider></v-divider>
+              <v-layout wrap>
+                <v-flex xs6>
+                  <v-list-tile>
+                    <v-list-tile-content>
+                      <v-list-tile-title><strong>Teléfono Fijo</strong></v-list-tile-title>
 
-            <v-list-tile>
-              <v-list-tile-content>
-                <v-list-tile-title>Sexo</v-list-tile-title>
+                      <v-list-tile-sub-title>
+                        <span class="text--primary">{{trabajador.telefono_fijo}}</span>
+                      </v-list-tile-sub-title>
+                    </v-list-tile-content>
+                  </v-list-tile>
+                </v-flex>
+                <v-flex xs6>
+                  <v-list-tile>
+                    <v-list-tile-content>
+                      <v-list-tile-title><strong>Teléfono Celular</strong></v-list-tile-title>
 
-                <v-list-tile-sub-title>
-                  <span class="text--primary">{{trabajador.sexo | capitalize}}</span>
-                </v-list-tile-sub-title>
-              </v-list-tile-content>
-            </v-list-tile>
-            <v-divider></v-divider>
+                      <v-list-tile-sub-title>
+                        <span class="text--primary">{{trabajador.telefono_celular}}</span>
+                      </v-list-tile-sub-title>
+                    </v-list-tile-content>
+                  </v-list-tile>
+                </v-flex>
+              </v-layout>
 
-            <v-list-tile>
-              <v-list-tile-content>
-                <v-list-tile-title>Dirección</v-list-tile-title>
+              <v-divider></v-divider>
+              <v-layout wrap>
+                <v-flex xs4>
+                  <v-list-tile>
+                    <v-list-tile-content>
+                      <v-list-tile-title><strong>Fecha Ingreso</strong></v-list-tile-title>
 
-                <v-list-tile-sub-title>
-                  <span class="text--primary">{{trabajador.direccion}}</span>
-                </v-list-tile-sub-title>
-              </v-list-tile-content>
-            </v-list-tile>
-            <v-divider></v-divider>
+                      <v-list-tile-sub-title>
+                        <span class="text--primary">{{trabajador.fecha_ingreso | dateFormat}}</span>
+                      </v-list-tile-sub-title>
+                    </v-list-tile-content>
+                  </v-list-tile>
+                </v-flex>
+                <v-flex xs4>
+                  <v-list-tile v-if="trabajador.fecha_egreso">
+                    <v-list-tile-content>
+                      <v-list-tile-title><strong>Fecha Egreso</strong></v-list-tile-title>
 
-            <v-list-tile>
-              <v-list-tile-content>
-                <v-list-tile-title>Teléfono Fijo</v-list-tile-title>
+                      <v-list-tile-sub-title>
+                        <span class="text--primary">{{trabajador.fecha_egreso | dateFormat}}</span>
+                      </v-list-tile-sub-title>
+                    </v-list-tile-content>
+                  </v-list-tile>
+                </v-flex>
 
-                <v-list-tile-sub-title>
-                  <span class="text--primary">{{trabajador.telefono_fijo}}</span>
-                </v-list-tile-sub-title>
-              </v-list-tile-content>
-            </v-list-tile>
-            <v-divider></v-divider>
+                <v-flex xs4>
+                  <v-list-tile>
+                    <v-list-tile-content>
+                      <v-list-tile-title><strong>Estatus</strong></v-list-tile-title>
 
-            <v-list-tile>
-              <v-list-tile-content>
-                <v-list-tile-title>Teléfono Celular</v-list-tile-title>
+                      <v-list-tile-sub-title>
+                        <span class="text--primary">{{trabajador.estatus | capitalize}}</span>
+                      </v-list-tile-sub-title>
+                    </v-list-tile-content>
+                  </v-list-tile>
+                </v-flex>
+              </v-layout>
+            </v-container>
+          </v-card-text>
 
-                <v-list-tile-sub-title>
-                  <span class="text--primary">{{trabajador.telefono_celular}}</span>
-                </v-list-tile-sub-title>
-              </v-list-tile-content>
-            </v-list-tile>
-            <v-divider></v-divider>
-
-            <v-list-tile>
-              <v-list-tile-content>
-                <v-list-tile-title>Fecha Ingreso</v-list-tile-title>
-
-                <v-list-tile-sub-title>
-                  <span class="text--primary">{{trabajador.fecha_ingreso | dateFormat}}</span>
-                </v-list-tile-sub-title>
-              </v-list-tile-content>
-            </v-list-tile>
-
-            <v-list-tile>
-              <v-list-tile-content>
-                <v-list-tile-title>Fecha Egreso</v-list-tile-title>
-
-                <v-list-tile-sub-title>
-                  <span class="text--primary">{{trabajador.fecha_egreso | dateFormat}}</span>
-                </v-list-tile-sub-title>
-              </v-list-tile-content>
-            </v-list-tile>
-            <v-divider></v-divider>
-
-            <v-list-tile>
-              <v-list-tile-content>
-                <v-list-tile-title>Estatus</v-list-tile-title>
-
-                <v-list-tile-sub-title>
-                  <span class="text--primary">{{trabajador.estatus | capitalize}}</span>
-                </v-list-tile-sub-title>
-              </v-list-tile-content>
-            </v-list-tile>
-          </v-list>
           <v-card-actions>
             <v-spacer></v-spacer>
             <v-btn color="blue darken-1" flat @click.native="dialogVer = false">Cerrar</v-btn>
@@ -315,7 +333,7 @@
                 name="telefono_fijo"
                 label="Telefono Fijo"
                 id="telefono_fijo"
-                v-validate="{regex: /(02)([1-9]{2})([0-9]{7})$/}"
+                v-validate="{regex: /(02)([1-9]{2})(-[0-9]{7})$/}"
               ></v-text-field>
               <v-alert
                 v-show="errors.has('telefono_fijo')"
@@ -328,7 +346,7 @@
                 name="telefono_celular"
                 label="Telefono Celular"
                 id="telefono_celular"
-                v-validate="{regex: /(04)(12|14|24|16|26)([0-9]{7})$/}"
+                v-validate="{regex: /(04)(12|14|24|16|26)(-[0-9]{7})$/}"
               ></v-text-field>
               <v-alert
                 v-show="errors.has('telefono_celular')"
@@ -457,6 +475,12 @@ export default {
     this.$validator.localize("es", dict);
     this.allTrabajadores();
   },
+  mounted() {
+    let fechaNacimiento = moment()
+      .subtract(14, "years")
+      .format("YYYY-MM-DD");
+    document.getElementById("fecha_nacimiento").max = fechaNacimiento;
+  },
   methods: {
     newTrabajador() {
       this.$router.push({ path: "/trabajadores/nuevo" });
@@ -580,3 +604,4 @@ export default {
   }
 };
 </script>
+

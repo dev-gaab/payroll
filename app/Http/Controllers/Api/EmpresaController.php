@@ -80,7 +80,7 @@ class EmpresaController extends Controller
 
     $empresa->save();
 
-    return response()->json(['error' => "Error al vincular empresa con usuario"]);
+    return response()->json(['res' => "Done!"]);
 
 
   }

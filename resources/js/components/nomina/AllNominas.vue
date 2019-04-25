@@ -6,7 +6,7 @@
       <v-alert v-model="alert" dismissible :type="alertType">{{alertMsg}}</v-alert>
       <v-card>
         <v-card-title>
-          <h3>Nominas</h3>
+          <h3>Nóminas</h3>
           <v-spacer></v-spacer>
           <v-text-field
             color="teal darken-4"
@@ -24,9 +24,9 @@
         <v-data-table :headers="headers" :items="nominas" :search="search">
           <template slot="items" slot-scope="props">
             <td>{{ props.item.codigo }}</td>
-            <td>{{ props.item.desde }}</td>
-            <td>{{ props.item.hasta }}</td>
-            <td>{{ props.item.estatus | capitalize}}</td>
+            <td>{{ props.item.desde | dateFormat }}</td>
+            <td>{{ props.item.hasta | dateFormat }}</td>
+            <td>{{ props.item.estatus | capitalize }}</td>
             <!-- Acciones -->
             <td class="justify-center layout px-0">
               <v-btn @click="verNomina(props.item.id)" icon small color="primary">
@@ -139,7 +139,13 @@ export default {
       if (!value) return "";
       value = value.toString();
       return value.charAt(0).toUpperCase() + value.slice(1);
-    }
+    },
+    dateFormat(value) {
+      if (!value) return "";
+
+      value = moment(value, "YYYY-MM-DD").format("DD/MM/YYYY");
+      return value;
+    },
   }
 };
 </script>
