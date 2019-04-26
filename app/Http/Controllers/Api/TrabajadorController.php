@@ -15,6 +15,7 @@ class TrabajadorController extends Controller
   public function verTodos($id)
   {
     $trabajadores = Trabajador::where('empresa_id', $id)
+      ->where('estatus', 'activo')
       ->orderBy('cedula', 'asc')
       ->orderBy('estatus', 'asc')
       ->get();
@@ -181,8 +182,9 @@ class TrabajadorController extends Controller
     $trabajador = Trabajador::find($id);
 
     $trabajador->estatus = 'inhabilitado';
+    $trabajador->fecha_egreso = $request->fecha_egreso;
     $trabajador->save();
 
-    return response()->json(["message" => "done!"]);
+    return response()->json(["res" => "done!"]);
   }
 }

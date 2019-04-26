@@ -33,6 +33,7 @@ Route::group(['prefix' => 'empresas', 'middleware' => 'auth:api'], function() {
     Route::get('/{id}', 'Api\EmpresaController@ver');
     Route::post('/', 'Api\EmpresaController@agregar')->middleware('check.rol');
     Route::put('/{id}', 'Api\EmpresaController@modificar');
+    Route::put('/disable/{id}', 'Api\EmpresaController@deshabilitar');
 });
 
 
@@ -42,6 +43,7 @@ Route::group(['prefix' => 'trabajadores', 'middleware' => 'auth:api'], function(
   Route::get('/{id}', 'Api\TrabajadorController@ver');
   Route::post('/{id}', 'Api\TrabajadorController@agregar');
   Route::put('/{id}', 'Api\TrabajadorController@modificar');
+  Route::put('/disable/{id}', 'Api\TrabajadorController@inhabilitar');
 });
 
 

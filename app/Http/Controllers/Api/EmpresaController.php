@@ -19,7 +19,9 @@ class EmpresaController extends Controller
   public function verTodas(Request $request)
   {
 
-    $empresas = Empresa::orderBy('estatus', 'desc')->get();
+    $empresas = Empresa::where('estatus', 'activa')
+      ->orderBy('estatus', 'desc')
+      ->get();
 
     return response()->json(["empresas" => $empresas]);
   }
@@ -86,7 +88,7 @@ class EmpresaController extends Controller
   }
 
   //    Funcion para deshabilitar una empresa
-  public function deshabilitar($id, Request $request)
+  public function deshabilitar($id)
   {
     $empresa = Empresa::find($id);
 

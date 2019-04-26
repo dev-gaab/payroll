@@ -1,6 +1,7 @@
 <template>
   <v-layout row wrap>
     <v-flex xs12>
+      <v-alert v-model="alert" dismissible :type="alertType">{{alertMsg}}</v-alert>
       <v-card>
         <v-card-title>
           <h3>Nomina Detalle</h3>
@@ -52,199 +53,172 @@
           <v-toolbar dark color="teal darken-1" dense>
             <v-toolbar-title>{{nominaDetalle.cedula}} - {{nominaDetalle.nombre}} {{nominaDetalle.apellido}}</v-toolbar-title>
             <v-spacer></v-spacer>
+            <v-btn @click.native="dialogVer = false" icon flat>
+              <v-icon medium>fa-times-circle</v-icon>
+            </v-btn>
           </v-toolbar>
+          <v-card-text>
+            <v-container grid-list-md>
+              <h3>Asignaciones</h3>
+              <v-divider></v-divider>
+              <v-layout wrap>
+                <v-flex xs6>
+                  <v-list-tile>
+                    <v-list-tile-content>
+                      <v-list-tile-title><strong>Dias Trabajados</strong></v-list-tile-title>
 
-          <v-list two-line>
-            <v-list-tile>
-              <v-list-tile-content>
-                <v-list-tile-title>Dias Trabajados</v-list-tile-title>
+                      <v-list-tile-sub-title>
 
-                <v-list-tile-sub-title>
-                  <v-layout row>
-                    <v-flex xs6>
-                      <span class="text--primary">{{nominaDetalle.dias_trabajados}}</span>
-                    </v-flex>
-                    <v-flex xs6>
-                      <span
-                        class="text--primary"
-                      >Monto: {{nominaDetalle.montos.pago_salario | numberFormat}}</span>
-                    </v-flex>
-                  </v-layout>
-                </v-list-tile-sub-title>
-              </v-list-tile-content>
-            </v-list-tile>
-            <v-divider></v-divider>
+                        <span class="text--primary">{{nominaDetalle.dias_trabajados}} días = {{nominaDetalle.montos.pago_salario | numberFormat}}</span>
+                      </v-list-tile-sub-title>
+                    </v-list-tile-content>
+                  </v-list-tile>
+                </v-flex>
+                <v-flex xs6>
+                  <v-list-tile>
+                    <v-list-tile-content>
+                      <v-list-tile-title><strong>Dias Feriados</strong></v-list-tile-title>
 
-            <v-list-tile>
-              <v-list-tile-content>
-                <v-list-tile-title>Horas extras diurnas</v-list-tile-title>
+                      <v-list-tile-sub-title>
 
-                <v-list-tile-sub-title>
-                  <v-layout row>
-                    <v-flex xs6>
-                      <span class="text--primary">{{nominaDetalle.he_diurnas}}</span>
-                    </v-flex>
-                    <v-flex xs6>
-                      <span
-                        class="text--primary"
-                      >Monto: {{nominaDetalle.montos.he_diurnas | numberFormat}}</span>
-                    </v-flex>
-                  </v-layout>
-                </v-list-tile-sub-title>
-              </v-list-tile-content>
-            </v-list-tile>
-            <v-divider></v-divider>
+                        <span class="text--primary">{{nominaDetalle.feriados}} días = {{nominaDetalle.montos.feriados | numberFormat}}</span>
+                      </v-list-tile-sub-title>
+                    </v-list-tile-content>
+                  </v-list-tile>
+                </v-flex>
+              </v-layout>
 
-            <v-list-tile>
-              <v-list-tile-content>
-                <v-list-tile-title>Horas extras nocturnas</v-list-tile-title>
+              <v-layout wrap mb-3>
+                <v-flex xs6>
+                  <v-list-tile>
+                    <v-list-tile-content>
+                      <v-list-tile-title><strong>Horas extras diurnas</strong></v-list-tile-title>
 
-                <v-list-tile-sub-title>
-                  <v-layout row>
-                    <v-flex xs6>
-                      <span class="text--primary">{{nominaDetalle.he_nocturnas}}</span>
-                    </v-flex>
-                    <v-flex xs6>
-                      <span
-                        class="text--primary"
-                      >Montos: {{nominaDetalle.montos.he_nocturnas | numberFormat}}</span>
-                    </v-flex>
-                  </v-layout>
-                </v-list-tile-sub-title>
-              </v-list-tile-content>
-            </v-list-tile>
-            <v-divider></v-divider>
+                      <v-list-tile-sub-title>
 
-            <v-list-tile>
-              <v-list-tile-content>
-                <v-list-tile-title>Días feriados</v-list-tile-title>
+                        <span class="text--primary">{{nominaDetalle.he_diurnas}} horas = {{nominaDetalle.montos.he_diurnas | numberFormat}}</span>
+                      </v-list-tile-sub-title>
+                    </v-list-tile-content>
+                  </v-list-tile>
+                </v-flex>
+                <v-flex xs6>
+                  <v-list-tile>
+                    <v-list-tile-content>
+                      <v-list-tile-title><strong>Horas extras nocturnas</strong></v-list-tile-title>
 
-                <v-list-tile-sub-title>
-                  <v-layout row>
-                    <v-flex xs6>
-                      <span class="text--primary">{{nominaDetalle.feriados}}</span>
-                    </v-flex>
-                    <v-flex xs6>
-                      <span
-                        class="text--primary"
-                      >Monto: {{ nominaDetalle.montos.feriados | numberFormat}}</span>
-                    </v-flex>
-                  </v-layout>
-                </v-list-tile-sub-title>
-              </v-list-tile-content>
-            </v-list-tile>
-            <v-divider></v-divider>
+                      <v-list-tile-sub-title>
 
-            <v-list-tile>
-              <v-list-tile-content>
-                <v-list-tile-title>IVSS</v-list-tile-title>
+                        <span class="text--primary">{{nominaDetalle.he_nocturnas}} horas = {{nominaDetalle.montos.he_nocturnas | numberFormat}}</span>
+                      </v-list-tile-sub-title>
+                    </v-list-tile-content>
+                  </v-list-tile>
+                </v-flex>
+              </v-layout>
 
-                <v-list-tile-sub-title>
-                  <v-layout row>
-                    <v-flex xs6>
-                      <span class="text--primary">{{nominaDetalle.ivss ? 'Si' : 'No'}}</span>
-                    </v-flex>
-                    <v-flex xs6>
-                      <span
-                        class="text--primary"
-                      >Monto: {{ nominaDetalle.montos.ivss | numberFormat }}</span>
-                    </v-flex>
-                  </v-layout>
-                </v-list-tile-sub-title>
-              </v-list-tile-content>
-            </v-list-tile>
-            <v-divider></v-divider>
+              <h3>Deducciones</h3>
+              <v-divider></v-divider>
 
-            <v-list-tile>
-              <v-list-tile-content>
-                <v-list-tile-title>FAOV</v-list-tile-title>
+              <v-layout wrap>
+                <v-flex xs6>
+                  <v-list-tile>
+                    <v-list-tile-content>
+                      <v-list-tile-title><strong>IVSS</strong></v-list-tile-title>
 
-                <v-list-tile-sub-title>
-                  <v-layout row>
-                    <v-flex xs6>
-                      <span class="text--primary">{{nominaDetalle.faov ? 'Si' : 'No'}}</span>
-                    </v-flex>
-                    <v-flex xs6>
-                      <span
-                        class="text--primary"
-                      >Monto: {{ nominaDetalle.montos.faov | numberFormat}}</span>
-                    </v-flex>
-                  </v-layout>
-                </v-list-tile-sub-title>
-              </v-list-tile-content>
-            </v-list-tile>
-            <v-divider></v-divider>
+                      <v-list-tile-sub-title>
 
-            <v-list-tile>
-              <v-list-tile-content>
-                <v-list-tile-title>Paro Forzoso</v-list-tile-title>
+                        <span class="text--primary">{{nominaDetalle.ivss ? 'Si' : 'No'}} = {{nominaDetalle.montos.ivss | numberFormat}}</span>
+                      </v-list-tile-sub-title>
+                    </v-list-tile-content>
+                  </v-list-tile>
+                </v-flex>
+                <v-flex xs6>
+                  <v-list-tile>
+                    <v-list-tile-content>
+                      <v-list-tile-title><strong>FAOV</strong></v-list-tile-title>
 
-                <v-list-tile-sub-title>
-                  <v-layout row>
-                    <v-flex xs6>
-                      <span class="text--primary">{{nominaDetalle.paro_forzoso ? 'Si' : 'No'}}</span>
-                    </v-flex>
-                    <v-flex xs6>
-                      <span
-                        class="text--primary"
-                      >Monto: {{nominaDetalle.montos.paro_forzoso | numberFormat}}</span>
-                    </v-flex>
-                  </v-layout>
-                </v-list-tile-sub-title>
-              </v-list-tile-content>
-            </v-list-tile>
-            <v-divider></v-divider>
+                      <v-list-tile-sub-title>
 
-            <v-list-tile>
-              <v-list-tile-content>
-                <v-list-tile-title>Cesta Ticket</v-list-tile-title>
+                        <span class="text--primary">{{nominaDetalle.faov ? 'Si' : 'No'}} = {{nominaDetalle.montos.faov | numberFormat}}</span>
+                      </v-list-tile-sub-title>
+                    </v-list-tile-content>
+                  </v-list-tile>
+                </v-flex>
+              </v-layout>
 
-                <v-list-tile-sub-title>
-                  <span class="text--primary">{{ nominaDetalle.montos.cesta_ticket | numberFormat}}</span>
-                </v-list-tile-sub-title>
-              </v-list-tile-content>
-            </v-list-tile>
+              <v-layout wrap mb-3>
+                <v-flex xs6>
+                  <v-list-tile>
+                    <v-list-tile-content>
+                      <v-list-tile-title><strong>Paro Forzoso</strong></v-list-tile-title>
 
-            <v-divider></v-divider>
+                      <v-list-tile-sub-title>
 
-            <v-list-tile>
-              <v-list-tile-content>
-                <v-list-tile-title>Total asignaciones</v-list-tile-title>
+                        <span class="text--primary">{{nominaDetalle.paro_forzoso ? 'Si' : 'No'}} = {{nominaDetalle.montos.paro_forzoso | numberFormat}}</span>
+                      </v-list-tile-sub-title>
+                    </v-list-tile-content>
+                  </v-list-tile>
+                </v-flex>
+              </v-layout>
 
-                <v-list-tile-sub-title>
-                  <span
-                    class="text--primary"
-                  >{{nominaDetalle.montos.total_asignaciones | numberFormat}}</span>
-                </v-list-tile-sub-title>
-              </v-list-tile-content>
-            </v-list-tile>
+              <h3>Totales</h3>
+              <v-divider></v-divider>
 
-            <v-divider></v-divider>
+              <v-layout wrap>
+                <v-flex xs6>
+                  <v-list-tile>
+                    <v-list-tile-content>
+                      <v-list-tile-title><strong>Total Asignaciones</strong></v-list-tile-title>
 
-            <v-list-tile>
-              <v-list-tile-content>
-                <v-list-tile-title>Total deducciones</v-list-tile-title>
+                      <v-list-tile-sub-title>
+                        <span class="text--primary">{{nominaDetalle.montos.total_asignaciones | numberFormat}}</span>
+                      </v-list-tile-sub-title>
+                    </v-list-tile-content>
+                  </v-list-tile>
+                </v-flex>
+                <v-flex xs6>
+                  <v-list-tile>
+                    <v-list-tile-content>
+                      <v-list-tile-title><strong>Total Deducciones</strong></v-list-tile-title>
 
-                <v-list-tile-sub-title>
-                  <span
-                    class="text--primary"
-                  >{{nominaDetalle.montos.total_deducciones | numberFormat}}</span>
-                </v-list-tile-sub-title>
-              </v-list-tile-content>
-            </v-list-tile>
+                      <v-list-tile-sub-title>
 
-            <v-divider></v-divider>
+                        <span class="text--primary">{{nominaDetalle.montos.total_deducciones | numberFormat}}</span>
+                      </v-list-tile-sub-title>
+                    </v-list-tile-content>
+                  </v-list-tile>
+                </v-flex>
+              </v-layout>
 
-            <v-list-tile>
-              <v-list-tile-content>
-                <v-list-tile-title>Total a pagar</v-list-tile-title>
+              <v-layout wrap>
+                <v-flex xs6>
+                  <v-list-tile>
+                    <v-list-tile-content>
+                      <v-list-tile-title><strong>Cesta Ticket</strong></v-list-tile-title>
 
-                <v-list-tile-sub-title>
-                  <span class="text--primary">{{nominaDetalle.montos.monto_total | numberFormat}}</span>
-                </v-list-tile-sub-title>
-              </v-list-tile-content>
-            </v-list-tile>
-          </v-list>
+                      <v-list-tile-sub-title>
+
+                        <span class="text--primary">{{ nominaDetalle.montos.cesta_ticket | numberFormat}}</span>
+                      </v-list-tile-sub-title>
+                    </v-list-tile-content>
+                  </v-list-tile>
+                </v-flex>
+
+                <v-flex xs6>
+                  <v-list-tile>
+                    <v-list-tile-content>
+                      <v-list-tile-title><strong>Total a pagar</strong></v-list-tile-title>
+
+                      <v-list-tile-sub-title>
+
+                        <span class="text--primary">{{nominaDetalle.montos.monto_total | numberFormat}}</span>
+                      </v-list-tile-sub-title>
+                    </v-list-tile-content>
+                  </v-list-tile>
+                </v-flex>
+              </v-layout>
+
+            </v-container>
+          </v-card-text>
 
           <v-card-actions>
             <v-spacer></v-spacer>
@@ -258,7 +232,7 @@
       <v-dialog v-model="dialogUpd" persistent max-width="500">
         <v-card class="elevation-12">
           <v-toolbar dark color="teal darken-1" dense>
-            <v-toolbar-title>{{nominaDetalleUpd.nombre}} {{nominaDetalleUpd.apellido}}</v-toolbar-title>
+            <v-toolbar-title>{{ nominaDetalleUpd.cedula }} - {{nominaDetalleUpd.nombre}} {{nominaDetalleUpd.apellido}}</v-toolbar-title>
             <v-spacer></v-spacer>
             <v-btn @click.native="dialogUpd = false" icon flat>
               <v-icon medium>fa-times-circle</v-icon>
@@ -267,57 +241,80 @@
 
           <form @submit.prevent="updateNominaDetalle">
             <v-card-text>
-              <v-text-field
-                color="teal darken-1"
-                v-model="nominaDetalleUpd.dias_trabajados"
-                name="dias_trabajados"
-                label="Dias trabajados"
-                id="dias_trabajados"
-                v-validate="'required|numeric|min_value:0|max_value:15'"
-              ></v-text-field>
-              <v-alert
-                v-show="errors.has('dias_trabajados')"
-                type="error"
-              >{{errors.first('dias_trabajados')}}</v-alert>
+              <v-container grid-list-md>
+                <v-layout wrap>
+                  <v-flex xs6>
+                    <v-text-field
+                      color="teal darken-1"
+                      v-model="nominaDetalleUpd.dias_trabajados"
+                      name="dias_trabajados"
+                      label="Dias trabajados"
+                      id="dias_trabajados"
+                      v-validate="'required|numeric|min_value:0|max_value:15'"
+                    ></v-text-field>
+                    <v-alert
+                      v-show="errors.has('dias_trabajados')"
+                      type="error"
+                    >{{errors.first('dias_trabajados')}}</v-alert>
+                  </v-flex>
 
-              <v-text-field
-                color="teal darken-1"
-                v-model="nominaDetalleUpd.he_diurnas"
-                name="he_diurnas"
-                label="Horas extras diurnas"
-                id="he_diurnas"
-                v-validate="'numeric|min_value:0'"
-              ></v-text-field>
-              <v-alert v-show="errors.has('he_diurnas')" type="error">{{errors.first('he_diurnas')}}</v-alert>
+                  <v-flex xs6>
+                    <v-text-field
+                      color="teal darken-1"
+                      v-model="nominaDetalleUpd.feriados"
+                      name="feriados"
+                      label="Dias Feriados"
+                      id="feriados"
+                      v-validate="'numeric|min_value:0|max_value:15'"
+                    ></v-text-field>
+                    <v-alert v-show="errors.has('feriados')" type="error">{{errors.first('feriados')}}</v-alert>
+                  </v-flex>
+                </v-layout>
 
-              <v-text-field
-                color="teal darken-1"
-                v-model="nominaDetalleUpd.he_nocturnas"
-                name="he_nocturnas"
-                label="Horas extras nocturnas"
-                id="he_nocturnas"
-                v-validate="'numeric|min_value:0'"
-              ></v-text-field>
-              <v-alert
-                v-show="errors.has('he_nocturnas')"
-                type="error"
-              >{{errors.first('he_nocturnas')}}</v-alert>
+                <v-layout wrap>
+                  <v-flex xs6>
+                    <v-text-field
+                      color="teal darken-1"
+                      v-model="nominaDetalleUpd.he_nocturnas"
+                      name="he_nocturnas"
+                      label="Horas extras nocturnas"
+                      id="he_nocturnas"
+                      v-validate="'numeric|min_value:0'"
+                    ></v-text-field>
+                    <v-alert
+                      v-show="errors.has('he_nocturnas')"
+                      type="error"
+                    >{{errors.first('he_nocturnas')}}</v-alert>
+                  </v-flex>
 
-              <v-text-field
-                color="teal darken-1"
-                v-model="nominaDetalleUpd.feriados"
-                name="feriados"
-                label="Dias Feriados"
-                id="feriados"
-                v-validate="'numeric|min_value:0|max_value:15'"
-              ></v-text-field>
-              <v-alert v-show="errors.has('feriados')" type="error">{{errors.first('feriados')}}</v-alert>
+                  <v-flex xs6>
+                    <v-text-field
+                      color="teal darken-1"
+                      v-model="nominaDetalleUpd.he_diurnas"
+                      name="he_diurnas"
+                      label="Horas extras diurnas"
+                      id="he_diurnas"
+                      v-validate="'numeric|min_value:0'"
+                    ></v-text-field>
+                    <v-alert v-show="errors.has('he_diurnas')" type="error">{{errors.first('he_diurnas')}}</v-alert>
+                  </v-flex>
+                </v-layout>
 
-              <v-checkbox v-model="nominaDetalleUpd.ivss" label="IVSS"></v-checkbox>
+                <v-layout wrap>
+                  <v-flex xs4>
+                    <v-checkbox v-model="nominaDetalleUpd.ivss" label="IVSS"></v-checkbox>
+                  </v-flex>
 
-              <v-checkbox v-model="nominaDetalleUpd.faov" label="FAOV"></v-checkbox>
+                  <v-flex xs4>
+                    <v-checkbox v-model="nominaDetalleUpd.faov" label="FAOV"></v-checkbox>
+                  </v-flex>
 
-              <v-checkbox v-model="nominaDetalleUpd.paro_forzoso" label="Paro Forzoso"></v-checkbox>
+                  <v-flex xs4>
+                    <v-checkbox v-model="nominaDetalleUpd.paro_forzoso" label="Paro Forzoso"></v-checkbox>
+                  </v-flex>
+                </v-layout>
+              </v-container>
+
             </v-card-text>
             <v-card-actions>
               <v-spacer></v-spacer>
@@ -358,7 +355,10 @@ export default {
       },
       nominaDetalleUpd: {},
       dialogVer: false,
-      dialogUpd: false
+      dialogUpd: false,
+      alert: false,
+      alertType: 'error',
+      alertMsg: ''
     };
   },
   components: {},
@@ -456,6 +456,9 @@ export default {
           .then(res => {
             vm.allNominasDetalle();
             vm.dialogUpd = false;
+            vm.alert = true;
+            vm.alertType = "success";
+            vm.alertMsg = "Nómina modificada"
           })
           .catch(err => console.log(err));
       });

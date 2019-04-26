@@ -49,6 +49,7 @@
 
 <script>
 import axios from "axios";
+const moment = require("moment");
 
 export default {
   name: "AllNominas",
@@ -84,7 +85,6 @@ export default {
         }
       )
       .then(res => {
-        console.log(res.data);
         if (res.data.error) {
           this.isVacioTrabajadores = true;
           this.alert = true;
@@ -112,7 +112,7 @@ export default {
     },
     generarNomina() {
       const vm = this;
-      // TODO: Realizar validacion de si la empresa posee trabajadores activos o no.
+
       if(!vm.isVacioTrabajadores) {
         axios
         .post(
@@ -125,8 +125,13 @@ export default {
           }
         )
         .then(res => {
-          console.log(res.data);
-          vm.listNominas();
+          if(res.data.error) {
+            vm.alert = true;
+            vm.alertType = "error";
+            vm.alertMsg = res.data.error;
+          } else {
+            vm.listNominas();
+          }
         });
       }
     },

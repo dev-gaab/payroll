@@ -54,7 +54,7 @@
               <v-btn @click="editEmpresa(props.item.id)" icon small color="warning">
                 <v-icon small>fa-edit</v-icon>
               </v-btn>
-              <v-btn v-if="props.item.estatus == 'habilitada'" icon small color="error">
+              <v-btn @click="disableEmpresa(props.item.id)" v-if="props.item.estatus == 'activa'" icon small color="error">
                 <v-icon small>fa-lock</v-icon>
               </v-btn>
             </td>
@@ -76,6 +76,9 @@
           <v-toolbar dark color="teal darken-1" dense>
             <v-toolbar-title>{{empresa.rif}} - {{empresa.razon_social}}</v-toolbar-title>
             <v-spacer></v-spacer>
+            <v-btn @click.native="dialogVer = false" icon flat>
+              <v-icon medium>fa-times-circle</v-icon>
+            </v-btn>
           </v-toolbar>
 
           <v-card-text>
@@ -84,7 +87,9 @@
                 <v-flex xs6>
                   <v-list-tile>
                     <v-list-tile-content>
-                      <v-list-tile-title><strong>Riesgo IVSS</strong></v-list-tile-title>
+                      <v-list-tile-title>
+                        <strong>Riesgo IVSS</strong>
+                      </v-list-tile-title>
 
                       <v-list-tile-sub-title>
                         <span class="text--primary">{{empresa.riesgo_ivss | capitalize}}</span>
@@ -95,7 +100,9 @@
                 <v-flex xs6>
                   <v-list-tile>
                     <v-list-tile-content>
-                      <v-list-tile-title><strong>Dirección</strong></v-list-tile-title>
+                      <v-list-tile-title>
+                        <strong>Dirección</strong>
+                      </v-list-tile-title>
 
                       <v-list-tile-sub-title>
                         <span class="text--primary">{{empresa.direccion}}</span>
@@ -110,7 +117,9 @@
                 <v-flex xs6>
                   <v-list-tile>
                     <v-list-tile-content>
-                      <v-list-tile-title><strong>Num. Afiliación IVSS</strong></v-list-tile-title>
+                      <v-list-tile-title>
+                        <strong>Num. Afiliación IVSS</strong>
+                      </v-list-tile-title>
 
                       <v-list-tile-sub-title>
                         <span class="text--primary">{{empresa.num_afiliacion_ivss}}</span>
@@ -121,10 +130,12 @@
                 <v-flex xs6>
                   <v-list-tile>
                     <v-list-tile-content>
-                      <v-list-tile-title><strong>Fecha de Inscripción IVSS</strong></v-list-tile-title>
+                      <v-list-tile-title>
+                        <strong>Fecha de Inscripción IVSS</strong>
+                      </v-list-tile-title>
 
                       <v-list-tile-sub-title>
-                        <span class="text--primary">{{empresa.fecha_inscripcion_ivss}}</span>
+                        <span class="text--primary">{{empresa.fecha_inscripcion_ivss | dateFormat}}</span>
                       </v-list-tile-sub-title>
                     </v-list-tile-content>
                   </v-list-tile>
@@ -136,7 +147,9 @@
                 <v-flex xs6>
                   <v-list-tile>
                     <v-list-tile-content>
-                      <v-list-tile-title><strong>Num. Afiliación FAOV</strong></v-list-tile-title>
+                      <v-list-tile-title>
+                        <strong>Num. Afiliación FAOV</strong>
+                      </v-list-tile-title>
 
                       <v-list-tile-sub-title>
                         <span class="text--primary">{{empresa.num_afiliacion_faov}}</span>
@@ -147,7 +160,9 @@
                 <v-flex xs6>
                   <v-list-tile>
                     <v-list-tile-content>
-                      <v-list-tile-title><strong>Num. Afiliación INCES</strong></v-list-tile-title>
+                      <v-list-tile-title>
+                        <strong>Num. Afiliación INCES</strong>
+                      </v-list-tile-title>
 
                       <v-list-tile-sub-title>
                         <span class="text--primary">{{empresa.num_afiliacion_inces}}</span>
@@ -162,7 +177,9 @@
                 <v-flex xs6>
                   <v-list-tile>
                     <v-list-tile-content>
-                      <v-list-tile-title> <strong> Estatus</strong></v-list-tile-title>
+                      <v-list-tile-title>
+                        <strong>Estatus</strong>
+                      </v-list-tile-title>
 
                       <v-list-tile-sub-title>
                         <span class="text--primary">{{empresa.estatus | capitalize}}</span>
@@ -431,6 +448,26 @@ export default {
           console.log(err);
         });
     },
+    disableEmpresa(id) {
+      let confirm = window.confirm("¿Seguro que quiere inhabilitar la empresa?\n Al inhabilitarla no podra realizar mas funciones y no podra volverla habilitar.");
+
+      if(confirm) {
+        const vm = this;
+
+         axios.put(`http://payroll.com.local/api/empresas/disable/${id}`, {}, {
+          headers: {
+            Authorization: `Bearer ${vm.$store.state.currentUser.token}`
+          }
+        })
+        .then(res => {
+          vm.alertSuc = true;
+          vm.messageSuc = "Empresa Inhabilitada";
+
+          vm.allEmpresas();
+        })
+        .catch(err => console.log(err));
+      }
+    },
     save() {
       const vm = this;
       this.$validator.validate().then(valid => {
@@ -556,6 +593,12 @@ export default {
       if (!value) return "";
       value = value.toString();
       return value.charAt(0).toUpperCase() + value.slice(1);
+    },
+    dateFormat(value) {
+      if (!value) return "";
+
+      value = moment(value, "YYYY-MM-DD").format("DD/MM/YYYY");
+      return value;
     }
   }
 };
