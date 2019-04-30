@@ -29,8 +29,6 @@
             <td>{{ props.item.apellido1 }} {{props.item.apellido2}}</td>
             <td>{{props.item.cargo}}</td>
             <td>{{props.item.fecha_ingreso | dateFormat}}</td>
-            <td>{{props.item.fecha_egreso}}</td>
-            <td>{{ props.item.estatus | capitalize}}</td>
             <!-- Acciones -->
             <td class="justify-center layout px-0">
               <v-btn @click="verTrabajador(props.item.id)" icon small color="primary">
@@ -241,7 +239,7 @@
         <v-card class="elevation-12">
           <!-- Header card -->
           <v-toolbar dark color="teal darken-1" dense>
-            <v-toolbar-title>Trabajador</v-toolbar-title>
+            <v-toolbar-title>Modificar Trabajador</v-toolbar-title>
             <v-spacer></v-spacer>
             <v-btn @click.native="dialogUpd = false" icon flat>
               <v-icon medium>fa-times-circle</v-icon>
@@ -255,7 +253,7 @@
                 <v-layout wrap>
                   <v-flex xs12>
                     <v-text-field
-                      color="teal darken-1"
+                      :color="errors.has('cedula') ? 'error' : 'teal darken-1'"
                       v-model="trabajador.cedula"
                       name="cedula"
                       label="Cédula"
@@ -268,7 +266,7 @@
                 <v-layout wrap>
                   <v-flex xs6>
                     <v-text-field
-                      color="teal darken-1"
+                      :color="errors.has('nombre1') ? 'error' : 'teal darken-1'"
                       v-model="trabajador.nombre1"
                       name="nombre1"
                       label="Primer Nombre"
@@ -279,7 +277,7 @@
                   </v-flex>
                   <v-flex xs6>
                     <v-text-field
-                      color="teal darken-1"
+                      :color="errors.has('nombre2') ? 'error' : 'teal darken-1'"
                       v-model="trabajador.nombre2"
                       name="nombre2"
                       label="Segundo Nombre"
@@ -293,7 +291,7 @@
                 <v-layout wrap>
                   <v-flex xs6>
                     <v-text-field
-                      color="teal darken-1"
+                      :color="errors.has('apellido1') ? 'error' : 'teal darken-1'"
                       v-model="trabajador.apellido1"
                       name="apellido1"
                       label="Primer Apellido"
@@ -307,7 +305,7 @@
                   </v-flex>
                   <v-flex xs6>
                     <v-text-field
-                      color="teal darken-1"
+                      :color="errors.has('apellido2') ? 'error' : 'teal darken-1'"
                       v-model="trabajador.apellido2"
                       name="apellido2"
                       label="Segundo Apellido"
@@ -324,7 +322,7 @@
                 <v-layout wrap>
                   <v-flex xs12>
                     <v-text-field
-                      color="teal darken-1"
+                      :color="errors.has('cargo') ? 'error' : 'teal darken-1'"
                       v-model="trabajador.cargo"
                       name="cargo"
                       label="Cargo"
@@ -338,7 +336,7 @@
                 <v-layout wrap>
                   <v-flex xs6>
                     <v-text-field
-                      color="teal darken-1"
+                      :color="errors.has('fecha_nacimiento') ? 'error' : 'teal darken-1'"
                       v-model="trabajador.fecha_nacimiento"
                       label="Fecha de Nacimiento"
                       name="fecha_nacimiento"
@@ -354,7 +352,7 @@
                   <v-flex xs6>
                     <v-select
                       :items="sexo"
-                      color="teal darken-1"
+                      :color="errors.has('sexo') ? 'error' : 'teal darken-1'"
                       v-model="trabajador.sexo"
                       label="Sexo"
                       name="sexo"
@@ -368,7 +366,7 @@
                 <v-layout wrap>
                   <v-flex xs12>
                     <v-textarea
-                      color="teal darken-1"
+                      :color="errors.has('direccion') ? 'error' : 'teal darken-1'"
                       v-model="trabajador.direccion"
                       name="direccion"
                       label="Direccion"
@@ -386,7 +384,7 @@
                 <v-layout wrap>
                   <v-flex xs6>
                     <v-text-field
-                      color="teal darken-1"
+                      :color="errors.has('telefono_fijo') ? 'error' : 'teal darken-1'"
                       v-model="trabajador.telefono_fijo"
                       name="telefono_fijo"
                       label="Telefono Fijo"
@@ -401,7 +399,7 @@
 
                   <v-flex xs6>
                     <v-text-field
-                      color="teal darken-1"
+                      :color="errors.has('telefono_celular') ? 'error' : 'teal darken-1'"
                       v-model="trabajador.telefono_celular"
                       name="telefono_celular"
                       label="Telefono Celular"
@@ -422,7 +420,7 @@
 
                 <v-text-field
                   v-if="isSalarioMinimo == false"
-                  color="teal darken-1"
+                  :color="errors.has('salario') ? 'error' : 'teal darken-1'"
                   v-model="salario.salario"
                   label="Salario mensual"
                   name="salario"
@@ -489,8 +487,6 @@ export default {
         { text: "Apellidos", value: "apellidos" },
         { text: "Cargo", value: "cargo" },
         { text: "Fecha Ingreso", value: "fecha_ingreso" },
-        { text: "Fecha Egreso", value: "fecha_greso" },
-        { text: "Estatus", value: "estatus" },
         { text: "Acciones", align: "center", value: "cedula", sortable: false }
       ],
       trabajadores: [],

@@ -37,21 +37,45 @@
           </v-list-tile-content>
         </v-list-tile>
 
-        <v-list-tile @click="routAllVacaciones">
-          <v-list-tile-action>
-            <v-icon>flight_takeoff</v-icon>
-          </v-list-tile-action>
-          <v-list-tile-content>
-            <v-list-tile-title>Vacaciones</v-list-tile-title>
-          </v-list-tile-content>
-        </v-list-tile>
+        
+        <v-list-group no-action>
+
+          
+          <v-list-tile slot="activator">
+            <v-list-tile-action>
+              <v-icon>flight_takeoff</v-icon>
+            </v-list-tile-action>
+            <v-list-tile-content>
+              <v-list-tile-title> Vacaciones </v-list-tile-title>
+            </v-list-tile-content>
+          </v-list-tile>
+
+          <v-list-tile @click="routAllVacaciones">
+            <v-list-tile-content>
+              <v-list-tile-title>Ver Vacaciones</v-list-tile-title>
+            </v-list-tile-content>
+          </v-list-tile>
+
+          <v-list-tile @click="routCalcVacaciones">
+            <v-list-tile-content>
+              <v-list-tile-title>Calcular Vacaciones</v-list-tile-title>
+            </v-list-tile-content>
+          </v-list-tile>
+
+          <v-list-tile @click="routFracVacaciones">
+            <v-list-tile-content>
+              <v-list-tile-title>Calcular Vacaciones Fraccionadas</v-list-tile-title>
+            </v-list-tile-content>
+          </v-list-tile>
+
+        </v-list-group>
 
         <v-list-tile @click="routTrabajador">
           <v-list-tile-action>
             <v-icon>people</v-icon>
           </v-list-tile-action>
           <v-list-tile-content>
-            <v-list-tile-title>Trabajadores</v-list-tile-title>
+            <v-list-tile-title>Trabajador</v-list-tile-title>
           </v-list-tile-content>
         </v-list-tile>
 
@@ -64,14 +88,31 @@
           </v-list-tile-content>
         </v-list-tile>
 
-        <v-list-tile @click>
-          <v-list-tile-action>
-            <v-icon>fa-calculator</v-icon>
-          </v-list-tile-action>
-          <v-list-tile-content>
-            <v-list-tile-title>Base de Cálculo</v-list-tile-title>
-          </v-list-tile-content>
-        </v-list-tile>
+        <v-list-group no-action>
+
+          
+          <v-list-tile slot="activator">
+            <v-list-tile-action>
+              <v-icon>fa-calculator</v-icon>
+            </v-list-tile-action>
+            <v-list-tile-content>
+              <v-list-tile-title>Base de Cálculo</v-list-tile-title>
+            </v-list-tile-content>
+          </v-list-tile>
+
+          <v-list-tile @click="routSalarioMinimo">
+            <v-list-tile-content>
+              <v-list-tile-title>Salario Mínimo</v-list-tile-title>
+            </v-list-tile-content>
+          </v-list-tile>
+
+          <v-list-tile @click="routCestaTicket">
+            <v-list-tile-content>
+              <v-list-tile-title>Cesta Ticket</v-list-tile-title>
+            </v-list-tile-content>
+          </v-list-tile>
+
+        </v-list-group>
 
         <v-list-tile @click="routUsers">
           <v-list-tile-action>
@@ -167,6 +208,18 @@ export default {
     },
     routAllVacaciones() {
       this.$router.push({ path: "/vacaciones" });
+    },
+    routCalcVacaciones() {
+      this.$router.push({ path: "/vacaciones/nueva" });
+    },
+    routFracVacaciones() {
+      this.$router.push({ path: "/vacaciones/fraccionadas" });
+    },
+    routSalarioMinimo() {
+      this.$router.push({ path: "/salario_minimo" });
+    },
+    routCestaTicket() {
+      this.$router.push({ path: "/cesta_ticket" });
     },
     logout() {
       this.$store.commit("logout");

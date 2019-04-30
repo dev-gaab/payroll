@@ -58,5 +58,6 @@ Route::group(['prefix' => 'nominas', 'middleware' => 'auth:api'], function() {
   Route::put('/detalle/{nomina_id}/{trabajador_id}', 'Api\NominaController@modificarNominaDetalle');
 });
 
-// TODO: Agregar las rutas para vacaciones utilidades y prestaciones
-Route::get('/vacaciones/validar/{trabajador_id}/{fecha_vacaciones}', 'Api\VacacionesController@validarDisponibilidadVacaciones');
+Route::group(['prefix' => 'vacaciones', 'middleware' => 'auth:api'], function() {
+  Route::get('/disponibles/{empresa_id}', 'Api\VacacionesController@trabajadoresDisponibles');
+});

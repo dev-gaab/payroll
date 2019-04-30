@@ -245,7 +245,7 @@
                 <v-layout wrap>
                   <v-flex xs6>
                     <v-text-field
-                      color="teal darken-1"
+                      :color="errors.has('dias_trabajados') ? 'error' : 'teal darken-1'"
                       v-model="nominaDetalleUpd.dias_trabajados"
                       name="dias_trabajados"
                       label="Dias trabajados"
@@ -260,7 +260,7 @@
 
                   <v-flex xs6>
                     <v-text-field
-                      color="teal darken-1"
+                      :color="errors.has('feriados') ? 'error' : 'teal darken-1'"
                       v-model="nominaDetalleUpd.feriados"
                       name="feriados"
                       label="Dias Feriados"
@@ -274,7 +274,7 @@
                 <v-layout wrap>
                   <v-flex xs6>
                     <v-text-field
-                      color="teal darken-1"
+                      :color="errors.has('he_nocturnas') ? 'error' : 'teal darken-1'"
                       v-model="nominaDetalleUpd.he_nocturnas"
                       name="he_nocturnas"
                       label="Horas extras nocturnas"
@@ -289,7 +289,7 @@
 
                   <v-flex xs6>
                     <v-text-field
-                      color="teal darken-1"
+                      :color="errors.has('he_diurnas') ? 'error' : 'teal darken-1'"
                       v-model="nominaDetalleUpd.he_diurnas"
                       name="he_diurnas"
                       label="Horas extras diurnas"
@@ -301,15 +301,12 @@
                 </v-layout>
 
                 <v-layout wrap>
-                  <v-flex xs4>
-                    <v-checkbox v-model="nominaDetalleUpd.ivss" label="IVSS"></v-checkbox>
-                  </v-flex>
 
-                  <v-flex xs4>
+                  <v-flex xs6>
                     <v-checkbox v-model="nominaDetalleUpd.faov" label="FAOV"></v-checkbox>
                   </v-flex>
 
-                  <v-flex xs4>
+                  <v-flex xs6>
                     <v-checkbox v-model="nominaDetalleUpd.paro_forzoso" label="Paro Forzoso"></v-checkbox>
                   </v-flex>
                 </v-layout>

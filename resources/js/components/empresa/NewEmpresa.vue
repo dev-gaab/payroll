@@ -1,7 +1,7 @@
 <template>
   <v-layout row wrap>
     <!-- Formulario de datos -->
-    <v-flex xs6>
+    <v-flex xs12 md7 pr-4>
       <v-card class="elevation-12">
         <!-- Header card -->
         <v-toolbar dark color="teal darken-1" dense>
@@ -13,88 +13,117 @@
         <!-- formulario -->
         <form @submit.prevent="addEmpresa">
           <v-card-text>
-            <v-text-field
-              color="teal darken-1"
-              v-model="empresa.rif"
-              name="rif"
-              label="Rif"
-              id="rif"
-              v-validate="{required: true, regex: '^([V|E|J]{1})([0-9]{9})$'}"
-            ></v-text-field>
+            <v-container grid-list-md>
+              <v-layout wrap>
+                <v-flex xs12>
+                  <v-text-field
+                    :color="errors.has('rif') ? 'error' : 'teal darken-1'"
+                    v-model="empresa.rif"
+                    name="rif"
+                    label="RIF"
+                    id="rif"
+                    v-validate="{required: true, regex: '^([V|E|J]{1})([0-9]{9})$'}"
+                  ></v-text-field>
 
-            <v-alert v-show="errors.has('rif')" type="error">{{errors.first('rif')}}</v-alert>
+                  <v-alert v-show="errors.has('rif')" type="error">{{errors.first('rif')}}</v-alert>
+                </v-flex>
+              </v-layout>
+              <v-layout wrap>
+          
+                <v-flex xs12>
+                  <v-text-field
+                    :color="errors.has('razon_social') ? 'error' : 'teal darken-1'"
+                    v-model="empresa.razon_social"
+                    name="razon_social"
+                    label="Razón Social"
+                    id="razon_social"
+                    v-validate="{required: true, regex: /[a-zA-Z0-9\.\-\,\sáéíóú]+$/}"
+                  ></v-text-field>
+                  <v-alert
+                    v-show="errors.has('razon_social')"
+                    type="error"
+                  >{{errors.first('razon_social')}}</v-alert>
+                </v-flex>
+              </v-layout>
 
-            <v-text-field
-              color="teal darken-1"
-              v-model="empresa.razon_social"
-              name="razon_social"
-              label="Razon Social"
-              id="razon_social"
-              v-validate="{required: true, regex: /[a-zA-Z0-9\.\,\sáéíóú]+$/}"
-            ></v-text-field>
-            <v-alert
-              v-show="errors.has('razon_social')"
-              type="error"
-            >{{errors.first('razon_social')}}</v-alert>
+              <v-layout wrap>
+                <v-flex xs12>
+                  <v-textarea
+                    :color="errors.has('direccion') ? 'error' : 'teal darken-1'"
+                    v-model="empresa.direccion"
+                    name="direccion"
+                    label="Dirección"
+                    id="direccion"
+                    rows="2"
+                    v-validate="{required: true, regex: /[a-zA-Z0-9\.\,\#\/\sáéíóú]+$/}"
+                  ></v-textarea>
+                  <v-alert v-show="errors.has('direccion')" type="error">{{errors.first('direccion')}}</v-alert>
+                </v-flex>
+              </v-layout>
 
-            <v-textarea
-              color="teal darken-1"
-              v-model="empresa.direccion"
-              name="direccion"
-              label="Direccion"
-              id="direccion"
-              rows="2"
-              v-validate="{required: true, regex: /[a-zA-Z0-9\.\,\#\/\sáéíóú]+$/}"
-            ></v-textarea>
-            <v-alert v-show="errors.has('direccion')" type="error">{{errors.first('direccion')}}</v-alert>
+              <v-layout wrap>
+                <v-flex xs6>
+                  <v-text-field
+                    :color="errors.has('fecha_ivss') ? 'error' : 'teal darken-1'"
+                    v-model="empresa.fecha_inscripcion_ivss"
+                    name="fecha_ivss"
+                    label="Fecha de inscripcion IVSS"
+                    id="fecha_ivss"
+                    type="date"
+                  ></v-text-field>
+                </v-flex>
 
-            <v-text-field
-              color="teal darken-1"
-              v-model="empresa.num_afiliacion_ivss"
-              name="num_ivss"
-              label="Numero de afiliación IVSS"
-              id="num_ivss"
-              v-validate="{regex: /[a-zA-z0-9]+$/}"
-            ></v-text-field>
-            <v-alert v-show="errors.has('num_ivss')" type="error">{{errors.first('num_ivss')}}</v-alert>
+                <v-flex xs6>
+                  <v-text-field
+                    :color="errors.has('num_ivss') ? 'error' : 'teal darken-1'"
+                    v-model="empresa.num_afiliacion_ivss"
+                    name="num_ivss"
+                    label="Numero de afiliación IVSS"
+                    id="num_ivss"
+                    v-validate="{regex: /[a-zA-z0-9]+$/}"
+                  ></v-text-field>
+                  <v-alert v-show="errors.has('num_ivss')" type="error">{{errors.first('num_ivss')}}</v-alert>
+                </v-flex>
+              </v-layout>
 
-            <v-text-field
-              color="teal darken-1"
-              v-model="empresa.fecha_inscripcion_ivss"
-              name="fecha_ivss"
-              label="Fecha de inscripcion IVSS"
-              id="fecha_ivss"
-              type="date"
-            ></v-text-field>
+              <v-layout wrap>
+                <v-flex xs12>
+                  <v-select
+                    :items="riesgoIvss"
+                    :color="errors.has('riesgo_ivss') ? 'error' : 'teal darken-1'"
+                    v-model="empresa.riesgo_ivss"
+                    label="Riesgo IVSS"
+                    name="riesgo_ivss"
+                    id="riesgo_ivss"
+                  ></v-select>
+                </v-flex>
+              </v-layout>
 
-            <v-select
-              :items="riesgoIvss"
-              color="teal darken-1"
-              v-model="empresa.riesgo_ivss"
-              label="Riesgo IVSS"
-              name="riesgo_ivss"
-              id="riesgo_ivss"
-            ></v-select>
-
-            <v-text-field
-              color="teal darken-1"
-              v-model="empresa.num_afiliacion_faov"
-              name="num_faov"
-              label="Numero de afiliación FAOV"
-              id="num_faov"
-            v-validate="{regex: /[a-zA-z0-9]+$/}"
-              ></v-text-field>
-              <v-alert v-show="errors.has('num_faov')" type="error">{{errors.first('num_faov')}}</v-alert>
-
-            <v-text-field
-              color="teal darken-1"
-              v-model="empresa.num_afiliacion_inces"
-              name="num_inces"
-              label="Numero de afiliación INCES"
-              id="num_inces"
-            v-validate="{regex: /[a-zA-z0-9]+$/}"
-              ></v-text-field>
-              <v-alert v-show="errors.has('num_inces')" type="error">{{errors.first('num_inces')}}</v-alert>
+              <v-layout wrap>
+                <v-flex xs6>
+                  <v-text-field
+                    :color="errors.has('num_faov') ? 'error' : 'teal darken-1'"
+                    v-model="empresa.num_afiliacion_faov"
+                    name="num_faov"
+                    label="Numero de afiliación FAOV"
+                    id="num_faov"
+                  v-validate="{regex: /[a-zA-z0-9]+$/}"
+                    ></v-text-field>
+                    <v-alert v-show="errors.has('num_faov')" type="error">{{errors.first('num_faov')}}</v-alert>
+                </v-flex>
+                <v-flex xs6>
+                  <v-text-field
+                    :color="errors.has('num_inces') ? 'error' : 'teal darken-1'"
+                    v-model="empresa.num_afiliacion_inces"
+                    name="num_inces"
+                    label="Numero de afiliación INCES"
+                    id="num_inces"
+                  v-validate="{regex: /[a-zA-z0-9]+$/}"
+                    ></v-text-field>
+                    <v-alert v-show="errors.has('num_inces')" type="error">{{errors.first('num_inces')}}</v-alert>
+                </v-flex>
+              </v-layout>
+            </v-container>
           </v-card-text>
           <v-card-actions>
             <v-spacer></v-spacer>
@@ -105,7 +134,7 @@
       </v-card>
     </v-flex>
 
-    <v-flex xs5 offset-xs1>
+    <v-flex xs12 md5 pt-2>
       <v-card>
         <v-card-title>
           <h3>Agregadas</h3>
@@ -138,6 +167,7 @@
 
 <script>
 import axios from "axios";
+const moment = require("moment");
 
 class Empresa {
   constructor(
@@ -173,7 +203,7 @@ export default {
       empresa: new Empresa(),
       riesgoIvss: ["Mínimo", "Medio", "Máximo"],
       headers: [
-        { text: "Rif", value: "rif" },
+        { text: "RIF", value: "rif" },
         { text: "Razon Social", value: "razon_social" }
       ],
       empresas: [],
@@ -213,6 +243,10 @@ export default {
     // or use the instance method
     this.$validator.localize("es", dict);
   },
+  mounted() {
+    let fechaActual = moment().format("YYYY-MM-DD");
+    document.getElementById("fecha_ivss").max = fechaActual;
+  },
   methods: {
     addEmpresa() {
       const vm = this;
@@ -243,7 +277,7 @@ export default {
             } else {
               vm.alert= true;
               vm.alertType = 'error';
-              vm.alertMsg = vm.data.error;
+              vm.alertMsg = res.data.error;
             }
           })
           .catch(err => {

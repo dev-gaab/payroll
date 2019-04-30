@@ -13,6 +13,8 @@ import User from '../components/users/User'
 import NewUser from '../components/users/NewUser'
 import Vacaciones from '../components/vacaciones/Vacaciones'
 import NewVacaciones from '../components/vacaciones/NewVacaciones'
+import AllSalariosMinimo from '../components/bases/salario_minimo/AllSalariosM'
+import AllCestaTicket from '../components/bases/cestaticket/AllCestaTicket'
 
 Vue.use(Router)
 /**
@@ -133,7 +135,23 @@ export default new Router({
       meta: {
         requiresAuth: true
       }
-    }
+    },
+    {
+      path: '/salario_minimo',
+      name: 'AllSalariosMinimo',
+      component: AllSalariosMinimo,
+      meta: {
+        requiresAuth: true
+      }
+    },
+    {
+      path: '/cesta_ticket',
+      name: 'AllCestaTicket',
+      component: AllCestaTicket,
+      meta: {
+        requiresAuth: true
+      }
+    },
   ],
   mode: 'history'
 })

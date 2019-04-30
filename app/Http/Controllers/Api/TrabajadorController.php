@@ -3,7 +3,9 @@
 namespace App\Http\Controllers\Api;
 
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 use App\Http\Controllers\Controller;
+// models
 use App\Models\Trabajador;
 use App\Models\Salario;
 use App\Models\SalarioMinimo;
@@ -17,7 +19,6 @@ class TrabajadorController extends Controller
     $trabajadores = Trabajador::where('empresa_id', $id)
       ->where('estatus', 'activo')
       ->orderBy('cedula', 'asc')
-      ->orderBy('estatus', 'asc')
       ->get();
 
     return response()->json(['trabajadores' => $trabajadores]);
@@ -122,33 +123,36 @@ class TrabajadorController extends Controller
   {
 
     // Validar Cedula existente
-    $validate_cedula = Trabajador::where('cedula', $request->cedula)
-      ->where('empresa_id', $id)
-      ->where('estatus', 'activo')
-      ->first();
+      $validate_cedula = Trabajador::where('cedula', $request->cedula)
+        ->where('empresa_id', $id)
+        ->where('estatus', 'activo')
+        ->first();
 
-    if($validate_cedula != null)
-      return response()->json(['error' => 'Ya existe un trabajador con la misma cedula']);
+      if($validate_cedula != null)
+        return response()->json(['error' => 'Ya existe un trabajador con la misma cedula']);
 
-    $trabajador = new Trabajador();
+    DB::transaction(function () use($id, $request) {
 
-    $trabajador->empresa_id = $id;
-    $trabajador->cedula = $request->cedula;
-    $trabajador->nombre1 = $request->nombre1;
-    $trabajador->nombre2 = $request->nombre2;
-    $trabajador->apellido1 = $request->apellido1;
-    $trabajador->apellido2 = $request->apellido2;
-    $trabajador->cargo = $request->cargo;
-    $trabajador->fecha_nacimiento = $request->fecha_nacimiento;
-    $trabajador->sexo = $request->sexo;
-    $trabajador->direccion = $request->direccion;
-    $trabajador->telefono_fijo = $request->telefono_fijo;
-    $trabajador->telefono_celular = $request->telefono_celular;
-    $trabajador->fecha_ingreso = $request->fecha_ingreso;
-    $trabajador->fecha_egreso = $request->fecha_egreso;
-    $trabajador->estatus = 'activo';
+      $trabajador = new Trabajador();
 
-    if ($trabajador->save()) {
+      $trabajador->empresa_id = $id;
+      $trabajador->cedula = $request->cedula;
+      $trabajador->nombre1 = $request->nombre1;
+      $trabajador->nombre2 = $request->nombre2;
+      $trabajador->apellido1 = $request->apellido1;
+      $trabajador->apellido2 = $request->apellido2;
+      $trabajador->cargo = $request->cargo;
+      $trabajador->fecha_nacimiento = $request->fecha_nacimiento;
+      $trabajador->sexo = $request->sexo;
+      $trabajador->direccion = $request->direccion;
+      $trabajador->telefono_fijo = $request->telefono_fijo;
+      $trabajador->telefono_celular = $request->telefono_celular;
+      $trabajador->fecha_ingreso = $request->fecha_ingreso;
+      $trabajador->fecha_egreso = $request->fecha_egreso;
+      $trabajador->estatus = 'activo';
+
+      $trabajador->save();
+
       date_default_timezone_set('America/Caracas');
 
       if ($request->salario_minimo == true) {
@@ -170,11 +174,11 @@ class TrabajadorController extends Controller
       $salario->estatus = 'activo';
 
       $salario->save();
+    });
 
-      return response()->json(['message' => 'ok']);
-    } else {
-      return response()->json(['error' => 'trabajador']);
-    }
+
+    return response()->json(['message' => 'ok']);
+
   }
 
   public function inhabilitar($id, Request $request)

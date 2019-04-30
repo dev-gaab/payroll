@@ -35,12 +35,12 @@ class VacacionesController extends Controller
 
     public function agregar(Request $request) {
 
-      $validar_disponibilidad = $this->validarDisponibilidadVacaciones($request->id, $request->fecha_inicio);
+      // $validar_disponibilidad = $this->validarDisponibilidadVacaciones($request->id, $request->fecha_inicio);
 
       // if(!$validar_disponibilidad)
       //   return response()->json(["error" => "Trabajador no cumple con el tiempo para el beneficio de vacaciones", "meses" => $validar_disponibilidad["meses"]}]);
 
-      $salario = Salario::where('trabajador_id'. $request->id)
+      $salario = Salario::where('trabajador_id', $request->id)
         ->where('estatus', 'activo')
         ->select('salario_diario')
         ->first();
@@ -55,12 +55,12 @@ class VacacionesController extends Controller
       $dias_disfrute = (15 + $years_servicio) - 1;
       // $bono_vacacional = 15 + $years_servicio;
 
+      if ($dias_disfrute > 30) $dias_disfrute = 30;
+      // if ($bono_vacacional > 30) $bono_vacacional = 30;
+
       if($request->isFraccionada) {
         $dias_disfrute = ($dias_disfrute * $request->meses) / 12;
       }
-
-      if ($dias_disfrute > 30) $dias_disfrute = 30;
-      // if ($bono_vacacional > 30) $bono_vacacional = 30;
 
       $fecha_final = $this->calcularFechaFinal(round($dias_disfrute), $request->dias_feriados, $request->fecha_inicio);
 
@@ -118,31 +118,56 @@ class VacacionesController extends Controller
 
     }
 
-    public function validardDisponibilidadVacaciones($trabajador_id, $fecha_vacaciones)
-    {
-      $vacaciones_trabajador = Vacaciones::where('trabajador_id', $trabajador_id)
-        ->orderBy('fecha_inicial', 'DESC')
-        ->first();
-      $trabajador = Trabajador::find($trabajador_id);
+    public function trabajadoresDisponibles($empresa_id) {
+      $trabajadores_empr = Trabajador::where('empresa_id', $empresa_id)
+        ->where('estatus', 'activo')
+        ->select('id', 'cedula', 'nombre1', 'apellido1', 'fecha_ingreso')
+        ->get();
 
-      if ($vacaciones_trabajador == null) {
-        $fecha_ingreso_trabajador = new DateTime($trabajador->fecha_ingreso);
-        $fecha_vacaciones = new DateTime($fecha_vacaciones);
-        $diferencia = $fecha_ingreso_trabajador->diff($fecha_vacaciones);
 
-        if($diferencia->y == 0) return response()->json(['res'=> false,'meses' => $diferencia->m]);
+      $trabajadores_disponibles = [];
 
-        return response()->json(['res'=> true]);
+      foreach ($trabajadores_empr as $trabajador) {
+        $respuesta = $this->validarDisponibilidadVacaciones($trabajador, date('Y-m-d'));
+
+        if($respuesta['res'] == true) {
+          $trabajador['a_servicio'] = $respuesta['a_servicio'];
+          $trabajadores_disponibles[] = $trabajador;
+        }
       }
 
-      $fecha_ultimas_vacaciones = new DateTime($vacaciones_trabajador->fecha_inicial);
-      $fecha_nuevas_vacaciones = new DateTime($fecha_vacaciones);
+      return response()->json($trabajadores_disponibles);
+    }
+
+    public function validarDisponibilidadVacaciones($trabajador, $fecha_vacaciones)
+    {
+      $vacaciones_trabajador = Vacaciones::where('trabajador_id', $trabajador["id"])
+        ->orderBy('fecha_inicial', 'DESC')
+        ->first();
+
+      if ($vacaciones_trabajador == null) {
+        $fecha_ingreso_trabajador = new \DateTime($trabajador["fecha_ingreso"]);
+        $fecha_vacaciones = new \DateTime($fecha_vacaciones);
+        $diferencia = $fecha_ingreso_trabajador->diff($fecha_vacaciones);
+
+        if($diferencia->y == 0) return ['res'=> false,'meses' => $diferencia->m];
+
+        return ['res'=> true, 'a_servicio' => $diferencia->y];
+      }
+
+      $fecha_ingreso_trabajador = new \DateTime($trabajador["fecha_ingreso"]);
+
+
+      $fecha_ultimas_vacaciones = new \DateTime($vacaciones_trabajador->fecha_inicial);
+      $fecha_nuevas_vacaciones = new \DateTime($fecha_vacaciones);
       $diferencia_fechas = $fecha_ultimas_vacaciones->diff($fecha_nuevas_vacaciones);
 
-      if($diferencia_fechas->y == 0) return response()->json(['res'=> false,'meses' => $diferencia_fechas->m]);
+      if($diferencia_fechas->y == 0) ['res'=> false, 'a_servicio' => $diferencia_fechas->y, 'meses' => $diferencia_fechas->m];
 
-      return response()->json(['res'=> true]);
+      $a_servicio = $fecha_ingreso_trabajador->diff($fecha_ultimas_vacaciones);
+      return ['res'=> true, 'a_servicio' => $a_servicio->y];
     }
+
 
     public function calcularFechaFinal($dias_validos, $dias_feriados, $fecha) {
       $feriados_iniciales = $dias_feriados;
@@ -178,6 +203,8 @@ class VacacionesController extends Controller
 
       return ["fecha_final" => $fecha, "dias_feriados" => $dias_feriados];
     }
+
+    
 
 }
 

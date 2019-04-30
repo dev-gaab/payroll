@@ -89,7 +89,7 @@
 	import axios from "axios";
 
 	export default {
-		name: "AllSalariosMinimo",
+		name: "AllCestaTicket",
 		data () {
 			return {
 				alerSuc: false,

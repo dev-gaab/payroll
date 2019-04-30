@@ -14,146 +14,185 @@
         <!-- formulario -->
         <form @submit.prevent="addTrabajador">
           <v-card-text>
-            <v-text-field
-              color="teal darken-1"
-              v-model="trabajador.cedula"
-              name="cedula"
-              label="Cédula"
-              id="cedula"
-              v-validate="{required: true, regex: '^([V|E]{1})([0-9]{7,8})$'}"
-            ></v-text-field>
-            <v-alert v-show="errors.has('cedula')" type="error">{{errors.first('cedula')}}</v-alert>
+              <v-container grid-list-md>
+                <v-layout wrap>
+                  <v-flex xs6>
+                    <v-text-field
+                      :color="errors.has('cedula') ? 'error' : 'teal darken-1'"
+                      v-model="trabajador.cedula"
+                      name="cedula"
+                      label="Cédula"
+                      id="cedula"
+                      v-validate="{required: true, regex: '^([V|E]{1})([0-9]{7,8})$'}"
+                    ></v-text-field>
+                    <v-alert v-show="errors.has('cedula')" type="error">{{errors.first('cedula')}}</v-alert>
+                  </v-flex>
 
-            <v-text-field
-              color="teal darken-1"
-              v-model="trabajador.nombre1"
-              name="nombre1"
-              label="Primer Nombre"
-              id="nombre1"
-              v-validate="'required|alpha'"
-            ></v-text-field>
-            <v-alert v-show="errors.has('nombre1')" type="error">{{errors.first('nombre1')}}</v-alert>
+                  <v-flex xs6>
+                    <v-text-field
+                      :color="errors.has('fecha_nacimiento') ? 'error' : 'teal darken-1'"
+                      v-model="trabajador.fecha_nacimiento"
+                      label="Fecha de Nacimiento"
+                      name="fecha_nacimiento"
+                      id="fecha_nacimiento"
+                      type="date"
+                      v-validate="'required'"
+                    ></v-text-field>
+                    <v-alert v-show="errors.has('fecha_nacimiento')" type="error">{{errors.first('fecha_nacimiento')}}</v-alert>
+                  </v-flex>
+                </v-layout>
+                <v-layout wrap>
+                  <v-flex xs6>
+                    <v-text-field
+                      :color="errors.has('nombre1') ? 'error' : 'teal darken-1'"
+                      v-model="trabajador.nombre1"
+                      name="nombre1"
+                      label="Primer Nombre"
+                      id="nombre1"
+                      v-validate="'required|alpha'"
+                    ></v-text-field>
+                    <v-alert v-show="errors.has('nombre1')" type="error">{{errors.first('nombre1')}}</v-alert>
+                  </v-flex>
 
-            <v-text-field
-              color="teal darken-1"
-              v-model="trabajador.nombre2"
-              name="nombre2"
-              label="Segundo Nombre"
-              id="nombre2"
-              v-validate="'alpha'"
-            ></v-text-field>
-            <v-alert v-show="errors.has('nombre2')" type="error">{{errors.first('nombre2')}}</v-alert>
+                  <v-flex xs6>
+                    <v-text-field
+                      :color="errors.has('nombre2') ? 'error' : 'teal darken-1'"
+                      v-model="trabajador.nombre2"
+                      name="nombre2"
+                      label="Segundo Nombre"
+                      id="nombre2"
+                      v-validate="'alpha'"
+                    ></v-text-field>
+                    <v-alert v-show="errors.has('nombre2')" type="error">{{errors.first('nombre2')}}</v-alert>
+                  </v-flex>
+                </v-layout>
 
-            <v-text-field
-              color="teal darken-1"
-              v-model="trabajador.apellido1"
-              name="apellido1"
-              label="Primer Apellido"
-              id="apellido1"
-              v-validate="'required|alpha'"
-            ></v-text-field>
-            <v-alert v-show="errors.has('apellido1')" type="error">{{errors.first('apellido1')}}</v-alert>
+                <v-layout wrap>
+                  <v-flex xs6>
+                    <v-text-field
+                      :color="errors.has('apellido1') ? 'error' : 'teal darken-1'"
+                      v-model="trabajador.apellido1"
+                      name="apellido1"
+                      label="Primer Apellido"
+                      id="apellido1"
+                      v-validate="'required|alpha'"
+                    ></v-text-field>
+                    <v-alert v-show="errors.has('apellido1')" type="error">{{errors.first('apellido1')}}</v-alert>
+                  </v-flex>
 
-            <v-text-field
-              color="teal darken-1"
-              v-model="trabajador.apellido2"
-              name="apellido2"
-              label="Segundo Apellido"
-              id="apellido2"
-              v-validate="'alpha'"
-            ></v-text-field>
-            <v-alert v-show="errors.has('apellido2')" type="error">{{errors.first('apellido2')}}</v-alert>
+                  <v-flex xs6>
+                    <v-text-field
+                      :color="errors.has('apellido2') ? 'error' : 'teal darken-1'"
+                      v-model="trabajador.apellido2"
+                      name="apellido2"
+                      label="Segundo Apellido"
+                      id="apellido2"
+                      v-validate="'alpha'"
+                    ></v-text-field>
+                    <v-alert v-show="errors.has('apellido2')" type="error">{{errors.first('apellido2')}}</v-alert>
+                  </v-flex>
+                </v-layout>
 
-            <v-text-field
-              color="teal darken-1"
-              v-model="trabajador.cargo"
-              name="cargo"
-              label="Cargo"
-              id="cargo"
-              v-validate="{required: true, regex: /[a-zA-Z0-9\.\,\#\-\_\/\sáéíóú]+$/}"
-            ></v-text-field>
-            <v-alert v-show="errors.has('cargo')" type="error">{{errors.first('cargo')}}</v-alert>
+                <v-layout wrap>
+                  <v-flex xs6>
+                    <v-text-field
+                      :color="errors.has('cargo') ? 'error' : 'teal darken-1'"
+                      v-model="trabajador.cargo"
+                      name="cargo"
+                      label="Cargo"
+                      id="cargo"
+                      v-validate="{required: true, regex: /[a-zA-Z0-9\.\,\#\-\_\/\sáéíóú]+$/}"
+                    ></v-text-field>
+                    <v-alert v-show="errors.has('cargo')" type="error">{{errors.first('cargo')}}</v-alert>
+                  </v-flex>
 
-            <v-text-field
-              color="teal darken-1"
-              v-model="trabajador.fecha_nacimiento"
-              label="Fecha de Nacimiento"
-              name="fecha_nacimiento"
-              id="fecha_nacimiento"
-              type="date"
-              v-validate="'required'"
-            ></v-text-field>
-            <v-alert v-show="errors.has('fecha_nacimiento')" type="error">{{errors.first('fecha_nacimiento')}}</v-alert>
+                  <v-flex xs6>
+                    <v-text-field
+                      :color="errors.has('fecha_ingreso') ? 'error' : 'teal darken-1'"
+                      v-model="trabajador.fecha_ingreso"
+                      label="Fecha de ingreso"
+                      name="fecha_ingreso"
+                      id="fecha_ingreso"
+                      type="date"
+                      v-validate="'required'"
+                    ></v-text-field>
+                    <v-alert v-show="errors.has('fecha_ingreso')" type="error">{{errors.first('fecha_ingreso')}}</v-alert>
+                  </v-flex>
+                </v-layout>
 
-            <v-select
-              :items="sexo"
-              color="teal darken-1"
-              v-model="trabajador.sexo"
-              label="Sexo"
-              name="sexo"
-              id="sexo"
-              v-validate="'required'"
-            ></v-select>
-            <v-alert v-show="errors.has('sexo')" type="error">{{errors.first('sexo')}}</v-alert>
+                <v-layout wrap>
+                  <v-flex xs12>
+                    <v-select
+                      :items="sexo"
+                      :color="errors.has('sexo') ? 'error' : 'teal darken-1'"
+                      v-model="trabajador.sexo"
+                      label="Sexo"
+                      name="sexo"
+                      id="sexo"
+                      v-validate="'required'"
+                    ></v-select>
+                    <v-alert v-show="errors.has('sexo')" type="error">{{errors.first('sexo')}}</v-alert>
+                  </v-flex>
+                </v-layout>
 
-            <v-textarea
-              color="teal darken-1"
-              v-model="trabajador.direccion"
-              name="direccion"
-              label="Direccion"
-              id="direccion"
-              rows="2"
-              v-validate="{required: true, regex: /[a-zA-Z0-9\.\,\#\/\sáéíóú]+$/}"
-            ></v-textarea>
-            <v-alert v-show="errors.has('direccion')" type="error">{{errors.first('direccion')}}</v-alert>
+                <v-layout wrap>
+                  <v-flex xs12>
+                    <v-textarea
+                      :color="errors.has('direccion') ? 'error' : 'teal darken-1'"
+                      v-model="trabajador.direccion"
+                      name="direccion"
+                      label="Direccion"
+                      id="direccion"
+                      rows="2"
+                      v-validate="{required: true, regex: /[a-zA-Z0-9\.\,\#\/\sáéíóú]+$/}"
+                    ></v-textarea>
+                    <v-alert v-show="errors.has('direccion')" type="error">{{errors.first('direccion')}}</v-alert>
+                  </v-flex>
+                </v-layout>
 
-            <v-text-field
-              color="teal darken-1"
-              v-model="trabajador.telefono_fijo"
-              name="telefono_fijo"
-              label="Telefono Fijo"
-              id="telefono_fijo"
-              v-validate="{regex: /(02)([1-9]{2})(-[0-9]{7})$/}"
-            ></v-text-field>
-            <v-alert v-show="errors.has('telefono_fijo')" type="error">{{errors.first('telefono_fijo')}}</v-alert>
+                <v-layout wrap>
+                  <v-flex xs6>
+                    <v-text-field
+                      :color="errors.has('telefono_fijo') ? 'error' : 'teal darken-1'"
+                      v-model="trabajador.telefono_fijo"
+                      name="telefono_fijo"
+                      label="Telefono Fijo"
+                      id="telefono_fijo"
+                      v-validate="{regex: /(02)([1-9]{2})(-[0-9]{7})$/}"
+                    ></v-text-field>
+                    <v-alert v-show="errors.has('telefono_fijo')" type="error">{{errors.first('telefono_fijo')}}</v-alert>
+                  </v-flex>
 
-            <v-text-field
-              color="teal darken-1"
-              v-model="trabajador.telefono_celular"
-              name="telefono_celular"
-              label="Telefono Celular"
-              id="telefono_celular"
-              v-validate="{regex: /(04)(12|14|24|16|26)(-[0-9]{7})$/}"
-            ></v-text-field>
-            <v-alert v-show="errors.has('telefono_celular')" type="error">{{errors.first('telefono_celular')}}</v-alert>
+                  <v-flex xs6>
+                    <v-text-field
+                      :color="errors.has('telefono_celular') ? 'error' : 'teal darken-1'"
+                      v-model="trabajador.telefono_celular"
+                      name="telefono_celular"
+                      label="Telefono Celular"
+                      id="telefono_celular"
+                      v-validate="{regex: /(04)(12|14|24|16|26)(-[0-9]{7})$/}"
+                    ></v-text-field>
+                    <v-alert v-show="errors.has('telefono_celular')" type="error">{{errors.first('telefono_celular')}}</v-alert>
+                  </v-flex>
+                </v-layout>
 
-            <v-text-field
-              color="teal darken-1"
-              v-model="trabajador.fecha_ingreso"
-              label="Fecha de ingreso"
-              name="fecha_ingreso"
-              id="fecha_ingreso"
-              type="date"
-              v-validate="'required'"
-            ></v-text-field>
-            <v-alert v-show="errors.has('fecha_ingreso')" type="error">{{errors.first('fecha_ingreso')}}</v-alert>
+                <v-toolbar dark color="teal darken-1" dense>
+                  <v-toolbar-title>Salario</v-toolbar-title>
+                  <v-spacer></v-spacer>
+                </v-toolbar>
+                <v-checkbox v-model="trabajador.salario_minimo" label="Salario Minimo?"></v-checkbox>
 
-            <v-toolbar dark color="teal darken-1" dense>
-              <v-toolbar-title>Salario</v-toolbar-title>
-              <v-spacer></v-spacer>
-            </v-toolbar>
-            <v-checkbox v-model="trabajador.salario_minimo" label="Salario Minimo?"></v-checkbox>
-
-            <v-text-field
-              v-if="trabajador.salario_minimo == false"
-              color="teal darken-1"
-              v-model="trabajador.salario"
-              label="Salario mensual"
-              name="salario"
-              id="salario"
-              v-validate="`${trabajador.salario_minimo ? '' : 'required'}|decimal:2`"
-            ></v-text-field>
-            <v-alert v-show="errors.has('salario')" type="error">{{errors.first('salario')}}</v-alert>
+                <v-text-field
+                  v-if="trabajador.salario_minimo == false"
+                  :color="errors.has('salario_minimo') ? 'error' : 'teal darken-1'"
+                  v-model="trabajador.salario"
+                  label="Salario mensual"
+                  name="salario"
+                  id="salario"
+                  v-validate="`${trabajador.salario_minimo ? '' : 'required'}|decimal:2`"
+                ></v-text-field>
+                <v-alert v-show="errors.has('salario')" type="error">{{errors.first('salario')}}</v-alert>
+              </v-container>
           </v-card-text>
           <v-card-actions>
             <v-spacer></v-spacer>

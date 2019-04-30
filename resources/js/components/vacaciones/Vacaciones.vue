@@ -16,9 +16,6 @@
             hide-details
           ></v-text-field>
           <v-spacer></v-spacer>
-          <v-btn  icon color="teal darken-4" dark @click="newVacaciones">
-            <v-icon>add</v-icon>
-          </v-btn>
           <v-btn icon color="teal darken-4" dark @click="printAll">
             <v-icon>print</v-icon>
           </v-btn>
@@ -59,7 +56,7 @@
         <v-card class="elevation-12">
           <!-- Header card -->
           <v-toolbar dark color="teal darken-1" dense>
-            <v-toolbar-title>Vacaciones</v-toolbar-title>
+            <v-toolbar-title>Modificar Vacaciones</v-toolbar-title>
             <v-spacer></v-spacer>
             <v-btn @click.native="dialogUpd = false" icon flat>
               <v-icon medium>fa-times-circle</v-icon>
@@ -69,34 +66,42 @@
           <!-- formulario -->
           <form @submit.prevent="save">
             <v-card-text>
-              <v-text-field
-                v-if="comprobarFechaInicio(vacacion.fecha_inicial)"
-                color="teal darken-1"
-                v-model="vacacion.fecha_inicial"
-                name="fecha_inicio"
-                label="Fecha Inicial"
-                id="fecha_inicio"
-                type="date"
-                v-validate="'required'"
-              ></v-text-field>
+              <v-container grid-list-md>
+                <v-layout wrap>
+                  <v-flex xs6>
+                    <v-text-field
+                      v-if="comprobarFechaInicio(vacacion.fecha_inicial)"
+                      :color="errors.has('fecha_inicial') ? 'error' : 'teal darken-1'"
+                      v-model="vacacion.fecha_inicial"
+                      name="fecha_inicio"
+                      label="Fecha Inicial"
+                      id="fecha_inicio"
+                      type="date"
+                      v-validate="'required'"
+                    ></v-text-field>
 
-              <v-alert
-                v-show="errors.has('fecha_inicio')"
-                type="error"
-              >{{errors.first('fecha_inicio')}}</v-alert>
+                    <v-alert
+                      v-show="errors.has('fecha_inicio')"
+                      type="error"
+                    >{{errors.first('fecha_inicio')}}</v-alert>
+                  </v-flex>
 
-              <v-text-field
-                color="teal darken-1"
-                v-model="vacacion.dias_feriados"
-                name="dias_feriados"
-                label="Razon Social"
-                id="dias_feriados"
-                v-validate="'required|numeric'"
-              ></v-text-field>
-              <v-alert
-                v-show="errors.has('dias_feriados')"
-                type="error"
-              >{{errors.first('dias_feriados')}}</v-alert>
+                  <v-flex xs6>
+                    <v-text-field
+                      :color="errors.has('dias_feriados') ? 'error' : 'teal darken-1'"
+                      v-model="vacacion.dias_feriados"
+                      name="dias_feriados"
+                      label="Razon Social"
+                      id="dias_feriados"
+                      v-validate="'required|numeric'"
+                    ></v-text-field>
+                    <v-alert
+                      v-show="errors.has('dias_feriados')"
+                      type="error"
+                    >{{errors.first('dias_feriados')}}</v-alert>
+                  </v-flex>
+                </v-layout>
+              </v-container>
 
             </v-card-text>
             <v-card-actions>
@@ -162,9 +167,6 @@ export default {
           vm.vacaciones = res.data;
         })
         .catch(err => console.log(err));
-    },
-    newVacaciones() {
-      this.$router.push({ path: "/vacaciones/nueva" });
     },
     agregarDiasFeriados(id) {
       const vm = this;

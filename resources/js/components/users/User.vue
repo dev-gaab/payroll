@@ -82,7 +82,7 @@
           <form @submit.prevent="updUser" id="userForm">
             <v-card-text>
               <v-text-field
-                color="teal darken-1"
+                :color="errors.has('nombre') ? 'error' : 'teal darken-1'"color="teal darken-1"
                 v-model="user.nombre"
                 name="nombre"
                 label="Nombre"
@@ -92,7 +92,7 @@
               <v-alert v-show="errors.has('nombre')" :value="true" type="error">{{errors.first('nombre')}}</v-alert>
 
               <v-text-field
-                color="teal darken-1"
+                :color="errors.has('apellido') ? 'error' : 'teal darken-1'"
                 v-model="user.apellido"
                 name="apellido"
                 label="Apellido"
@@ -104,7 +104,7 @@
               </div>
 
               <v-text-field
-                color="teal darken-1"
+                :color="errors.has('email') ? 'error' : 'teal darken-1'"
                 v-model="user.email"
                 name="email"
                 label="Correo"
@@ -119,7 +119,7 @@
 
               <v-text-field
                 v-if="password.isChangingPassword"
-                color="teal darken-1"
+                :color="errors.has('password') ? 'error' : 'teal darken-1'"
                 v-model="password.newPassword"
                 name="password"
                 label="Contraseña Nueva"
@@ -134,7 +134,7 @@
 
               <v-text-field
                 v-if="password.isChangingPassword"
-                color="teal darken-1"
+                :color="errors.has('password_confirmation') ? 'error' : 'teal darken-1'"
                 v-model="password.confirmNewPassword"
                 name="password_confirmation"
                 label="Confirmar contraseña nueva"
