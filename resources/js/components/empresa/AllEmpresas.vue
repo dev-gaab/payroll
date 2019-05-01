@@ -228,7 +228,7 @@
                     <v-alert v-show="errors.has('rif')" type="error">{{errors.first('rif')}}</v-alert>
                   </v-flex>
                 </v-layout>
-                <v-layout wrap>              
+                <v-layout wrap>
                   <v-flex xs12>
                     <v-text-field
                       :color="errors.has('razon_social') ? 'error' : 'teal darken-1'"
@@ -246,7 +246,7 @@
                 </v-layout>
 
                 <v-layout wrap>
-                  <v-flex xs12> 
+                  <v-flex xs12>
                     <v-textarea
                       :color="errors.has('direccion') ? 'error' : 'teal darken-1'"
                       v-model="empresa.direccion"

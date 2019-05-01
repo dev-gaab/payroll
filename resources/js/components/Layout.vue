@@ -37,16 +37,13 @@
           </v-list-tile-content>
         </v-list-tile>
 
-        
         <v-list-group no-action>
-
-          
           <v-list-tile slot="activator">
             <v-list-tile-action>
               <v-icon>flight_takeoff</v-icon>
             </v-list-tile-action>
             <v-list-tile-content>
-              <v-list-tile-title> Vacaciones </v-list-tile-title>
+              <v-list-tile-title>Vacaciones</v-list-tile-title>
             </v-list-tile-content>
           </v-list-tile>
 
@@ -67,7 +64,6 @@
               <v-list-tile-title>Calcular Vacaciones Fraccionadas</v-list-tile-title>
             </v-list-tile-content>
           </v-list-tile>
-
         </v-list-group>
 
         <v-list-tile @click="routTrabajador">
@@ -87,32 +83,6 @@
             <v-list-tile-title>Reportes</v-list-tile-title>
           </v-list-tile-content>
         </v-list-tile>
-
-        <v-list-group no-action>
-
-          
-          <v-list-tile slot="activator">
-            <v-list-tile-action>
-              <v-icon>fa-calculator</v-icon>
-            </v-list-tile-action>
-            <v-list-tile-content>
-              <v-list-tile-title>Base de Cálculo</v-list-tile-title>
-            </v-list-tile-content>
-          </v-list-tile>
-
-          <v-list-tile @click="routSalarioMinimo">
-            <v-list-tile-content>
-              <v-list-tile-title>Salario Mínimo</v-list-tile-title>
-            </v-list-tile-content>
-          </v-list-tile>
-
-          <v-list-tile @click="routCestaTicket">
-            <v-list-tile-content>
-              <v-list-tile-title>Cesta Ticket</v-list-tile-title>
-            </v-list-tile-content>
-          </v-list-tile>
-
-        </v-list-group>
 
         <v-list-tile @click="routUsers">
           <v-list-tile-action>
@@ -215,12 +185,7 @@ export default {
     routFracVacaciones() {
       this.$router.push({ path: "/vacaciones/fraccionadas" });
     },
-    routSalarioMinimo() {
-      this.$router.push({ path: "/salario_minimo" });
-    },
-    routCestaTicket() {
-      this.$router.push({ path: "/cesta_ticket" });
-    },
+
     logout() {
       this.$store.commit("logout");
       this.$router.push({ path: "/login" });
@@ -233,7 +198,6 @@ export default {
 #container {
   /* background-image: url("../assets/fondo.png"); */
   /* background-size: cover; */
-  background: #E8F5E9; /* fallback for old browsers */
-
+  background: #e8f5e9; /* fallback for old browsers */
 }
 </style>

@@ -9,23 +9,34 @@ use App\Models\SalarioMinimo;
 use App\Models\Asignaciones;
 use App\Models\Deducciones;
 use App\Models\CestaTicket;
+use Illuminate\Support\Facades\DB;
+
 
 class BasesController extends Controller
 {
     /** Salario minimo*/
-    public function verTodosSalario() {
-        $salarios = SalarioMinimo::all();
+    public function verActual() {
+        $salario_minimo = SalarioMinimo::where('estatus', 'activo')->first();
 
-        return response()->json($salarios);
+        $cesta_ticket = CestaTicket::where('estatus', 'activa')->first();
+
+        return response()->json(["salario_minimo" => $salario_minimo, "cesta_ticket" => $cesta_ticket]);
     }
 
-    public function verSalario($id) {
-        $salario = SalarioMinimo::find($id);
+    public function histoCesta() {
+      $cesta_ticket = CestaTicket::all();
 
-        return response()->json($id);
+      return response()->json($cesta_ticket);
     }
 
-    public function addSalario(Request $request) {
+    public function histoSalario() {
+      $salario = SalarioMinimo::all();
+
+      return response()->json($salario);
+    }
+
+    public function updSalario(Request $request) {
+      DB::transaction(function () use($request) {
         $salario_anterior = SalarioMinimo::where('estatus', 'activo')->first();
         $salario_anterior->estatus = 'inactivo';
         $salario_anterior->hasta = date("d-m-Y");
@@ -34,38 +45,32 @@ class BasesController extends Controller
         $salario = new SalarioMinimo;
         $salario->monto = $request->monto;
         $salario->estatus = 'activo';
+        $salario->tipo = 'mensual';
         $salario->desde = date("d-m-Y");
         $salario->save();
 
-        return response()->json(["res" => "Done!"]);
+        DB::table('salario')
+          ->where('estatus', 'activo')
+          ->update([])
+      });
+
+      return response()->json(["res" => "Done!"]);
     }
 
-    /** Cesta ticket */
+    public function updCesta(Request $request) {
+        DB::transaction(function () use($request)  {
+          $cesta_anterior = CestaTicket::where('estatus', 'activa')->first();
+          $cesta_anterior->estatus = 'inactiva';
+          $cesta_anterior->hasta = date("d-m-Y");
+          $cesta_anterior->save();
 
-    public function verTodosCesta() {
-        $cestas = CestaTicket::all();
+          $cesta = new CestaTicket;
+          $cesta->cantidad = $request->monto;
+          $cesta->desde = date("d-m-Y");
+          $cesta->estatus = 'activa';
 
-        return response()->json($cestas);
-    }
-
-    public function verCesta($id) {
-        $cesta = CestaTicket::find($id);
-
-        return response()->json($cesta);
-    }
-
-    public function addCesta(Request $request) {
-        $cesta_anterior = CestaTicket::where('estatus', 'activa')->first();
-        $cesta_anterior->estatus = 'inactiva';
-        $cesta_anterior->hasta = date("d-m-Y");
-        $cesta_anterior->save();
-
-        $cesta = new CestaTicket;
-        $cesta->monto = $request->monto;
-        $cesta->desde = $request->desde;
-        $cesta->estatus = 'activa';
-
-        $cesta->save();
+          $cesta->save();
+        });
 
         return response()->json(["res" => "Done!"]);
     }

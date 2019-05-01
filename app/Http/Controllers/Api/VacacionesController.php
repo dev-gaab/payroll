@@ -47,8 +47,8 @@ class VacacionesController extends Controller
 
       $trabajador = Trabajador::find($request->id);
 
-      $fecha_ingreso = new DateTime($trabajador->fecha_ingreso);
-      $fecha_actual = new Datetime(date('Y-m-d'));
+      $fecha_ingreso = new \DateTime($trabajador->fecha_ingreso);
+      $fecha_actual = new \Datetime(date('Y-m-d'));
       $diferencia = $fecha_ingreso->diff($fecha_actual);
       $years_servicio = $diferencia->y;
 
@@ -85,6 +85,7 @@ class VacacionesController extends Controller
       $vacaciones->dias_feriados = $fecha_final["dias_feriados"];
       $vacaciones->fecha_inicial = $request->fecha_inicio;
       $vacaciones->fecha_final = $fecha_final["fecha_final"];
+      $vacaciones->tipo = 'anual';
       $vacaciones->montos = json_encode($montos);
 
       $vacaciones->save();
@@ -133,7 +134,9 @@ class VacacionesController extends Controller
         if($respuesta['res'] == true) {
           $trabajador['a_servicio'] = $respuesta['a_servicio'];
           $trabajadores_disponibles[] = $trabajador;
+
         }
+
       }
 
       return response()->json($trabajadores_disponibles);
@@ -145,7 +148,9 @@ class VacacionesController extends Controller
         ->orderBy('fecha_inicial', 'DESC')
         ->first();
 
+
       if ($vacaciones_trabajador == null) {
+
         $fecha_ingreso_trabajador = new \DateTime($trabajador["fecha_ingreso"]);
         $fecha_vacaciones = new \DateTime($fecha_vacaciones);
         $diferencia = $fecha_ingreso_trabajador->diff($fecha_vacaciones);
@@ -162,7 +167,7 @@ class VacacionesController extends Controller
       $fecha_nuevas_vacaciones = new \DateTime($fecha_vacaciones);
       $diferencia_fechas = $fecha_ultimas_vacaciones->diff($fecha_nuevas_vacaciones);
 
-      if($diferencia_fechas->y == 0) ['res'=> false, 'a_servicio' => $diferencia_fechas->y, 'meses' => $diferencia_fechas->m];
+      if($diferencia_fechas->y == 0) return ['res'=> false, 'a_servicio' => $diferencia_fechas->y, 'meses' => $diferencia_fechas->m];
 
       $a_servicio = $fecha_ingreso_trabajador->diff($fecha_ultimas_vacaciones);
       return ['res'=> true, 'a_servicio' => $a_servicio->y];
@@ -204,7 +209,7 @@ class VacacionesController extends Controller
       return ["fecha_final" => $fecha, "dias_feriados" => $dias_feriados];
     }
 
-    
+
 
 }
 
