@@ -190,6 +190,8 @@ export default {
             if (!res.data.error) {
               vm.alert = true;
               vm.alertMsg = "Vacaciones calculadas.";
+              vm.dialogUpd = false;
+              vm.trabajadoresDisponibles();
             }
           })
           .catch(err => console.log(err));

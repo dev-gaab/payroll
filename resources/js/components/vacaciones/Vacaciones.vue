@@ -32,7 +32,13 @@
             <td>{{ props.item.montos.total_pagar | numberFormat }}</td>
             <!-- Acciones -->
             <td class="justify-center layout px-0">
-              <v-btn v-if="comprobarFechaInicio(props.item.fecha_final)" @click="editVacaciones(props.item.id)" icon small color="warning">
+              <v-btn
+                v-if="comprobarFechaInicio(props.item.fecha_final)"
+                @click="editVacaciones(props.item.id)"
+                icon
+                small
+                color="warning"
+              >
                 <v-icon small>fa-edit</v-icon>
               </v-btn>
               <v-btn icon small color="error" @click="deleteVacaciones(props.item.id)">
@@ -56,7 +62,7 @@
         <v-card class="elevation-12">
           <!-- Header card -->
           <v-toolbar dark color="teal darken-1" dense>
-            <v-toolbar-title>Modificar Vacaciones</v-toolbar-title>
+            <v-toolbar-title>Modificar | {{ formVacaciones.cedula }} {{ formVacaciones.nombre1 }} {{formVacaciones.apellido1 }} </v-toolbar-title>
             <v-spacer></v-spacer>
             <v-btn @click.native="dialogUpd = false" icon flat>
               <v-icon medium>fa-times-circle</v-icon>
@@ -70,9 +76,9 @@
                 <v-layout wrap>
                   <v-flex xs6>
                     <v-text-field
-                      v-if="comprobarFechaInicio(vacacion.fecha_inicial)"
-                      :color="errors.has('fecha_inicial') ? 'error' : 'teal darken-1'"
-                      v-model="vacacion.fecha_inicial"
+                      v-if="comprobarFechaInicio(formVacaciones.fecha_inicial)"
+                      :color="errors.has('fecha_inicio') ? 'error' : 'teal darken-1'"
+                      v-model="formVacaciones.fecha_inicial"
                       name="fecha_inicio"
                       label="Fecha Inicial"
                       id="fecha_inicio"
@@ -89,9 +95,9 @@
                   <v-flex xs6>
                     <v-text-field
                       :color="errors.has('dias_feriados') ? 'error' : 'teal darken-1'"
-                      v-model="vacacion.dias_feriados"
+                      v-model="formVacaciones.dias_feriados"
                       name="dias_feriados"
-                      label="Razon Social"
+                      label="Dias Feriados"
                       id="dias_feriados"
                       v-validate="'required|numeric'"
                     ></v-text-field>
@@ -102,7 +108,6 @@
                   </v-flex>
                 </v-layout>
               </v-container>
-
             </v-card-text>
             <v-card-actions>
               <v-spacer></v-spacer>
@@ -147,17 +152,35 @@ export default {
       alert: false,
       alertType: "success",
       alertMsg: "",
-      vacacion: {
-        fecha_inicio: "2019-01-01",
-        dias_feriados: 0
-      },
       dialogUpd: false,
       alertUpd: false,
-      alertUpdMsg: ""
+      alertUpdMsg: "",
+      formVacaciones: {}
     };
   },
   created() {
     this.allVacaciones();
+
+    const dict = {
+      custom: {
+        fecha_inicio: {
+          required: "No debe ser vacio"
+        },
+        dias_feriados: {
+          required: "No debe ser vacio",
+          numeric: "Solo se permite el ingreso de números"
+        }
+      }
+    };
+
+    this.$validator.localize("es", dict);
+  },
+  mounted() {
+    let maxDate = moment()
+      .add(7, "d")
+      .format("YYYY-MM-DD");
+
+    document.getElementById("fecha_inicio").max = maxDate;
   },
   methods: {
     allVacaciones() {
@@ -199,38 +222,32 @@ export default {
           }
         })
         .then(res => {
-          vm.vacaciones = res.data;
-          vm.formVacaciones = {
-            fecha_inicio: res.data.fecha_inicio,
-            dias_feriados: 0
-          };
+
+          vm.formVacaciones = res.data;
           vm.dialogUpd = true;
+
+          document.getElementById("fecha_inicio").min = res.data.fecha_inicial;
         })
         .catch(err => console.log(err));
     },
     comprobarFechaInicio(fecha) {
-      let now = moment().format('YYYY-MM-DD');
+      let now = moment().format("YYYY-MM-DD");
       let a = moment(now).isSameOrBefore(fecha);
 
       return a;
     },
 
-    printAll(){
-
-    },
-    save() {
-
-    }
-
+    printAll() {},
+    save() {}
   },
   filters: {
-     dateFormat(value) {
+    dateFormat(value) {
       if (!value) return "";
 
       value = moment(value, "YYYY-MM-DD").format("DD/MM/YYYY");
       return value;
     },
-     numberFormat(value) {
+    numberFormat(value) {
       value = new Intl.NumberFormat("es-VE", {
         style: "currency",
         currency: "VES"

@@ -33,7 +33,7 @@ class VacacionesController extends Controller
         ->join('trabajador', 'vacaciones.trabajador_id', 'trabajador.id')
         ->select('trabajador.cedula', 'trabajador.nombre1', 'trabajador.apellido1', 'vacaciones.*')
         ->where('vacaciones.id', $id)
-        ->get();
+        ->first();
       return response()->json($vacacion);
     }
 
