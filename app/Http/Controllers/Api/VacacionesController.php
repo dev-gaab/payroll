@@ -21,6 +21,10 @@ class VacacionesController extends Controller
         ->select('trabajador.cedula', 'trabajador.nombre1', 'trabajador.apellido1', 'vacaciones.*')
         ->where('empresa.id', $empresa_id)
         ->get();
+
+      for($i = 0 ; $i < sizeof($vacaciones); $i++) {
+          $vacaciones[$i]->montos = json_decode($vacaciones[$i]->montos);
+        }
       return response()->json($vacaciones);
     }
 

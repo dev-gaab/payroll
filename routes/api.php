@@ -60,7 +60,7 @@ Route::group(['prefix' => 'nominas', 'middleware' => 'auth:api'], function() {
 
 Route::group(['prefix' => 'vacaciones', 'middleware' => 'auth:api'], function() {
   Route::get('/disponibles/{empresa_id}', 'Api\VacacionesController@trabajadoresDisponibles');
-  Route::get('/all/{empresa_id}', 'Api\VacacionesController@trabajadoresDisponibles');
+  Route::get('/all/{empresa_id}', 'Api\VacacionesController@index');
   Route::post('/calcular', 'Api\VacacionesController@agregar');
 });
 

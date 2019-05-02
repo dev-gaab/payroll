@@ -48,10 +48,6 @@ class BasesController extends Controller
         $salario->tipo = 'mensual';
         $salario->desde = date("d-m-Y");
         $salario->save();
-
-        DB::table('salario')
-          ->where('estatus', 'activo')
-          ->update([])
       });
 
       return response()->json(["res" => "Done!"]);

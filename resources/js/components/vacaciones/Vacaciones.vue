@@ -23,20 +23,20 @@
         <v-data-table :headers="headers" :items="vacaciones" :search="search">
           <template slot="items" slot-scope="props">
             <td>{{ props.item.cedula }}</td>
-            <td>{{ props.item.nombre }} {{props.item.apellido}}</td>
+            <td>{{ props.item.nombre1 }} {{props.item.apellido1 }}</td>
             <td>{{ props.item.a_servicio }}</td>
             <td>{{ props.item.dias_disfrute }}</td>
             <td>{{ props.item.dias_feriados }}</td>
-            <td>{{ props.item.fecha_inicio }}</td>
-            <td>{{ props.item.fecha_final }}</td>
-            <td>{{ props.item.monto }}</td>
+            <td>{{ props.item.fecha_inicial | dateFormat }}</td>
+            <td>{{ props.item.fecha_final | dateFormat }}</td>
+            <td>{{ props.item.montos.total_pagar | numberFormat }}</td>
             <!-- Acciones -->
             <td class="justify-center layout px-0">
               <v-btn v-if="comprobarFechaInicio(props.item.fecha_final)" @click="editVacaciones(props.item.id)" icon small color="warning">
                 <v-icon small>fa-edit</v-icon>
               </v-btn>
-              <v-btn @click="deleteVacaciones(props.item.id)">
-                <v-ico small>fa-trash</v-ico>
+              <v-btn icon small color="error" @click="deleteVacaciones(props.item.id)">
+                <v-icon small>fa-trash</v-icon>
               </v-btn>
             </td>
           </template>
@@ -134,7 +134,13 @@ export default {
         { text: "Días feriados", value: "dias_feriados" },
         { text: "Fecha Inicial", value: "fecha_inicio" },
         { text: "Fecha Final", value: "fecha_final" },
-        { text: "Monto a pagar", value: "monto" }
+        { text: "Monto a pagar", value: "monto" },
+        {
+          text: "Acciones",
+          value: "acciones",
+          align: "center",
+          sortable: false
+        }
       ],
       vacaciones: [],
       idE: this.$store.state.empresa.id,
@@ -205,7 +211,7 @@ export default {
     comprobarFechaInicio(fecha) {
       let now = moment().format('YYYY-MM-DD');
       let a = moment(now).isSameOrBefore(fecha);
-      
+
       return a;
     },
 
@@ -216,6 +222,21 @@ export default {
 
     }
 
+  },
+  filters: {
+     dateFormat(value) {
+      if (!value) return "";
+
+      value = moment(value, "YYYY-MM-DD").format("DD/MM/YYYY");
+      return value;
+    },
+     numberFormat(value) {
+      value = new Intl.NumberFormat("es-VE", {
+        style: "currency",
+        currency: "VES"
+      }).format(value);
+      return value;
+    }
   }
 };
 </script>
