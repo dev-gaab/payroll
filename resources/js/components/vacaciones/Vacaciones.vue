@@ -27,13 +27,14 @@
             <td>{{ props.item.a_servicio }}</td>
             <td>{{ props.item.dias_disfrute }}</td>
             <td>{{ props.item.dias_feriados }}</td>
+            <td>{{ props.item.dias_descanso }}</td>
             <td>{{ props.item.fecha_inicial | dateFormat }}</td>
             <td>{{ props.item.fecha_final | dateFormat }}</td>
             <td>{{ props.item.montos.total_pagar | numberFormat }}</td>
             <!-- Acciones -->
             <td class="justify-center layout px-0">
               <v-btn
-                v-if="comprobarFechaInicio(props.item.fecha_final)"
+                v-if="comprobarFecha(props.item.fecha_final)"
                 @click="editVacaciones(props.item.id)"
                 icon
                 small
@@ -41,7 +42,13 @@
               >
                 <v-icon small>fa-edit</v-icon>
               </v-btn>
-              <v-btn icon small color="error" @click="deleteVacaciones(props.item.id)">
+              <v-btn
+                v-if="comprobarFecha(props.item.fecha_final)"
+                icon
+                small
+                color="error"
+                @click="deleteVacaciones(props.item.id)"
+              >
                 <v-icon small>fa-trash</v-icon>
               </v-btn>
             </td>
@@ -62,7 +69,7 @@
         <v-card class="elevation-12">
           <!-- Header card -->
           <v-toolbar dark color="teal darken-1" dense>
-            <v-toolbar-title>Modificar | {{ formVacaciones.cedula }} {{ formVacaciones.nombre1 }} {{formVacaciones.apellido1 }} </v-toolbar-title>
+            <v-toolbar-title>Modificar | {{ formVacaciones.cedula }} {{ formVacaciones.nombre1 }} {{formVacaciones.apellido1 }}</v-toolbar-title>
             <v-spacer></v-spacer>
             <v-btn @click.native="dialogUpd = false" icon flat>
               <v-icon medium>fa-times-circle</v-icon>
@@ -74,9 +81,9 @@
             <v-card-text>
               <v-container grid-list-md>
                 <v-layout wrap>
-                  <v-flex xs6>
+                  <v-flex xs6 v-if="comprobarFecha(formVacaciones.fecha_inicial)">
                     <v-text-field
-                      v-if="comprobarFechaInicio(formVacaciones.fecha_inicial)"
+                      v-if="comprobarFecha(formVacaciones.fecha_inicial)"
                       :color="errors.has('fecha_inicio') ? 'error' : 'teal darken-1'"
                       v-model="formVacaciones.fecha_inicial"
                       name="fecha_inicio"
@@ -92,14 +99,17 @@
                     >{{errors.first('fecha_inicio')}}</v-alert>
                   </v-flex>
 
-                  <v-flex xs6>
+                  <v-flex xs6 v-if="comprobarFecha(formVacaciones.fecha_final
+                  )">
                     <v-text-field
+                      v-if="comprobarFecha(formVacaciones.fecha_final
+                      )"
                       :color="errors.has('dias_feriados') ? 'error' : 'teal darken-1'"
                       v-model="formVacaciones.dias_feriados"
                       name="dias_feriados"
                       label="Dias Feriados"
                       id="dias_feriados"
-                      v-validate="'required|numeric'"
+                      v-validate="`required|numeric|min_value:${formVacaciones.dias_feriados}`"
                     ></v-text-field>
                     <v-alert
                       v-show="errors.has('dias_feriados')"
@@ -137,6 +147,7 @@ export default {
         { text: "Años de servicio", value: "a_servicio" },
         { text: "Días disfrute", value: "dias_disfrute" },
         { text: "Días feriados", value: "dias_feriados" },
+        { text: "Días descanso", value: "dias_descanso" },
         { text: "Fecha Inicial", value: "fecha_inicio" },
         { text: "Fecha Final", value: "fecha_final" },
         { text: "Monto a pagar", value: "monto" },
@@ -168,7 +179,8 @@ export default {
         },
         dias_feriados: {
           required: "No debe ser vacio",
-          numeric: "Solo se permite el ingreso de números"
+          numeric: "Solo se permite el ingreso de números",
+          min_value: "No puede ser menor a los días feriados anteriores"
         }
       }
     };
@@ -222,7 +234,6 @@ export default {
           }
         })
         .then(res => {
-
           vm.formVacaciones = res.data;
           vm.dialogUpd = true;
 
@@ -230,15 +241,66 @@ export default {
         })
         .catch(err => console.log(err));
     },
-    comprobarFechaInicio(fecha) {
+    comprobarFecha(fecha) {
       let now = moment().format("YYYY-MM-DD");
       let a = moment(now).isSameOrBefore(fecha);
 
       return a;
     },
+    deleteVacaciones(id) {
+      let confirm = window.confirm(
+        "¿Seguro que quiere eliminar las Vacaciones?"
+      );
 
+      if (confirm) {
+        const vm = this;
+
+        axios
+          .delete(`http://payroll.com.local/api/vacaciones/${id}`, {
+            headers: {
+              Authorization: `Bearer ${vm.$store.state.currentUser.token}`
+            }
+          })
+          .then(res => {
+            vm.alert = true;
+            vm.alertMsg = "Vacación eliminada";
+            vm.allVacaciones();
+          })
+          .catch(err => console.log(err));
+
+        this.dialogDis = false;
+      }
+    },
     printAll() {},
-    save() {}
+    save() {
+      this.$validator.validate().then(valid => {
+        if (!valid) {
+          // do stuff if not valid.
+          return;
+        }
+        const vm = this;
+        axios
+          .put(
+            `http://payroll.com.local/api/vacaciones/${vm.formVacaciones.id}`,
+            vm.formVacaciones,
+            {
+              headers: {
+                Authorization: `Bearer ${vm.$store.state.currentUser.token}`
+              }
+            }
+          )
+          .then(res => {
+            if (!res.data.error) {
+              vm.alert = true;
+              vm.alertType = "success";
+              vm.alertMsg = "Vacaciones modificadas";
+              vm.allVacaciones();
+              vm.dialogUpd = false;
+            }
+          })
+          .catch(error => console.log(error));
+      });
+    }
   },
   filters: {
     dateFormat(value) {

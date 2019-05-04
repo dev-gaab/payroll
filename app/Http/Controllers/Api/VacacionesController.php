@@ -68,7 +68,7 @@ class VacacionesController extends Controller
 
       $fecha_final = $this->calcularFechaFinal(round($dias_disfrute), $request->dias_feriados, $request->fecha_inicio);
 
-      $total_dias_vac = round($dias_disfrute) + $fecha_final["dias_feriados"];
+      $total_dias_vac = round($dias_disfrute) + $request->dias_feriados + $fecha_final["dias_descanso"];
       // $dias_a_pagar = $total_dias_vac + $bono_vacacional;
 
       // $cesta_ticket = CestaTicket::where('estatus', 'activa')->first();
@@ -86,16 +86,50 @@ class VacacionesController extends Controller
       $vacaciones->trabajador_id = $request->id;
       $vacaciones->a_servicio = $years_servicio;
       $vacaciones->dias_disfrute = $dias_disfrute;
-      $vacaciones->dias_feriados = $fecha_final["dias_feriados"];
+      $vacaciones->dias_feriados = $request->dias_feriados;
+      $vacaciones->dias_descanso = $fecha_final["dias_descanso"];
       $vacaciones->fecha_inicial = $request->fecha_inicio;
       $vacaciones->fecha_final = $fecha_final["fecha_final"];
-      $vacaciones->tipo = 'anual';
+      $vacaciones->tipo = $request->tipo;
       $vacaciones->montos = json_encode($montos);
 
       $vacaciones->save();
 
       return response()->json(["res" => "Done!"]);
 
+    }
+
+    public function modificar($id, Request $request) {
+      $salario = Salario::where('trabajador_id', $request->trabajador_id)
+        ->where('estatus', 'activo')
+        ->select('salario_diario')
+        ->first();
+
+      $fecha_final = $this->calcularFechaFinal(round($request->dias_disfrute), $request->dias_feriados, $request->fecha_inicial);
+
+      $total_dias_vac = round($request->dias_disfrute) + $request->dias_feriados + $fecha_final["dias_descanso"];
+      // $dias_a_pagar = $total_dias_vac + $bono_vacacional;
+
+      // $cesta_ticket = CestaTicket::where('estatus', 'activa')->first();
+
+      // $monto_cesta_ticket = ($cesta_ticket->cantidad/30) * $dias_disfrute;
+
+      $total_pagar = $request->dias_disfrute * $salario->salario_diario;
+
+      $montos = [
+        "total_dias_vacaciones" => $total_dias_vac,
+        "total_pagar" => $total_pagar
+      ];
+
+      $vacaciones = Vacaciones::find($id);
+      $vacaciones->dias_feriados = $request->dias_feriados;
+      $vacaciones->dias_descanso = $fecha_final["dias_descanso"];
+      $vacaciones->fecha_final = $fecha_final["fecha_final"];
+      $vacaciones->montos = json_encode($montos);
+
+      $vacaciones->save();
+
+      return response()->json(["res" => "Done!"]);
     }
 
     public function agregarDiasFeriados ($id, Request $request) {
@@ -179,15 +213,17 @@ class VacacionesController extends Controller
 
 
     public function calcularFechaFinal($dias_validos, $dias_feriados, $fecha) {
-      $feriados_iniciales = $dias_feriados;
 
-      while ($feriados_iniciales > 0) {
+      // colocar dias feriados y dias descanso..
+      $dias_descanso = 0;
+
+      while ($dias_feriados > 0) {
         $weekday = date('w', strtotime($fecha));
 
         if($weekday == 0 || $weekday == 6) {
-          $dias_feriados ++;
+          $dias_descanso ++;
         } else {
-          $feriados_iniciales --;
+          $dias_feriados --;
         }
 
         $fecha = date("Y-m-d", strtotime($fecha . "+ 1 day"));
@@ -197,7 +233,7 @@ class VacacionesController extends Controller
         $weekday = date('w', strtotime($fecha));
 
         if($weekday == 0 || $weekday == 6) {
-          $dias_feriados ++;
+          $dias_descanso ++;
           $fecha = date("Y-m-d", strtotime($fecha . "+ 1 day"));
         } else {
           $dias_validos --;
@@ -210,10 +246,14 @@ class VacacionesController extends Controller
 
       }
 
-      return ["fecha_final" => $fecha, "dias_feriados" => $dias_feriados];
+      return ["fecha_final" => $fecha, "dias_descanso" => $dias_descanso];
     }
 
 
-
+    public function delete($id) {
+      $vacacion = Vacaciones::find($id);
+      // Eliminar
+      return response()->json(["res" => "Done!"]);
+    }
 }
 

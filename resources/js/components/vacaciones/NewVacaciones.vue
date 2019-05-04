@@ -80,7 +80,7 @@
                       name="dias_feriados"
                       label="Dias Feriados"
                       id="dias_feriados"
-                      v-validate="'required|numeric'"
+                      v-validate="'required|numeric|min_value:0'"
                     ></v-text-field>
                     <v-alert
                       v-show="errors.has('dias_feriados')"
@@ -148,7 +148,8 @@ export default {
         },
         dias_feriados: {
           required: "No debe ser vacio",
-          numeric: "Solo se permite el ingreso de números"
+          numeric: "Solo se permite el ingreso de números",
+          min_value: "Solo se aceptan números positivos"
         }
       }
     };
@@ -219,6 +220,7 @@ export default {
     modalCalcularVacaciones(trabajador) {
       this.trabajador = trabajador;
       this.trabajador.dias_feriados = 0;
+      this.trabajador.tipo = "anual";
       this.dialogUpd = true;
     }
   },

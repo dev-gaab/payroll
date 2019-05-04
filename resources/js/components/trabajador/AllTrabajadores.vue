@@ -427,6 +427,8 @@
                   id="salario"
                   v-validate="`${isSalarioMinimo ? '' : 'required'}|decimal:2`"
                 ></v-text-field>
+
+                <v-alert v-show="errors.has('salario')" type="error">{{errors.first('salario')}}</v-alert>
               </v-container>
             </v-card-text>
             <v-card-actions>
@@ -572,7 +574,9 @@ export default {
     document.getElementById("fecha_nacimiento").max = fechaNacimiento;
 
     let fechaActual = moment().format("YYYY-MM-DD");
-    let fechaInicioDisable = moment().subtract(7, 'days').format("YYYY-MM-DD");
+    let fechaInicioDisable = moment()
+      .subtract(7, "days")
+      .format("YYYY-MM-DD");
 
     document.getElementById("fecha_disable").min = fechaInicioDisable;
     document.getElementById("fecha_disable").max = fechaActual;
