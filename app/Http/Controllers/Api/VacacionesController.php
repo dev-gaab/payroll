@@ -63,7 +63,14 @@ class VacacionesController extends Controller
       // if ($bono_vacacional > 30) $bono_vacacional = 30;
 
       if($request->isFraccionada) {
-        $dias_disfrute = ($dias_disfrute * $request->meses) / 12;
+        $fecha_egreso = new \DateTime($trabajador->fecha_egreso);
+        $dif = $fecha_ingreso->diff($fecha_egreso);
+
+        $meses = $dif->m;
+
+        if($dif->d >= 5) $meses ++;
+
+        $dias_disfrute = ($dias_disfrute * $meses) / 12;
       }
 
       $fecha_final = $this->calcularFechaFinal(round($dias_disfrute), $request->dias_feriados, $request->fecha_inicio);
@@ -85,7 +92,7 @@ class VacacionesController extends Controller
       $vacaciones = new Vacaciones();
       $vacaciones->trabajador_id = $request->id;
       $vacaciones->a_servicio = $years_servicio;
-      $vacaciones->dias_disfrute = $dias_disfrute;
+      $vacaciones->dias_disfrute = round($dias_disfrute, 2);
       $vacaciones->dias_feriados = $request->dias_feriados;
       $vacaciones->dias_descanso = $fecha_final["dias_descanso"];
       $vacaciones->fecha_inicial = $request->fecha_inicio;
@@ -252,8 +259,41 @@ class VacacionesController extends Controller
 
     public function delete($id) {
       $vacacion = Vacaciones::find($id);
-      // Eliminar
+
+      $vacacion->delete();
       return response()->json(["res" => "Done!"]);
     }
+
+    /**
+     * *VACACIONES FRACCIONADAS
+     */
+
+    public function vacacionesFracDisponibles($empresa_id) {
+      $trabajadores = Trabajador::where('estatus', '<>', 'activo')
+        ->select('id', 'cedula', 'nombre1', 'apellido1', 'fecha_ingreso', 'fecha_egreso')
+        ->get();
+
+      $disponibles = [];
+
+      foreach ($trabajadores as $trabajador) {
+        $vacacion = Vacaciones::where('trabajador_id', $trabajador['id'])
+          ->where('tipo', '<>', 'anual')
+          ->first();
+
+        if($vacacion == null) {
+          $fecha_ingreso = new \DateTime($trabajador['fecha_ingreso']);
+          $fecha_egreso = new \Datetime($trabajador['fecha_egreso']);
+
+          $dif = $fecha_ingreso->diff($fecha_egreso);
+          $a_servicio = $dif->y;
+          $trabajador['a_servicio'] = $a_servicio;
+
+          $disponibles[] = $trabajador;
+        }
+      }
+
+      return response()->json($disponibles);
+    }
+
 }
 

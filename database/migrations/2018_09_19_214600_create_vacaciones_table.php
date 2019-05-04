@@ -17,7 +17,7 @@ class CreateVacacionesTable extends Migration
             $table->increments('id');
             $table->integer('trabajador_id')->unsigned();
             $table->integer('a_servicio');
-            $table->integer('dias_disfrute');
+            $table->float('dias_disfrute');
             $table->integer('dias_feriados');
             $table->integer('dias_descanso');
             $table->string('tipo');

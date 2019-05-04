@@ -65,6 +65,8 @@ Route::group(['prefix' => 'vacaciones', 'middleware' => 'auth:api'], function() 
   Route::post('/calcular', 'Api\VacacionesController@agregar');
   Route::put('/{id}','Api\VacacionesController@modificar');
   Route::delete('/{id}', 'Api\VacacionesController@delete');
+  // Vacaciones Fraccionadas
+  Route::get('/fraccionadas/disponibles/{empresa_id}', 'Api\VacacionesController@vacacionesFracDisponibles');
 });
 
 
