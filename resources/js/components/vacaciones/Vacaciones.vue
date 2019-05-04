@@ -24,6 +24,7 @@
           <template slot="items" slot-scope="props">
             <td>{{ props.item.cedula }}</td>
             <td>{{ props.item.nombre1 }} {{props.item.apellido1 }}</td>
+            <td>{{ props.item.tipo | capitalize }}</td>
             <td>{{ props.item.a_servicio }}</td>
             <td>{{ props.item.dias_disfrute }}</td>
             <td>{{ props.item.dias_feriados }}</td>
@@ -34,7 +35,7 @@
             <!-- Acciones -->
             <td class="justify-center layout px-0">
               <v-btn
-                v-if="comprobarFecha(props.item.fecha_final)"
+                v-if="comprobarFecha(props.item.fecha_final) && props.item.tipo == 'anual'"
                 @click="editVacaciones(props.item.id)"
                 icon
                 small
@@ -144,6 +145,7 @@ export default {
       headers: [
         { text: "Cedula", value: "cedula" },
         { text: "Nombre", value: "nombre" },
+        { text: "Tipo", value: "tipo" },
         { text: "Años de servicio", value: "a_servicio" },
         { text: "Días disfrute", value: "dias_disfrute" },
         { text: "Días feriados", value: "dias_feriados" },
@@ -303,6 +305,11 @@ export default {
     }
   },
   filters: {
+    capitalize(value) {
+      if (!value) return "";
+      value = value.toString();
+      return value.charAt(0).toUpperCase() + value.slice(1);
+    },
     dateFormat(value) {
       if (!value) return "";
 

@@ -42,6 +42,9 @@
 </template>
 
 <script>
+import axios from "axios";
+const moment = require('moment');
+
 export default {
   name: "VacacionesFrac",
   data() {
@@ -67,7 +70,40 @@ export default {
       alertUpdMsg: "",
       alert: false,
       alertMsg: ""
+    };
+  },
+  created() {
+    this.allVacacionesFraccionadas();
+  },
+  methods: {
+    allVacacionesFraccionadas() {
+      const vm = this;
+
+      axios.get(
+        `http://payroll.com.local/api/vacaciones/fraccionadas/disponibles/${
+          vm.empresa_id
+        }`,
+        {
+          headers: {
+            Authorization: `Bearer ${vm.$store.state.currentUser.token}`
+          }
+        }
+      )
+      .then(res => {
+        if(!res.data.error) {
+          vm.trabajadores = res.data;
+        }
+      })
+      .catch(err => console.log(err));
+    }
+  },
+   filters: {
+    dateFormat(value) {
+      if (!value) return "";
+
+      value = moment(value, "YYYY-MM-DD").format("DD/MM/YYYY");
+      return value;
     }
   }
-}
+};
 </script>
