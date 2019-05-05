@@ -16,6 +16,7 @@ import NewVacaciones from '../components/vacaciones/NewVacaciones'
 import VacacionesFrac from '../components/vacaciones/VacacionesFrac'
 import Utilidades from '../components/utilidades/Utilidades'
 import Prestaciones from '../components/prestaciones/Prestaciones'
+import ReportesEmpresa from '../components/reportes/ReportesEmpresa'
 
 Vue.use(Router)
 /**
@@ -157,6 +158,15 @@ export default new Router({
       path: '/prestaciones',
       name: 'Prestaciones',
       component: Prestaciones,
+      meta: {
+        requiresAuth: true
+      }
+    },
+    // reportes
+    {
+      path: '/reportes/empresa',
+      name: 'ReportesEmpresa',
+      component: ReportesEmpresa,
       meta: {
         requiresAuth: true
       }
