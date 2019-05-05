@@ -75,7 +75,25 @@
           </v-list-tile-content>
         </v-list-tile>
 
-        <v-list-tile @click>
+        <v-list-tile @click="routUtilidades">
+          <v-list-tile-action>
+            <v-icon>redeem</v-icon>
+          </v-list-tile-action>
+          <v-list-tile-content>
+            <v-list-tile-title>Utilidades</v-list-tile-title>
+          </v-list-tile-content>
+        </v-list-tile>
+
+        <v-list-tile @click="routPrestaciones">
+          <v-list-tile-action>
+            <v-icon>access_time</v-icon>
+          </v-list-tile-action>
+          <v-list-tile-content>
+            <v-list-tile-title>Prestaciones Sociales</v-list-tile-title>
+          </v-list-tile-content>
+        </v-list-tile>
+
+        <v-list-tile>
           <v-list-tile-action>
             <v-icon>print</v-icon>
           </v-list-tile-action>
@@ -184,6 +202,12 @@ export default {
     },
     routFracVacaciones() {
       this.$router.push({ path: "/vacaciones/fraccionadas" });
+    },
+    routPrestaciones() {
+      this.$router.push({ path: "/prestaciones" });
+    },
+    routUtilidades() {
+      this.$router.push({ path: "/utilidades" });
     },
 
     logout() {

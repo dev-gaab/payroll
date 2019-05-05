@@ -27,9 +27,6 @@
           >
             <v-icon>add</v-icon>
           </v-btn>
-          <v-btn icon color="teal darken-4" dark @click="printAll">
-            <v-icon>print</v-icon>
-          </v-btn>
         </v-card-title>
         <v-data-table :headers="headers" :items="empresas" :search="search">
           <template slot="items" slot-scope="props">

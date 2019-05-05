@@ -23,7 +23,7 @@
             <td>{{ props.item.a_servicio }}</td>
             <!-- Acciones -->
             <td class="justify-center layout px-0">
-              <v-btn @click="modalCalcularVacaciones(props.item)" icon small color="success">
+              <v-btn @click="calcular(props.item.id)" icon small color="success">
                 <v-icon small>fa-check</v-icon>
               </v-btn>
             </td>
@@ -92,6 +92,34 @@ export default {
       .then(res => {
         if(!res.data.error) {
           vm.trabajadores = res.data;
+        }
+      })
+      .catch(err => console.log(err));
+    },
+    calcular(id) {
+      const vm = this;
+
+      const data = {
+        id,
+        isFraccionada: true,
+        dias_feriados: 0,
+        fecha_inicio: moment().format('YYYY-MM-DD'),
+        tipo: 'fraccionada'
+      };
+
+      axios.post(`http://payroll.com.local/api/vacaciones/calcular`,
+        data,
+        {
+          headers: {
+            Authorization: `Bearer ${vm.$store.state.currentUser.token}`
+          }
+        }
+      )
+      .then(res => {
+        if(!res.data.error) {
+          vm.alertMsg = "Vacaciones Calculadas";
+          vm.allVacacionesFraccionadas();
+          vm.alert = true;
         }
       })
       .catch(err => console.log(err));

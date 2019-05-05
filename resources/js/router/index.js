@@ -14,6 +14,8 @@ import NewUser from '../components/users/NewUser'
 import Vacaciones from '../components/vacaciones/Vacaciones'
 import NewVacaciones from '../components/vacaciones/NewVacaciones'
 import VacacionesFrac from '../components/vacaciones/VacacionesFrac'
+import Utilidades from '../components/utilidades/Utilidades'
+import Prestaciones from '../components/prestaciones/Prestaciones'
 
 Vue.use(Router)
 /**
@@ -143,6 +145,22 @@ export default new Router({
         requiresAuth: true
       }
     },
+    {
+      path: '/utilidades',
+      name: 'Utilidades',
+      component: Utilidades,
+      meta: {
+        requiresAuth: true
+      }
+    },
+    {
+      path: '/prestaciones',
+      name: 'Prestaciones',
+      component: Prestaciones,
+      meta: {
+        requiresAuth: true
+      }
+    }
   ],
   mode: 'history'
 })

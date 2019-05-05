@@ -223,6 +223,7 @@ export default {
       this.trabajador.tipo = "anual";
       this.dialogUpd = true;
     }
+
   },
   filters: {
     dateFormat(value) {

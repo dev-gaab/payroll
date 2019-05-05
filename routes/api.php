@@ -69,6 +69,13 @@ Route::group(['prefix' => 'vacaciones', 'middleware' => 'auth:api'], function() 
   Route::get('/fraccionadas/disponibles/{empresa_id}', 'Api\VacacionesController@vacacionesFracDisponibles');
 });
 
+Route::group(['prefix' => 'prestaciones', 'middleware' => 'auth:api'], function() {
+  Route::get('/{empresa_id}', 'Api\PrestacionesController@todas');
+  Route::get('/disponibles/{empresa_id}', 'Api\PrestacionesController@disponibles');
+  Route::post('/calcular', 'Api\PrestacionesController@calcularPrestaciones');
+  Route::delete('/{id}', 'Api\PrestacionesController@delete');
+});
+
 
 // Route::group(['prefix' => 'bases', 'middleware' => 'auth:api'], function() {
 //   Route::get('/', 'Api\BasesController@verActual');
