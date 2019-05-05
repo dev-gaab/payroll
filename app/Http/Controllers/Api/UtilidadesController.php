@@ -33,7 +33,7 @@ class UtilidadesController extends Controller
       return response()->json($utilidades);
     }
 
-    public function addUtilidades($trabajador_id, Request $request) {
+    public function addUtilidades(Request $request) {
 
       if ($request->dias_utilidades < 30)
         return response()->json(["error" => "Los dias de utilidades no pueden ser menores a 30"]);
@@ -41,18 +41,18 @@ class UtilidadesController extends Controller
       if($request->dias_utilidades > 120)
         return response()->json(["error" => "Los dias de utilidades no pueden ser mayores a 120 dias (4 meses)"]);
 
-      $comprobar_utilidades = Utilidade::where('trabajador_id', $trabajador_id)
+      $comprobar_utilidades = Utilidade::where('trabajador_id', $request->id)
         ->where('fecha', date('Y'))
         ->first();
 
       if($comprobar_utilidades != null)
         return response()->json(["error" => "El trabajador ya recibio utilidades por este año."]);
 
-      $salario = Salario::where('trabajador_id', $trabajador_id)
+      $salario = Salario::where('trabajador_id', $request->id)
     		->where('estatus', 'activo')
         ->first();
 
-      $trabajador = Trabajador::find($trabajador_id);
+      $trabajador = Trabajador::find($request->id);
       $fecha = $trabajador->fecha_ingreso;
       $fecha = explode('-', $fecha);
       $year_ingreso = $fecha[0];
