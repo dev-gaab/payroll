@@ -42,7 +42,7 @@ class UtilidadesController extends Controller
         return response()->json(["error" => "Los dias de utilidades no pueden ser mayores a 120 dias (4 meses)"]);
 
       $comprobar_utilidades = Utilidade::where('trabajador_id', $request->id)
-        ->where('fecha', date('Y'))
+        ->whereYear('fecha', date('Y'))
         ->first();
 
       if($comprobar_utilidades != null)
