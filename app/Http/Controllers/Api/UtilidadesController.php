@@ -4,7 +4,7 @@ namespace App\Http\Controllers\Api;
 
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
-use App\Http\Controllers\Api\Salario;
+use App\Models\Salario;
 use App\Models\Utilidades;
 use App\Models\Trabajador;
 use Illuminate\Support\Facades\DB;
@@ -12,11 +12,11 @@ use Illuminate\Support\Facades\DB;
 class UtilidadesController extends Controller
 {
 
-    public function verTodas($empresa_id) {
+    public function todas($empresa_id) {
       $utilidades = DB::table('utilidades')
         ->join('trabajador', 'utilidades.trabajador_id', 'trabajador.id')
         ->join('empresa', 'trabajador.empresa_id', 'empresa.id')
-        ->select('trabajador.cedula', 'trabajador.nombre1', 'trabajador.apellido1', 'utilidades.*')
+        ->select('trabajador.cedula', 'trabajador.nombre1', 'trabajador.apellido1', 'trabajador.fecha_ingreso', 'utilidades.*')
         ->where('empresa.id', $empresa_id)
         ->get();
 
@@ -41,7 +41,7 @@ class UtilidadesController extends Controller
       if($request->dias_utilidades > 120)
         return response()->json(["error" => "Los dias de utilidades no pueden ser mayores a 120 dias (4 meses)"]);
 
-      $comprobar_utilidades = Utilidade::where('trabajador_id', $request->id)
+      $comprobar_utilidades = Utilidades::where('trabajador_id', $request->id)
         ->whereYear('fecha', date('Y'))
         ->first();
 
@@ -62,13 +62,21 @@ class UtilidadesController extends Controller
         if($year_ingreso < date('Y')) {
           $dias = ($request->dias_utilidades * (int) date('m')) / 12;
           if(date('m') == 12) $tipo = 'completa';
+          $meses = (int) date('m');
         } else {
-          $meses = (int) date('m') - (int) $fecha[1];
-          $dias = ($request->dias_utilidades * $meses) / 12;
+          $fecha1 = new \DateTime($trabajador->fecha_ingreso);
+          $fecha2 = new \DateTime(date('Y-m-d'));
+
+          $dif = $fecha1->diff($fecha2);
+          $meses = $dif->m;
+          if($dif->d >= 5) $meses ++;
 
           if($meses == 12) $tipo = 'completa';
+
+          $dias = ($request->dias_utilidades * $meses) / 12;
         }
       } else {
+        $meses = 12;
         $dias = $request->dias_utilidades;
         $tipo = 'completa';
       }
@@ -76,9 +84,9 @@ class UtilidadesController extends Controller
       $monto = $dias * $salario->salario_diario;
 
       $utilidades = new Utilidades();
-      $utilidades->trabajador_id = $trabajador_id;
-      $utilidades->fecha = date('Y');
-      $utilidades->dias = $dias;
+      $utilidades->trabajador_id = $request->id;
+      $utilidades->fecha = date('Y-m-d');
+      $utilidades->dias = $request->dias_utilidades;
       $utilidades->monto = $monto;
       $utilidades->sd_actual = $salario->salario_diario;
       $utilidades->tipo = $tipo;
@@ -90,31 +98,24 @@ class UtilidadesController extends Controller
       return response()->json(["res" => "Done!"]);
     }
 
-    public function disponibilidadUtilidades($empresa_id) {
+    public function disponibles($empresa_id) {
       $trabajadores = Trabajador::where('empresa_id', $empresa_id)
         ->where('estatus', 'activo')
         ->get();
 
       $disponibles = [];
-      $i = 0;
       foreach ($trabajadores as $trabajador) {
-        if($this->validarTrabajadorUtilidades($trabajador->id)) {
-          $disponibles[$i] = $trabajador;
-          $i ++;
+        $comprobar_utilidades = Utilidades::where('trabajador_id', $trabajador["id"])
+        ->whereYear('fecha', date('Y'))
+        ->first();
+
+        if($comprobar_utilidades == null) {
+          $disponibles[] = $trabajador;
         }
       }
 
       return response()->json($disponibles);
     }
 
-    public function validarTrabajadorUtilidades($trabajador_id) {
-      $comprobar_utilidades = Utilidade::where('trabajador_id', $trabajador_id)
-        ->where('fecha', date('Y'))
-        ->first();
 
-      if($comprobar_utilidades != null)
-        return false;
-
-      return true;
-    }
 }

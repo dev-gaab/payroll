@@ -27,13 +27,10 @@
             <td>{{ props.item.fecha | dateFormat }}</td>
             <td>{{ props.item.dias }}</td>
             <td>{{ props.item.meses_calculados }}</td>
-            <td>{{ props.item.montos.tipo | capitalize }}</td>
-            <td>{{ props.item.montos.monto | numberFormat }}</td>
+            <td>{{ props.item.tipo | capitalize }}</td>
+            <td>{{ props.item.monto | numberFormat }}</td>
             <!-- Acciones -->
             <td class="justify-center layout px-0">
-              <v-btn @click="modificar(props.item)" icon small color="error">
-                <v-icon small>fa-trash</v-icon>
-              </v-btn>
               <v-btn @click="delete(props.item.id)" icon small color="error">
                 <v-icon small>fa-trash</v-icon>
               </v-btn>
@@ -118,6 +115,12 @@
                     >{{errors.first('utilidades')}}</v-alert>
                   </v-flex>
                 </v-layout>
+
+                <v-layout wrap>
+                  <v-flex xs12>
+                    <v-checkbox v-model="trabajador.fraccionada" label="Fraccionada?"></v-checkbox>
+                  </v-flex>
+                </v-layout>
               </v-container>
             </v-card-text>
             <v-card-actions>
@@ -127,7 +130,7 @@
                 flat
                 @click.native="dialogCal = false; trabajador = {}"
               >Cerrar</v-btn>
-              <v-btn type="submit" dark color="teal darken-1">Guardar</v-btn>
+              <v-btn type="submit" dark color="teal darken-1">Calcular</v-btn>
             </v-card-actions>
           </form>
           <!-- Fin form-->
@@ -138,6 +141,9 @@
 </template>
 
 <script>
+import axios from "axios";
+const moment = require("moment");
+
 export default {
   name: "Utilidades",
   data() {
@@ -240,7 +246,8 @@ export default {
       this.dialogCal = true;
       this.trabajador = {
         id,
-        dias_utilidades: 30
+        dias_utilidades: 30,
+        fraccionada: false
       };
     },
     calcular(id) {

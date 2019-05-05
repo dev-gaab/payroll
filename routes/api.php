@@ -76,6 +76,14 @@ Route::group(['prefix' => 'prestaciones', 'middleware' => 'auth:api'], function(
   Route::delete('/{id}', 'Api\PrestacionesController@delete');
 });
 
+Route::group(['prefix' => 'utilidades', 'middleware' => 'auth:api'], function() {
+  Route::get('/{empresa_id}', 'Api\UtilidadesController@todas');
+  Route::get('/disponibles/{empresa_id}', 'Api\UtilidadesController@disponibles');
+  Route::post('/calcular', 'Api\UtilidadesController@addUtilidades');
+  Route::get('/ver/{id}', 'Api\UtilidadesController@addUtilidades');
+  Route::delete('/{id}', 'Api\UtilidadesController@delete');
+});
+
 
 // Route::group(['prefix' => 'bases', 'middleware' => 'auth:api'], function() {
 //   Route::get('/', 'Api\BasesController@verActual');
