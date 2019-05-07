@@ -4,6 +4,9 @@
       <v-card class="elevation-12">
         <!-- Header card -->
         <v-toolbar dark color="teal darken-1" dense>
+          <v-btn icon color="teal darken-4" dark @click.native="$router.push({ path: '/users' })">
+            <v-icon>reply</v-icon>
+          </v-btn>
           <v-toolbar-title>Usuario</v-toolbar-title>
           <v-spacer></v-spacer>
         </v-toolbar>
@@ -59,7 +62,9 @@
               name="password"
               label="Contraseña"
               id="password"
+              type="password"
               v-validate="'required|alpha_num|min:6|max:16'"
+              ref="password"
             ></v-text-field>
             <v-alert v-show="errors.has('password')" type="error">{{errors.first('password')}}</v-alert>
 
@@ -70,14 +75,10 @@
               label="Confirmar contraseña"
               type="password"
               id="password_confirmation"
-              v-validate="'required|alpha_num|confirmed:password'"
+              v-validate="'required|confirmed:password'"
               data-vv-as="password"
             ></v-text-field>
-            <v-alert
-              v-show="errors.has('password_confirmation')"
-              type="error"
-            >{{errors.first('password_confirmation')}}</v-alert>
-
+            <v-alert v-show="errors.has('password_confirmation')" type="error">{{errors.first('password_confirmation')}}</v-alert>
             <v-select
               :items="roles"
               color="teal darken-1"
@@ -114,8 +115,8 @@
         </v-card-title>
         <v-data-table :headers="headers" :items="users" :search="search">
           <template slot="items" slot-scope="props">
-            <td>{{ props.item.cedula }}</td>
-            <td>{{ props.item.nombre1 }} {{props.item.apellido1}}</td>
+            <td>{{ props.item.username }}</td>
+            <td>{{ props.item.nombre }} {{props.item.apellido}}</td>
           </template>
           <v-alert
             slot="no-results"
@@ -130,6 +131,8 @@
 </template>
 
 <script>
+import axios from "axios";
+
 export default {
   data() {
     return {
@@ -177,7 +180,6 @@ export default {
         },
         password_confirmation: {
           required: "No debe ser vacio",
-          alpha_num: "Solo se permiten letras y números",
           confirmed: "Las contraseñas deben coincidir "
         },
         rol: {
@@ -190,7 +192,49 @@ export default {
   },
   methods: {
     addUser() {
-      console.log('event')
+      const vm = this;
+      this.$validator.validate().then(valid => {
+        if (!valid) {
+          // do stuff if not valid.
+          return;
+        }
+        axios
+          .post(
+            `http://payroll.com.local/api/auth/signup`,
+            vm.user,
+            {
+              headers: {
+                Authorization: `Bearer ${vm.$store.state.currentUser.token}`
+              }
+            }
+          )
+          .then(res => {
+            if (!res.data.error) {
+              vm.$data.users.push({
+                username: vm.$data.user.username,
+                nombre: vm.$data.user.nombre,
+                apellido: vm.$data.user.apellido
+              });
+
+              vm.$data.user = {
+                rol: "Administrador"
+              };
+
+              vm.$data.alert = true;
+              vm.$data.alertType = "success";
+              vm.$data.alertMessage = "Usuario Agregado!";
+            } else {
+              vm.$data.alert = true;
+              vm.$data.alertType = "error";
+              vm.$data.alertMessage = res.data.error
+            }
+
+            document.getElementById("username").focus();
+          })
+          .catch(err => {
+            console.log(err);
+          });
+      });
     }
   }
 };

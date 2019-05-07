@@ -6,9 +6,12 @@ namespace App\Http\Controllers\Api;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Auth;
 // Models
 use App\Models\Empresa;
 use App\Models\UsuarioEmpresa;
+use App\Models\Historial;
+use App\Models\Sesion;
 
 /**
  * Class EmpresaController
@@ -57,6 +60,18 @@ class EmpresaController extends Controller
 
     $empresa->save();
 
+    $sesion = Sesion::where("final", null)->where("usuario_id", Auth::id())->first();
+
+    $datos_sesion = [
+      "accion" => "Modificar empresa",
+      "fecha" => date('Y-m-d h:i:s A')
+    ]; 
+
+    $historial = new Historial();
+    $historial->sesion_id = $sesion->id;
+    $historial->data  = json_encode($datos_sesion);
+    $historial->save();
+
     return response()->json(['res' => 'Empresa Modificada']);
   }
 
@@ -82,6 +97,18 @@ class EmpresaController extends Controller
 
     $empresa->save();
 
+    $sesion = Sesion::where("final", null)->where("usuario_id", Auth::id())->first();
+
+    $datos_sesion = [
+      "accion" => "Agregar empresa",
+      "fecha" => date('Y-m-d h:i:s A')
+    ]; 
+
+    $historial = new Historial();
+    $historial->sesion_id = $sesion->id;
+    $historial->data  = json_encode($datos_sesion);
+    $historial->save();
+
     return response()->json(['res' => "Done!"]);
 
 
@@ -94,6 +121,19 @@ class EmpresaController extends Controller
 
     $empresa->estatus = 'inactiva';
     $empresa->save();
+
+    $sesion = Sesion::where("final", null)->where("usuario_id", Auth::id())->first();
+
+    $datos_sesion = [
+      "accion" => "Deshabilitar empresa",
+      "fecha" => date('Y-m-d h:i:s A')
+    ]; 
+
+    $historial = new Historial();
+    $historial->sesion_id = $sesion->id;
+    $historial->data  = json_encode($datos_sesion);
+    $historial->save();
+
 
     return response()->json(["res" => "Empresa deshabilitada"]);
   }

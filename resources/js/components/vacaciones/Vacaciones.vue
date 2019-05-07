@@ -16,9 +16,6 @@
             hide-details
           ></v-text-field>
           <v-spacer></v-spacer>
-          <v-btn icon color="teal darken-4" dark @click="printAll">
-            <v-icon>print</v-icon>
-          </v-btn>
         </v-card-title>
         <v-data-table :headers="headers" :items="vacaciones" :search="search">
           <template slot="items" slot-scope="props">
@@ -40,6 +37,7 @@
                 icon
                 small
                 color="warning"
+                title="Editar vacaciones"
               >
                 <v-icon small>fa-edit</v-icon>
               </v-btn>
@@ -49,6 +47,7 @@
                 small
                 color="error"
                 @click="deleteVacaciones(props.item.id)"
+                title="Eliminar Vacaciones"
               >
                 <v-icon small>fa-trash</v-icon>
               </v-btn>

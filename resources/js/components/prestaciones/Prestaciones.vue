@@ -15,7 +15,7 @@
             hide-details
           ></v-text-field>
           <v-spacer></v-spacer>
-          <v-btn icon color="teal darken-4" dark @click="newPrestaciones">
+          <v-btn icon color="teal darken-4" dark @click="newPrestaciones" title="Calcular nuevas prestaciones">
             <v-icon>add</v-icon>
           </v-btn>
         </v-card-title>
@@ -33,7 +33,7 @@
 
             <!-- Acciones -->
             <td class="justify-center layout px-0">
-              <v-btn @click="delete(props.item.id)" icon small color="error">
+              <v-btn @click="deletePrestaciones(props.item.id)" icon small color="error" title="Eliminar Prestaciones">
                 <v-icon small>fa-trash</v-icon>
               </v-btn>
             </td>
@@ -74,7 +74,7 @@
                 <td>{{ props.item.cedula }}</td>
                 <td>{{ props.item.nombre1 }} {{ props.item.apellido1 }}</td>
                 <td>{{ props.item.fecha_ingreso | dateFormat }}</td>
-                <td>{{ props.item.fecha_egreso }}</td>
+                <td>{{ props.item.fecha_egreso | dateFormat }}</td>
                 <!-- Acciones -->
                 <td class="justify-center layout px-0">
                   <v-btn @click="calcularModal(props.item.id)" icon small color="success">
@@ -278,15 +278,27 @@ export default {
           .catch(err => console.log(err));
       });
     },
-     delete(id) {
-      axios
+     deletePrestaciones(id) {
+       let confirm = window.confirm(
+        "¿Seguro que quiere eliminar?"
+      );
+       const vm = this;
+
+      if (confirm) {
+        axios
         .delete(`http://payroll.com.local/api/prestaciones/${id}`, {
           headers: {
             Authorization: `Bearer ${vm.$store.state.currentUser.token}`
           }
         })
-        .then(res => {})
+        .then(res => {
+          this.alertMsg = "Prestaciones Eliminada";
+          this.alert = true;
+          this.allPrestaciones();
+        })
         .catch(err => console.log(err));
+      }
+      
     }
   },
   filters: {

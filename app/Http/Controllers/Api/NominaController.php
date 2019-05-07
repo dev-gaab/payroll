@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Api;
 
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use App\Models\Nomina;
@@ -13,6 +14,8 @@ use App\Models\CestaTicket;
 use App\Models\SalarioMinimo;
 use App\Models\Deducciones;
 use App\Models\Asignaciones;
+use App\Models\Historial;
+use App\Models\Sesion;
 
 date_default_timezone_set("America/Caracas");
 
@@ -204,7 +207,7 @@ class NominaController extends Controller
       }
     }
 
-    $trabajadores = Trabajador::where('empresa_id', $id)->get();
+    $trabajadores = Trabajador::where('empresa_id', $id)->where('estatus', 'activo')->get();
     $nro_trabajadores = sizeof($trabajadores);
 
     $datos_nom = [

@@ -4,26 +4,24 @@ namespace App\Http\Controllers;
 
 use Validator;
 use App\User;
+use App\Models\Sesion;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+
 
 class AuthController extends Controller
 {
     public function signup(Request $request)
     {
-        $validation = Validator::make($request->all(), [
-            'nombre'     => 'required|string',
-            'apellido'   => 'required|string',
-            'email'    => 'required|string|email|unique:usuario',
-            'username'    => 'required|string|unique:usuario',
-            'password' => 'required|string|confirmed',
-            'rol'   => 'required|string'
-        ]);
+        $validEmail = User::where('email', $request->email)->first();
+        if($validEmail != null) {
+            return response()->json(["error" => "Email en uso"]);
+        }
 
-        if ($validation->fails()) {
-            $errors = $validation->errors();
-            return response()->json(['validateErrors' => $errors]);
+        $validEmail = User::where('username', $request->username)->first();
+        if($validEmail != null) {
+            return response()->json(["error" => "Nombre de usuario en uso"]);
         }
 
         $user = new User([
@@ -66,9 +64,15 @@ class AuthController extends Controller
         }
         $token->save();
 
+        $isAdmin = false;
         if($user->rol == 'admin') {
             $isAdmin = true;
         }
+
+        $sesiones = new Sesion();
+        $sesiones->usuario_id = $user->id;
+        $sesiones->inicio = date('Y-m-d h:i:s A');
+        $sesiones->save();
 
         return response()->json([
             'isAdmin' => $isAdmin,
@@ -82,6 +86,16 @@ class AuthController extends Controller
 
     public function logout(Request $request)
     {
+        $user_id = Auth::id();
+
+        $sesion = Sesion::where("final", null)
+            ->where("usuario_id", $user_id)
+            ->first();
+
+        $sesion->final = date('Y-m-d h:i:s');
+        
+        $sesion->save();
+
         $request->user()->token()->revoke();
 
         return response()->json(['message' =>

@@ -9,7 +9,7 @@
           color="teal darken-4"
           large
           dark
-          @click="impActivas"
+          @click="activas"
         >Imprimir Todas las Empresas activas</v-btn>
       </v-flex>
       <v-flex xs12 md6>
@@ -17,7 +17,7 @@
           color="teal darken-4"
           large
           dark
-          @click="impInactivas"
+          @click="inactivas"
         >Imprimir Todas las Empresas inactivas</v-btn>
       </v-flex>
     </v-layout>
@@ -25,13 +25,56 @@
 </template>
 
 <script>
+  import axios from "axios";
+  const moment = require("moment");
+
 export default {
   name: "ReportesEmpresa",
+  data() {
+    return {
+      empresas_activas: [],
+      empresas_inactivas: []
+    }
+  },
   methods: {
-    impActivas() {
+    activas() {
+      axios
+        .get(`http://payroll.com.local/api/reportes/empresas/activas`, {
+          headers: {
+            Authorization: `Bearer ${this.$store.state.currentUser.token}`
+          }
+        })
+        .then(res => {
+          this.empresas_activas = res.data;
+          this.impActivas();
 
+          console.log(this.empresas_activas);
+        })
+        .catch(err => {
+          console.log(err);
+        });
     },
-    impInactivas(){
+    inactivas(){
+      axios
+        .get(`http://payroll.com.local/api/reportes/empresas/inactivas`, {
+          headers: {
+            Authorization: `Bearer ${this.$store.state.currentUser.token}`
+          }
+        })
+        .then(res => {
+          this.empresas_inactivas = res.data;
+          this.impInactivas
+        })
+        .catch(err => {
+          console.log(err);
+        });
+    },
+    impActivas() {
+      let dd = {
+        content: {}
+      }
+    },
+    impInactivas() {
 
     }
   }

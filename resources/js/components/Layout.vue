@@ -55,13 +55,13 @@
 
           <v-list-tile @click="routCalcVacaciones">
             <v-list-tile-content>
-              <v-list-tile-title>Calcular Vacaciones</v-list-tile-title>
+              <v-list-tile-title>Vacaciones Anuales</v-list-tile-title>
             </v-list-tile-content>
           </v-list-tile>
 
           <v-list-tile @click="routFracVacaciones">
             <v-list-tile-content>
-              <v-list-tile-title>Calcular Vacaciones Fraccionadas</v-list-tile-title>
+              <v-list-tile-title>Vacaciones Fraccionadas</v-list-tile-title>
             </v-list-tile-content>
           </v-list-tile>
         </v-list-group>
@@ -110,7 +110,7 @@
           </v-list-tile>
         </v-list-group>
 
-        <v-list-tile @click="routUsers">
+        <v-list-tile @click="routUsers" v-if="$store.state.currentUser.isAdmin">
           <v-list-tile-action>
               <v-icon>account_box</v-icon>
             </v-list-tile-action>
@@ -158,6 +158,8 @@
 </template>
 
 <script>
+  import axios from "axios";
+
 export default {
   name: "Layout",
   data: () => ({
@@ -222,8 +224,23 @@ export default {
       this.$router.push({ path: "/reportes/empresa" });
     },
     logout() {
-      this.$store.commit("logout");
-      this.$router.push({ path: "/login" });
+
+      const vm = this;
+
+      axios.get('/api/auth/logout', {
+          headers: {
+            Authorization: `Bearer ${vm.$store.state.currentUser.token}`
+          }
+        })
+        .then(res => {
+          if(!res.data.error) {
+            this.$store.commit("logout");
+            this.$router.push({ path: "/login" });
+          }
+        })
+        .catch(err => console.log(err));
+
+      
     }
   }
 };

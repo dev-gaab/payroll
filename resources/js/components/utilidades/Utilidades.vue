@@ -15,7 +15,7 @@
             hide-details
           ></v-text-field>
           <v-spacer></v-spacer>
-          <v-btn icon color="teal darken-4" dark @click="newUtilidades">
+          <v-btn icon color="teal darken-4" dark @click="newUtilidades" title="Nuevas Utilidades">
             <v-icon>add</v-icon>
           </v-btn>
         </v-card-title>
@@ -31,7 +31,7 @@
             <td>{{ props.item.monto | numberFormat }}</td>
             <!-- Acciones -->
             <td class="justify-center layout px-0">
-              <v-btn @click="delete(props.item.id)" icon small color="error">
+              <v-btn @click="deleteU(props.item.id)" icon small color="error" title="Eliminar utilidades">
                 <v-icon small>fa-trash</v-icon>
               </v-btn>
             </td>
@@ -281,15 +281,26 @@ export default {
           .catch(err => console.log(err));
       });
     },
-     delete(id) {
-      axios
-        .delete(`http://payroll.com.local/api/utilidades/${id}`, {
+     deleteU(id) {
+
+      let confirm = window.confirm(
+        "¿Seguro que quiere eliminar?"
+      );
+       const vm = this;
+
+      if (confirm) {
+          axios.delete(`http://payroll.com.local/api/utilidades/${id}`, {
           headers: {
             Authorization: `Bearer ${vm.$store.state.currentUser.token}`
           }
         })
-        .then(res => {})
+        .then(res => {
+          this.alertMsg = "Utilidades Eliminada";
+          this.alert = true;
+          this.allUtilidades();
+        })
         .catch(err => console.log(err));
+      }
     }
   },
   filters: {

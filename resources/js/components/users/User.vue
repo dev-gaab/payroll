@@ -18,7 +18,7 @@
             hide-details
           ></v-text-field>
           <v-spacer></v-spacer>
-          <v-btn icon color="teal darken-4" dark @click="newUser">
+          <v-btn icon color="teal darken-4" dark @click="newUser" title="Nuevo usuario">
             <v-icon>add</v-icon>
           </v-btn>
         </v-card-title>
@@ -31,7 +31,7 @@
             <td>{{ props.item.estatus | capitalize}}</td>
             <!-- Acciones -->
             <td class="justify-center layout px-0">
-              <v-btn @click="editUserModal(props.item.id)" icon small color="warning">
+              <v-btn @click="editUserModal(props.item.id)" icon small color="warning" title="Editar Usuario">
                 <v-icon small>fa-edit</v-icon>
               </v-btn>
               <v-btn
@@ -40,6 +40,7 @@
                 icon
                 small
                 color="error"
+                title="Inhabilitar Usuario"
               >
                 <v-icon small>fa-lock</v-icon>
               </v-btn>
@@ -49,6 +50,7 @@
                 icon
                 small
                 color="success"
+                title="Habilitar Usuario"
               >
                 <v-icon small>fa-unlock</v-icon>
               </v-btn>
@@ -77,7 +79,7 @@
             </v-btn>
           </v-toolbar>
 
-          <v-alert v-model="alertModal" dismissible :type="alertModalType">{{alertModalMessage}}</v-alert>
+          <v-alert v-model="alertModal" dismissible type="error">{{alertModalMessage}}</v-alert>
           <!-- formulario -->
           <form @submit.prevent="updUser" id="userForm">
             <v-card-text>
@@ -125,7 +127,7 @@
                 label="Contraseña Nueva"
                 type="password"
                 id="password"
-                v-validate="'required'"
+                v-validate="'required|alpha_num|min:6|max:16'"
                 ref="password"
               ></v-text-field>
               <div class="red">
@@ -264,9 +266,18 @@ export default {
           // do stuff if not valid.
           return;
         }
+        const vm = this;
+
+        const data = {
+          nombre: vm.user.nombre,
+          apellido: vm.user.apellido,
+          email: vm.user.email,
+          password: vm.password.newPassword,
+          isChangingPassword: vm.password.isChangingPassword
+        };
 
         axios
-          .put(`http://payroll.com.local/api/users/${user.id}`, vm.user, {
+          .put(`http://payroll.com.local/api/users/${vm.user.id}`, data, {
             headers: {
               Authorization: `Bearer ${vm.$store.state.currentUser.token}`
             }
@@ -282,6 +293,9 @@ export default {
             vm.user = {};
             vm.alertTableMessage = "Usuario modificado!";
             vm.alertTable = true;
+            vm.alertTableType = 'success';
+            vm.allUsers();
+
           })
           .catch(err => console.log(err));
       });

@@ -18,7 +18,7 @@
             hide-details
           ></v-text-field>
           <v-spacer></v-spacer>
-          <v-btn icon color="teal darken-4" dark @click="newTrabajador">
+          <v-btn icon color="teal darken-4" dark @click="newTrabajador" v-if="$store.state.currentUser.isAdmin" title="Nuevo Trabajador">
             <v-icon>add</v-icon>
           </v-btn>
         </v-card-title>
@@ -31,18 +31,19 @@
             <td>{{props.item.fecha_ingreso | dateFormat}}</td>
             <!-- Acciones -->
             <td class="justify-center layout px-0">
-              <v-btn @click="verTrabajador(props.item.id)" icon small color="primary">
+              <v-btn @click="verTrabajador(props.item.id)" icon small color="primary" title="Ver Trabajador">
                 <v-icon small>fa-eye</v-icon>
               </v-btn>
-              <v-btn @click="editTrabajadorModal(props.item.id)" icon small color="warning">
+              <v-btn @click="editTrabajadorModal(props.item.id)" icon small color="warning" v-if="$store.state.currentUser.isAdmin" title="Editar modal">
                 <v-icon small>fa-edit</v-icon>
               </v-btn>
               <v-btn
                 @click="disable(props.item.id)"
-                v-if="props.item.estatus == 'activo'"
+                v-if="props.item.estatus == 'activo' && $store.state.currentUser.isAdmin"
                 icon
                 small
                 color="error"
+                title="Inhabilitar Trabajador"
               >
                 <v-icon small>fa-lock</v-icon>
               </v-btn>

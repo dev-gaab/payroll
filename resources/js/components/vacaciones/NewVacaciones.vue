@@ -23,7 +23,7 @@
             <td>{{ props.item.a_servicio }}</td>
             <!-- Acciones -->
             <td class="justify-center layout px-0">
-              <v-btn @click="modalCalcularVacaciones(props.item)" icon small color="success">
+              <v-btn @click="modalCalcularVacaciones(props.item)" icon small color="success" title="Calcular Vacaciones">
                 <v-icon small>fa-check</v-icon>
               </v-btn>
             </td>

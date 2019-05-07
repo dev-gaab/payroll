@@ -4,6 +4,9 @@
       <v-alert v-model="alert" dismissible :type="alertType">{{alertMsg}}</v-alert>
       <v-card>
         <v-card-title>
+          <v-btn icon color="teal darken-4" dark @click.native="$router.push({ path: '/nominas' })">
+            <v-icon>reply</v-icon>
+          </v-btn>
           <h3>Nomina Detalle</h3>
           <v-spacer></v-spacer>
           <v-text-field
@@ -28,11 +31,14 @@
             <td>{{ props.item.montos.monto_total | numberFormat}}</td>
             <!-- Acciones -->
             <td class="justify-center layout px-0">
-              <v-btn @click="verNominaDetalle(props.item.id)" icon small color="primary">
+              <v-btn @click="verNominaDetalle(props.item.id)" icon small color="primary" title="Ver Nomina Detalle">
                 <v-icon small>fa-eye</v-icon>
               </v-btn>
-              <v-btn @click="editNominaDetalleModal(props.item.id)" icon small color="warning">
+              <v-btn @click="editNominaDetalleModal(props.item.id)" icon small color="warning" title="Editar Nomina Detalle">
                 <v-icon small>fa-edit</v-icon>
+              </v-btn>
+              <v-btn @click="print(props.item.id)" icon small color="teal darken-1" dark title="Imprimir recibo de pago">
+                <v-icon small>fa-print</v-icon>
               </v-btn>
             </td>
           </template>
@@ -327,6 +333,11 @@
 
 <script>
 import axios from "axios";
+import pdfMake from "pdfmake/build/pdfmake";
+import pdfFonts from "pdfmake/build/vfs_fonts";
+pdfMake.vfs = pdfFonts.pdfMake.vfs;
+
+const moment = require("moment");
 
 export default {
   name: "NominaDetalle",
@@ -459,6 +470,133 @@ export default {
           })
           .catch(err => console.log(err));
       });
+    },
+    print(id) {
+      const vm = this;
+
+      axios
+        .get(`/api/reportes/nomina/detalle/${id}`, {
+          headers: {
+            Authorization: `Bearer ${vm.$store.state.currentUser.token}`
+          }
+        })
+        .then(res => {
+          const date = moment().format("DD-MM-YYY, h:mm:ss a");
+
+          const nominaDesde = moment(res.data.desde).format("DD-MM-YYY");
+          const nominaHasta = moment(res.data.hasta).format("DD-MM-YYY");
+
+          let dd = {
+            footer: {
+              columns: [
+                {
+                  text: `Direccion`,
+                  alignment: 'center',
+                  bold: true, 
+                }
+              ]
+            },
+            content: [
+              {
+                stack: [
+                  `${vm.$store.state.empresa.nombre}`,
+                  `RIF V-12312413534`
+                ],
+                style: 'header'
+              },
+              {
+                text: 'Recibo de pago',
+                bold: true,
+                alignment: 'center',
+                fontSize: 16,
+                margin: [0, 0, 0, 4]
+              },
+              {
+                text: `Emitido el ${date}`,
+                bold: true,
+                alignment: 'center',
+                fontSize: 10,
+                margin: [0, 0, 0, 4]
+              },
+              {
+                text: `Nómina del ${nominaDesde} al ${nominaHasta}`,
+                bold: true,
+                alignment: 'center',
+                margin: [0, 0, 0, 15]
+              },
+              {
+                text: `${res.data.cedula} - ${res.data.nombre1} ${res.data.apellido1}`,
+                bold: true,
+                margin: [0, 0, 0, 2]
+              },
+              {
+                text: `Cargo ${res.data.cargo}`,
+                bold: true,
+                margin: [0, 0, 0, 2]
+              },
+              {
+                text: `Fecha de Ingreso ${res.data.fecha_ingreso}`,
+                bold: true,
+                margin: [0, 0, 0, 10]
+              },
+              {
+                layout: 'headerLineOnly', // optional
+                table: {
+                  // headers are automatically repeated if the table spans over multiple pages
+                  // you can declare how many rows should be treated as headers
+                  headerRows: 1,
+                  widths: [ 200, '*', '*', '*' ],
+
+                  body: [
+                    [ 'Descripción', {text: 'D/H/Porc', alignment: 'right'}, {text: 'Asignaciones', alignment: 'right'}, {text: 'Deducciones', alignment: 'right'} ],
+                    [ 'Salario', {text: `${res.data.dias_trabajados}`, alignment: 'right'}, {text: `${res.data.montos.pago_salario}`, alignment: 'right'}, {text: '0', alignment: 'right'} ],
+                    [ 'Horas Extras Diurnas', {text: `${res.data.he_diurnas}`, alignment: 'right'}, {text: `${res.data.montos.he_diurnas}`, alignment: 'right'}, {text: '0', alignment: 'right'} ],
+                    [ 'Horas Extras Nocturnas', {text: `${res.data.he_nocturnas}`, alignment: 'right'}, {text: `${res.data.montos.he_nocturnas}`, alignment: 'right'}, {text: '0', alignment: 'right'} ],
+                    [ 'Domingo / Feriados', {text: `${res.data.feriados}`, alignment: 'right'}, {text: `${res.data.montos.feriados}`, alignment: 'right'}, {text: '0', alignment: 'right'} ],
+                    [ 'IVSS', {text: `4.00`, alignment: 'right'}, {text: `0`, alignment: 'right'}, {text: `${res.data.montos.ivss}`, alignment: 'right'} ],
+                    [ 'Paro Forzoso', {text: `0.50`, alignment: 'right'}, {text: `0`, alignment: 'right'}, {text: `${res.data.montos.paro_forzoso}`, alignment: 'right'} ],
+                    [ {text: 'FAOV'}, {text: `1.00`, alignment: 'right'}, {text: `0`, alignment: 'right'}, {text: `${res.data.montos.faov}`, alignment: 'right'} ],
+                    [ {text: 'TOTALES', bold: true}, {text: ``, alignment: 'right'}, {text: `${res.data.montos.total_asignaciones}`, bold: true, alignment: 'right'}, {text: `${res.data.montos.total_deducciones}`,  bold: true, alignment: 'right'} ],
+                    [ {text: ''}, {text: ``, alignment: 'right'}, {text: `Neto a Cobrar Bs.`, bold: true, alignment: 'right'}, {text: `${res.data.montos.monto_total}`,  bold: true, alignment: 'right'} ],
+
+                  ]
+                }
+              },
+              {
+                text: `He recibido de la Empresa la cantidad especificada en este recibo, que comprende con la totalidad de mi salario al periodo que se indica en el mismo`,
+                fontSize: 10,
+                bold: true,
+                margin: [0, 20, 0, 50]
+              },
+              {
+                text: `Recibo Conforme`,
+                bold: true,
+                fontSize: 16,
+                alignment: 'center',
+                margin: [0, 0, 0, 50]
+              },
+              {
+                text: `C.I N° ${res.data.cedula}`,
+                fontSize: 16,
+                alignment: 'center',
+                bold: true,
+                border: [false, true, false, false],
+                margin: [2, 0, 0, 10]
+              }
+            ],
+            styles: {
+              header: {
+                fontSize: 18,
+                bold: true,
+                alignment: 'center',
+                margin: [0, 0, 0, 20]
+              }
+            }
+          };
+
+          pdfMake.createPdf(dd).open();
+        })
+        .catch(err => console.log(err));
     }
   },
   filters: {

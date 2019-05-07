@@ -117,5 +117,13 @@ class UtilidadesController extends Controller
       return response()->json($disponibles);
     }
 
+    public function delete($id) {
+      $utilidades = Utilidades::find($id);
+
+      $utilidades->delete();
+
+      return response()->json(["res" => "ok"]);
+    }
+
 
 }

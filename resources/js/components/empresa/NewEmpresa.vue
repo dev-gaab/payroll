@@ -5,6 +5,9 @@
       <v-card class="elevation-12">
         <!-- Header card -->
         <v-toolbar dark color="teal darken-1" dense>
+          <v-btn icon color="teal darken-4" dark @click.native="$router.push({ path: '/empresas' })">
+            <v-icon>reply</v-icon>
+          </v-btn>
           <v-toolbar-title>Empresa</v-toolbar-title>
           <v-spacer></v-spacer>
         </v-toolbar>

@@ -84,6 +84,12 @@ Route::group(['prefix' => 'utilidades', 'middleware' => 'auth:api'], function() 
   Route::delete('/{id}', 'Api\UtilidadesController@delete');
 });
 
+Route::group(['prefix' => 'reportes', 'middleware' => 'auth:api'], function() {
+  Route::get('/empresas/activas', 'Api\ReportesController@empresasActivas');
+  Route::get('/empresas/inactivas', 'Api\ReportesController@empresasInactivas');
+  Route::get('/nomina/detalle/{id}', 'Api\ReportesController@nominaUno');
+});
+
 
 // Route::group(['prefix' => 'bases', 'middleware' => 'auth:api'], function() {
 //   Route::get('/', 'Api\BasesController@verActual');

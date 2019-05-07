@@ -24,6 +24,7 @@
             color="teal darken-4"
             dark
             @click="newEmpresa"
+            title="Nueva Empresa"
           >
             <v-icon>add</v-icon>
           </v-btn>
@@ -44,13 +45,13 @@
               >
                 <v-icon small>fa-check</v-icon>
               </v-btn>
-              <v-btn @click="verEmpresa(props.item.id)" icon small color="primary">
+              <v-btn @click="verEmpresa(props.item.id)" icon small color="primary" title="Utilizar empresa">
                 <v-icon small>fa-eye</v-icon>
               </v-btn>
-              <v-btn @click="editEmpresa(props.item.id)" icon small color="warning">
+              <v-btn @click="editEmpresa(props.item.id)" icon small color="warning" v-if="$store.state.currentUser.isAdmin" title="Editar empresa">
                 <v-icon small>fa-edit</v-icon>
               </v-btn>
-              <v-btn @click="disableEmpresa(props.item.id)" v-if="props.item.estatus == 'activa'" icon small color="error">
+              <v-btn @click="disableEmpresa(props.item.id)" v-if="props.item.estatus == 'activa' && props.item.id != empresaId && $store.state.currentUser.isAdmin"" icon small color="error" title="Inhabilitar Empresa">
                 <v-icon small>fa-lock</v-icon>
               </v-btn>
             </td>
