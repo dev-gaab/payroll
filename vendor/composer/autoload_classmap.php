@@ -6,12 +6,15 @@ $vendorDir = dirname(dirname(__FILE__));
 $baseDir = dirname($vendorDir);
 
 return array(
+    'App\\Cargos' => $baseDir . '/app/Cargos.php',
+    'App\\Configuraciones' => $baseDir . '/app/Configuraciones.php',
     'App\\Console\\Kernel' => $baseDir . '/app/Console/Kernel.php',
     'App\\Exceptions\\Handler' => $baseDir . '/app/Exceptions/Handler.php',
     'App\\Http\\Controllers\\Api\\BasesController' => $baseDir . '/app/Http/Controllers/Api/BasesController.php',
     'App\\Http\\Controllers\\Api\\EmpresaController' => $baseDir . '/app/Http/Controllers/Api/EmpresaController.php',
     'App\\Http\\Controllers\\Api\\NominaController' => $baseDir . '/app/Http/Controllers/Api/NominaController.php',
     'App\\Http\\Controllers\\Api\\PrestacionesController' => $baseDir . '/app/Http/Controllers/Api/PrestacionesController.php',
+    'App\\Http\\Controllers\\Api\\ReportesController' => $baseDir . '/app/Http/Controllers/Api/ReportesController.php',
     'App\\Http\\Controllers\\Api\\TrabajadorController' => $baseDir . '/app/Http/Controllers/Api/TrabajadorController.php',
     'App\\Http\\Controllers\\Api\\UserController' => $baseDir . '/app/Http/Controllers/Api/UserController.php',
     'App\\Http\\Controllers\\Api\\UtilidadesController' => $baseDir . '/app/Http/Controllers/Api/UtilidadesController.php',

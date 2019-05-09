@@ -63,7 +63,7 @@ class TrabajadorController extends Controller
       ->where('id', '<>', $id)
       ->first();
 
-    if($validate_cedula != null)
+    if ($validate_cedula != null)
       return response()->json(['error' => 'Ya existe un trabajador con la misma cedula']);
 
     $sal = Salario::where('trabajador_id', $id)
@@ -107,6 +107,7 @@ class TrabajadorController extends Controller
     $trabajador->apellido2 = $request->apellido2;
     $trabajador->cargo = $request->cargo;
     $trabajador->fecha_nacimiento = $request->fecha_nacimiento;
+    $trabajador->fecha_ingreso = $request->fecha_ingreso;
     $trabajador->sexo = $request->sexo;
     $trabajador->direccion = $request->direccion;
     $trabajador->telefono_fijo = $request->telefono_fijo;
@@ -123,15 +124,15 @@ class TrabajadorController extends Controller
   {
 
     // Validar Cedula existente
-      $validate_cedula = Trabajador::where('cedula', $request->cedula)
-        ->where('empresa_id', $id)
-        ->where('estatus', 'activo')
-        ->first();
+    $validate_cedula = Trabajador::where('cedula', $request->cedula)
+      ->where('empresa_id', $id)
+      ->where('estatus', 'activo')
+      ->first();
 
-      if($validate_cedula != null)
-        return response()->json(['error' => 'Ya existe un trabajador con la misma cedula']);
+    if ($validate_cedula != null)
+      return response()->json(['error' => 'Ya existe un trabajador con la misma cedula']);
 
-    DB::transaction(function () use($id, $request) {
+    DB::transaction(function () use ($id, $request) {
 
       $trabajador = new Trabajador();
 
@@ -178,7 +179,6 @@ class TrabajadorController extends Controller
 
 
     return response()->json(['message' => 'ok']);
-
   }
 
   public function inhabilitar($id, Request $request)

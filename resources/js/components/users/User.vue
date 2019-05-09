@@ -31,12 +31,18 @@
             <td>{{ props.item.estatus | capitalize}}</td>
             <!-- Acciones -->
             <td class="justify-center layout px-0">
-              <v-btn @click="editUserModal(props.item.id)" icon small color="warning" title="Editar Usuario">
+              <v-btn
+                @click="editUserModal(props.item.id)"
+                icon
+                small
+                color="warning"
+                title="Editar Usuario"
+              >
                 <v-icon small>fa-edit</v-icon>
               </v-btn>
               <v-btn
                 @click="disableUser(props.item.id)"
-                v-if="props.item.estatus == 'activo'"
+                v-if="props.item.estatus == 'activo' && props.item.username == $store.state.currentUser.user.username"
                 icon
                 small
                 color="error"
@@ -84,14 +90,19 @@
           <form @submit.prevent="updUser" id="userForm">
             <v-card-text>
               <v-text-field
-                :color="errors.has('nombre') ? 'error' : 'teal darken-1'"color="teal darken-1"
+                :color="errors.has('nombre') ? 'error' : 'teal darken-1'"
+                color="teal darken-1"
                 v-model="user.nombre"
                 name="nombre"
                 label="Nombre"
                 id="nombre"
                 v-validate="'required|alpha'"
               ></v-text-field>
-              <v-alert v-show="errors.has('nombre')" :value="true" type="error">{{errors.first('nombre')}}</v-alert>
+              <v-alert
+                v-show="errors.has('nombre')"
+                :value="true"
+                type="error"
+              >{{errors.first('nombre')}}</v-alert>
 
               <v-text-field
                 :color="errors.has('apellido') ? 'error' : 'teal darken-1'"
@@ -230,7 +241,7 @@ export default {
   },
   methods: {
     newUser() {
-      this.$router.push({path: '/users/nuevo'})
+      this.$router.push({ path: "/users/nuevo" });
     },
     allUsers() {
       const vm = this;
@@ -293,9 +304,8 @@ export default {
             vm.user = {};
             vm.alertTableMessage = "Usuario modificado!";
             vm.alertTable = true;
-            vm.alertTableType = 'success';
+            vm.alertTableType = "success";
             vm.allUsers();
-
           })
           .catch(err => console.log(err));
       });
@@ -303,17 +313,21 @@ export default {
     disableUser(id) {
       const vm = this;
 
-      if(window.confirm('¿Esta seguro que desea inhabilitar al usuario?')) {
+      if (window.confirm("¿Esta seguro que desea inhabilitar al usuario?")) {
         axios
-          .put(`http://payroll.com.local/api/users/disable/${id}`, {}, {
-            headers: {
-              Authorization: `Bearer ${vm.$store.state.currentUser.token}`
+          .put(
+            `http://payroll.com.local/api/users/disable/${id}`,
+            {},
+            {
+              headers: {
+                Authorization: `Bearer ${vm.$store.state.currentUser.token}`
+              }
             }
-          })
+          )
           .then(res => {
             vm.alertTable = true;
-            vm.alertTableMessage = 'Usuario inhabilitado.';
-            vm.alertTableType = 'success';
+            vm.alertTableMessage = "Usuario inhabilitado.";
+            vm.alertTableType = "success";
             vm.allUsers();
           })
           .catch(err => console.log(err));
@@ -322,17 +336,21 @@ export default {
     enableUser(id) {
       const vm = this;
 
-      if(window.confirm('¿Esta seguro que desea habilitar al usuario?')) {
+      if (window.confirm("¿Esta seguro que desea habilitar al usuario?")) {
         axios
-          .put(`http://payroll.com.local/api/users/enable/${id}`, {}, {
-            headers: {
-              Authorization: `Bearer ${vm.$store.state.currentUser.token}`
+          .put(
+            `http://payroll.com.local/api/users/enable/${id}`,
+            {},
+            {
+              headers: {
+                Authorization: `Bearer ${vm.$store.state.currentUser.token}`
+              }
             }
-          })
+          )
           .then(res => {
             vm.alertTable = true;
-            vm.alertTableMessage = 'Usuario habilitado.';
-            vm.alertTableType = 'success';
+            vm.alertTableMessage = "Usuario habilitado.";
+            vm.alertTableType = "success";
             vm.allUsers();
           })
           .catch(err => console.log(err));

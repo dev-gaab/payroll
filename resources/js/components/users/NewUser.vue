@@ -22,7 +22,7 @@
               name="username"
               label="Nombre de Usuario"
               id="username"
-              v-validate="'required|alpha_num|min:6|max:16'"
+              v-validate="'required|alpha_num|min:8|max:16'"
             ></v-text-field>
             <v-alert v-show="errors.has('username')" type="error">{{errors.first('username')}}</v-alert>
 

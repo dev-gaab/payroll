@@ -456,12 +456,15 @@ class ComposerStaticInit2dad47aeafc1cd7084c37721e282f3e8
     );
 
     public static $classMap = array (
+        'App\\Cargos' => __DIR__ . '/../..' . '/app/Cargos.php',
+        'App\\Configuraciones' => __DIR__ . '/../..' . '/app/Configuraciones.php',
         'App\\Console\\Kernel' => __DIR__ . '/../..' . '/app/Console/Kernel.php',
         'App\\Exceptions\\Handler' => __DIR__ . '/../..' . '/app/Exceptions/Handler.php',
         'App\\Http\\Controllers\\Api\\BasesController' => __DIR__ . '/../..' . '/app/Http/Controllers/Api/BasesController.php',
         'App\\Http\\Controllers\\Api\\EmpresaController' => __DIR__ . '/../..' . '/app/Http/Controllers/Api/EmpresaController.php',
         'App\\Http\\Controllers\\Api\\NominaController' => __DIR__ . '/../..' . '/app/Http/Controllers/Api/NominaController.php',
         'App\\Http\\Controllers\\Api\\PrestacionesController' => __DIR__ . '/../..' . '/app/Http/Controllers/Api/PrestacionesController.php',
+        'App\\Http\\Controllers\\Api\\ReportesController' => __DIR__ . '/../..' . '/app/Http/Controllers/Api/ReportesController.php',
         'App\\Http\\Controllers\\Api\\TrabajadorController' => __DIR__ . '/../..' . '/app/Http/Controllers/Api/TrabajadorController.php',
         'App\\Http\\Controllers\\Api\\UserController' => __DIR__ . '/../..' . '/app/Http/Controllers/Api/UserController.php',
         'App\\Http\\Controllers\\Api\\UtilidadesController' => __DIR__ . '/../..' . '/app/Http/Controllers/Api/UtilidadesController.php',

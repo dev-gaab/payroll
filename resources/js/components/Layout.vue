@@ -84,15 +84,6 @@
           </v-list-tile-content>
         </v-list-tile>
 
-        <v-list-tile @click="routPrestaciones">
-          <v-list-tile-action>
-            <v-icon>access_time</v-icon>
-          </v-list-tile-action>
-          <v-list-tile-content>
-            <v-list-tile-title>Prestaciones Sociales</v-list-tile-title>
-          </v-list-tile-content>
-        </v-list-tile>
-
         <v-list-group no-action>
           <v-list-tile slot="activator">
             <v-list-tile-action>
@@ -112,8 +103,8 @@
 
         <v-list-tile @click="routUsers" v-if="$store.state.currentUser.isAdmin">
           <v-list-tile-action>
-              <v-icon>account_box</v-icon>
-            </v-list-tile-action>
+            <v-icon>account_box</v-icon>
+          </v-list-tile-action>
           <v-list-tile-content>
             <v-list-tile-title>Usuarios</v-list-tile-title>
           </v-list-tile-content>
@@ -158,7 +149,7 @@
 </template>
 
 <script>
-  import axios from "axios";
+import axios from "axios";
 
 export default {
   name: "Layout",
@@ -220,27 +211,25 @@ export default {
       this.$router.push({ path: "/utilidades" });
     },
     // Reportes
-    routReportesEmpresa(){
+    routReportesEmpresa() {
       this.$router.push({ path: "/reportes/empresa" });
     },
     logout() {
-
       const vm = this;
 
-      axios.get('/api/auth/logout', {
+      axios
+        .get("/api/auth/logout", {
           headers: {
             Authorization: `Bearer ${vm.$store.state.currentUser.token}`
           }
         })
         .then(res => {
-          if(!res.data.error) {
+          if (!res.data.error) {
             this.$store.commit("logout");
             this.$router.push({ path: "/login" });
           }
         })
         .catch(err => console.log(err));
-
-      
     }
   }
 };

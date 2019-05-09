@@ -18,7 +18,14 @@
             hide-details
           ></v-text-field>
           <v-spacer></v-spacer>
-          <v-btn icon color="teal darken-4" dark @click="newTrabajador" v-if="$store.state.currentUser.isAdmin" title="Nuevo Trabajador">
+          <v-btn
+            icon
+            color="teal darken-4"
+            dark
+            @click="newTrabajador"
+            v-if="$store.state.currentUser.isAdmin"
+            title="Nuevo Trabajador"
+          >
             <v-icon>add</v-icon>
           </v-btn>
         </v-card-title>
@@ -31,10 +38,23 @@
             <td>{{props.item.fecha_ingreso | dateFormat}}</td>
             <!-- Acciones -->
             <td class="justify-center layout px-0">
-              <v-btn @click="verTrabajador(props.item.id)" icon small color="primary" title="Ver Trabajador">
+              <v-btn
+                @click="verTrabajador(props.item.id)"
+                icon
+                small
+                color="primary"
+                title="Ver Trabajador"
+              >
                 <v-icon small>fa-eye</v-icon>
               </v-btn>
-              <v-btn @click="editTrabajadorModal(props.item.id)" icon small color="warning" v-if="$store.state.currentUser.isAdmin" title="Editar modal">
+              <v-btn
+                @click="editTrabajadorModal(props.item.id)"
+                icon
+                small
+                color="warning"
+                v-if="$store.state.currentUser.isAdmin"
+                title="Editar modal"
+              >
                 <v-icon small>fa-edit</v-icon>
               </v-btn>
               <v-btn
@@ -252,7 +272,7 @@
             <v-card-text>
               <v-container grid-list-md>
                 <v-layout wrap>
-                  <v-flex xs12>
+                  <v-flex xs6>
                     <v-text-field
                       :color="errors.has('cedula') ? 'error' : 'teal darken-1'"
                       v-model="trabajador.cedula"
@@ -262,6 +282,22 @@
                       v-validate="{required: true, regex: '^([V|E]{1})([0-9]{7,8})$'}"
                     ></v-text-field>
                     <v-alert v-show="errors.has('cedula')" type="error">{{errors.first('cedula')}}</v-alert>
+                  </v-flex>
+
+                  <v-flex xs6>
+                    <v-text-field
+                      :color="errors.has('fecha_ingreso') ? 'error' : 'teal darken-1'"
+                      v-model="trabajador.fecha_ingreso"
+                      label="Fecha de ingreso"
+                      name="fecha_ingreso"
+                      id="fecha_ingreso"
+                      type="date"
+                      v-validate="'required'"
+                    ></v-text-field>
+                    <v-alert
+                      v-show="errors.has('fecha_ingreso')"
+                      type="error"
+                    >{{errors.first('fecha_ingreso')}}</v-alert>
                   </v-flex>
                 </v-layout>
                 <v-layout wrap>
@@ -573,6 +609,9 @@ export default {
       .subtract(14, "years")
       .format("YYYY-MM-DD");
     document.getElementById("fecha_nacimiento").max = fechaNacimiento;
+
+    let fechaIngreso = moment().format("YYYY-MM-DD");
+    document.getElementById("fecha_ingreso").max = fechaIngreso;
 
     let fechaActual = moment().format("YYYY-MM-DD");
     let fechaInicioDisable = moment()
