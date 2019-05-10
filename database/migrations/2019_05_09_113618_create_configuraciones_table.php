@@ -20,6 +20,7 @@ class CreateConfiguracionesTable extends Migration
       $table->boolean('ivss');
       $table->boolean('faov');
       $table->boolean('paro_forsozo');
+      $table->string('estatus');
 
       $table->foreign('empresa_id')
         ->references('id')

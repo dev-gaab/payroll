@@ -52,13 +52,29 @@ class EmpresaController extends Controller
     $empresa->rif = $request->rif;
     $empresa->razon_social = $request->razon_social;
     $empresa->direccion = $request->direccion;
-    $empresa->num_afiliacion_ivss = $request->num_afiliacion_ivss;
-    $empresa->fecha_inscripcion_ivss = $request->fecha_inscripcion_ivss;
-    $empresa->riesgo_ivss = $request->riesgo_ivss;
-    $empresa->num_afiliacion_faov = $request->num_afiliacion_faov;
-    $empresa->num_afiliacion_inces = $request->num_afiliacion_inces;
 
     $empresa->save();
+
+    if($request->cambiar_configuracion) {
+
+      $configuracion_vieja = Configuraciones::where('empresa_id', $id)
+          ->where('estatus', 'activa')
+          ->first();
+
+      $configuracion = new Configuraciones([
+        'empresa_id' => $id,
+        'dias_utilidades' => $request->dias_utilidades,
+        'ivss' => $request->ivss,
+        'faov' => $request->faov,
+        'paro_forzoso' => $request->paro_forzoso
+      ]);
+
+      if($configuracion->save()) {
+        $configuracion_vieja->estatus = 'inactiva';
+        $configuracion_vieja->save();
+      }
+      
+    }
 
     $sesion = Sesion::where("final", null)->where("usuario_id", Auth::id())->first();
 
@@ -88,11 +104,6 @@ class EmpresaController extends Controller
     $empresa->rif = $request->rif;
     $empresa->razon_social = $request->razon_social;
     $empresa->direccion = $request->direccion;
-    $empresa->num_afiliacion_ivss = $request->num_afiliacion_ivss;
-    $empresa->fecha_inscripcion_ivss = $request->fecha_inscripcion_ivss;
-    $empresa->riesgo_ivss = $request->riesgo_ivss;
-    $empresa->num_afiliacion_faov = $request->num_afiliacion_faov;
-    $empresa->num_afiliacion_inces = $request->num_afiliacion_inces;
     $empresa->estatus = 'activa';
 
     $empresa->save();
