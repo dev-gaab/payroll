@@ -551,15 +551,11 @@ export default {
       deep: true,
       handler(val) {
         if (!val) return "";
-        val.nombre1 = val.nombre1.toString();
-        val.nombre2 = val.nombre2.toString();
-        val.apellido1 = val.apellido1.toString();
-        val.apellido2 = val.apellido2.toString();
 
-        this.trabajador.nombre1 = val.nombre1.charAt(0).toUpperCase() + val.nombre1.slice(1).toLowerCase();
-        this.trabajador.nombre2 = val.nombre2.charAt(0).toUpperCase() + val.nombre2.slice(1).toLowerCase();
-        this.trabajador.apellido1 = val.apellido1.charAt(0).toUpperCase() + val.apellido1.slice(1).toLowerCase();
-        this.trabajador.apellido2 = val.apellido2.charAt(0).toUpperCase() + val.apellido2.slice(1).toLowerCase();
+        this.trabajador.nombre1 = this.strFormat(val.nombre1);
+        this.trabajador.nombre2 = this.strFormat(val.nombre2);
+        this.trabajador.apellido1 = this.strFormat(val.apellido1);
+        this.trabajador.apellido2 = this.strFormat(val.apellido2);
       }
     }
   },
@@ -639,6 +635,12 @@ export default {
     document.getElementById("fecha_disable").max = fechaActual;
   },
   methods: {
+    strFormat(val) {
+      if (val === null || val == "") return "";
+
+      val = val.toString();
+      return val.charAt(0).toUpperCase() + val.slice(1).toLowerCase();
+    },
     newTrabajador() {
       this.$router.push({ path: "/trabajadores/nuevo" });
     },

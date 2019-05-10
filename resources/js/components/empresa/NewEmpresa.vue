@@ -5,7 +5,12 @@
       <v-card class="elevation-12">
         <!-- Header card -->
         <v-toolbar dark color="teal darken-1" dense>
-          <v-btn icon color="teal darken-4" dark @click.native="$router.push({ path: '/empresas' })">
+          <v-btn
+            icon
+            color="teal darken-4"
+            dark
+            @click.native="$router.push({ path: '/empresas' })"
+          >
             <v-icon>reply</v-icon>
           </v-btn>
           <v-toolbar-title>Empresa</v-toolbar-title>
@@ -32,7 +37,6 @@
                 </v-flex>
               </v-layout>
               <v-layout wrap>
-          
                 <v-flex xs12>
                   <v-text-field
                     :color="errors.has('razon_social') ? 'error' : 'teal darken-1'"
@@ -60,7 +64,10 @@
                     rows="2"
                     v-validate="{required: true, regex: /[a-zA-Z0-9\.\,\#\/\sáéíóú]+$/}"
                   ></v-textarea>
-                  <v-alert v-show="errors.has('direccion')" type="error">{{errors.first('direccion')}}</v-alert>
+                  <v-alert
+                    v-show="errors.has('direccion')"
+                    type="error"
+                  >{{errors.first('direccion')}}</v-alert>
                 </v-flex>
               </v-layout>
 
@@ -110,9 +117,9 @@
                     name="num_faov"
                     label="Numero de afiliación FAOV"
                     id="num_faov"
-                  v-validate="{regex: /[a-zA-z0-9]+$/}"
-                    ></v-text-field>
-                    <v-alert v-show="errors.has('num_faov')" type="error">{{errors.first('num_faov')}}</v-alert>
+                    v-validate="{regex: /[a-zA-z0-9]+$/}"
+                  ></v-text-field>
+                  <v-alert v-show="errors.has('num_faov')" type="error">{{errors.first('num_faov')}}</v-alert>
                 </v-flex>
                 <v-flex xs6>
                   <v-text-field
@@ -121,9 +128,12 @@
                     name="num_inces"
                     label="Numero de afiliación INCES"
                     id="num_inces"
-                  v-validate="{regex: /[a-zA-z0-9]+$/}"
-                    ></v-text-field>
-                    <v-alert v-show="errors.has('num_inces')" type="error">{{errors.first('num_inces')}}</v-alert>
+                    v-validate="{regex: /[a-zA-z0-9]+$/}"
+                  ></v-text-field>
+                  <v-alert
+                    v-show="errors.has('num_inces')"
+                    type="error"
+                  >{{errors.first('num_inces')}}</v-alert>
                 </v-flex>
               </v-layout>
             </v-container>
@@ -211,8 +221,8 @@ export default {
       ],
       empresas: [],
       alert: false,
-      alertType: 'error',
-      alertMsg: ''
+      alertType: "error",
+      alertMsg: ""
     };
   },
   watch: {
@@ -278,9 +288,9 @@ export default {
           })
           .then(res => {
             if (!res.data.error) {
-              vm.alert= true;
-              vm.alertType = 'success';
-              vm.alertMsg = 'Empresa Registrada';
+              vm.alert = true;
+              vm.alertType = "success";
+              vm.alertMsg = "Empresa Registrada";
 
               vm.$data.empresas.push({
                 rif: vm.$data.empresa.rif,
@@ -288,9 +298,10 @@ export default {
               });
 
               vm.$data.empresa = new Empresa();
+              vm.$validator.reset();
             } else {
-              vm.alert= true;
-              vm.alertType = 'error';
+              vm.alert = true;
+              vm.alertType = "error";
               vm.alertMsg = res.data.error;
             }
           })

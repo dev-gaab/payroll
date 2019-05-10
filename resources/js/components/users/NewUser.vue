@@ -78,7 +78,10 @@
               v-validate="'required|confirmed:password'"
               data-vv-as="password"
             ></v-text-field>
-            <v-alert v-show="errors.has('password_confirmation')" type="error">{{errors.first('password_confirmation')}}</v-alert>
+            <v-alert
+              v-show="errors.has('password_confirmation')"
+              type="error"
+            >{{errors.first('password_confirmation')}}</v-alert>
             <v-select
               :items="roles"
               color="teal darken-1"
@@ -151,7 +154,7 @@ export default {
       users: []
     };
   },
-  created () {
+  created() {
     const dict = {
       custom: {
         username: {
@@ -183,8 +186,8 @@ export default {
           confirmed: "Las contraseñas deben coincidir "
         },
         rol: {
-          required: 'No debe ser vacio',
-          alpha: 'Solo se permiten letras'
+          required: "No debe ser vacio",
+          alpha: "Solo se permiten letras"
         }
       }
     };
@@ -199,15 +202,11 @@ export default {
           return;
         }
         axios
-          .post(
-            `http://payroll.com.local/api/auth/signup`,
-            vm.user,
-            {
-              headers: {
-                Authorization: `Bearer ${vm.$store.state.currentUser.token}`
-              }
+          .post(`http://payroll.com.local/api/auth/signup`, vm.user, {
+            headers: {
+              Authorization: `Bearer ${vm.$store.state.currentUser.token}`
             }
-          )
+          })
           .then(res => {
             if (!res.data.error) {
               vm.$data.users.push({
@@ -223,10 +222,11 @@ export default {
               vm.$data.alert = true;
               vm.$data.alertType = "success";
               vm.$data.alertMessage = "Usuario Agregado!";
+              vm.$validator.reset();
             } else {
               vm.$data.alert = true;
               vm.$data.alertType = "error";
-              vm.$data.alertMessage = res.data.error
+              vm.$data.alertMessage = res.data.error;
             }
 
             document.getElementById("username").focus();

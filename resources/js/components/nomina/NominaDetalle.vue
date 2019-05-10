@@ -31,13 +31,32 @@
             <td>{{ props.item.montos.monto_total | numberFormat}}</td>
             <!-- Acciones -->
             <td class="justify-center layout px-0">
-              <v-btn @click="verNominaDetalle(props.item.id)" icon small color="primary" title="Ver Nomina Detalle">
+              <v-btn
+                @click="verNominaDetalle(props.item.id)"
+                icon
+                small
+                color="primary"
+                title="Ver Nomina Detalle"
+              >
                 <v-icon small>fa-eye</v-icon>
               </v-btn>
-              <v-btn @click="editNominaDetalleModal(props.item.id)" icon small color="warning" title="Editar Nomina Detalle">
+              <v-btn
+                @click="editNominaDetalleModal(props.item.id)"
+                icon
+                small
+                color="warning"
+                title="Editar Nomina Detalle"
+              >
                 <v-icon small>fa-edit</v-icon>
               </v-btn>
-              <v-btn @click="print(props.item.id)" icon small color="teal darken-1" dark title="Imprimir recibo de pago">
+              <v-btn
+                @click="print(props.item.id)"
+                icon
+                small
+                color="teal darken-1"
+                dark
+                title="Imprimir recibo de pago"
+              >
                 <v-icon small>fa-print</v-icon>
               </v-btn>
             </td>
@@ -71,11 +90,14 @@
                 <v-flex xs6>
                   <v-list-tile>
                     <v-list-tile-content>
-                      <v-list-tile-title><strong>Dias Trabajados</strong></v-list-tile-title>
+                      <v-list-tile-title>
+                        <strong>Dias Trabajados</strong>
+                      </v-list-tile-title>
 
                       <v-list-tile-sub-title>
-
-                        <span class="text--primary">{{nominaDetalle.dias_trabajados}} días = {{nominaDetalle.montos.pago_salario | numberFormat}}</span>
+                        <span
+                          class="text--primary"
+                        >{{nominaDetalle.dias_trabajados}} días = {{nominaDetalle.montos.pago_salario | numberFormat}}</span>
                       </v-list-tile-sub-title>
                     </v-list-tile-content>
                   </v-list-tile>
@@ -83,11 +105,14 @@
                 <v-flex xs6>
                   <v-list-tile>
                     <v-list-tile-content>
-                      <v-list-tile-title><strong>Dias Feriados</strong></v-list-tile-title>
+                      <v-list-tile-title>
+                        <strong>Dias Feriados</strong>
+                      </v-list-tile-title>
 
                       <v-list-tile-sub-title>
-
-                        <span class="text--primary">{{nominaDetalle.feriados}} días = {{nominaDetalle.montos.feriados | numberFormat}}</span>
+                        <span
+                          class="text--primary"
+                        >{{nominaDetalle.feriados}} días = {{nominaDetalle.montos.feriados | numberFormat}}</span>
                       </v-list-tile-sub-title>
                     </v-list-tile-content>
                   </v-list-tile>
@@ -98,11 +123,14 @@
                 <v-flex xs6>
                   <v-list-tile>
                     <v-list-tile-content>
-                      <v-list-tile-title><strong>Horas extras diurnas</strong></v-list-tile-title>
+                      <v-list-tile-title>
+                        <strong>Horas extras diurnas</strong>
+                      </v-list-tile-title>
 
                       <v-list-tile-sub-title>
-
-                        <span class="text--primary">{{nominaDetalle.he_diurnas}} horas = {{nominaDetalle.montos.he_diurnas | numberFormat}}</span>
+                        <span
+                          class="text--primary"
+                        >{{nominaDetalle.he_diurnas}} horas = {{nominaDetalle.montos.he_diurnas | numberFormat}}</span>
                       </v-list-tile-sub-title>
                     </v-list-tile-content>
                   </v-list-tile>
@@ -110,11 +138,14 @@
                 <v-flex xs6>
                   <v-list-tile>
                     <v-list-tile-content>
-                      <v-list-tile-title><strong>Horas extras nocturnas</strong></v-list-tile-title>
+                      <v-list-tile-title>
+                        <strong>Horas extras nocturnas</strong>
+                      </v-list-tile-title>
 
                       <v-list-tile-sub-title>
-
-                        <span class="text--primary">{{nominaDetalle.he_nocturnas}} horas = {{nominaDetalle.montos.he_nocturnas | numberFormat}}</span>
+                        <span
+                          class="text--primary"
+                        >{{nominaDetalle.he_nocturnas}} horas = {{nominaDetalle.montos.he_nocturnas | numberFormat}}</span>
                       </v-list-tile-sub-title>
                     </v-list-tile-content>
                   </v-list-tile>
@@ -128,11 +159,14 @@
                 <v-flex xs6>
                   <v-list-tile>
                     <v-list-tile-content>
-                      <v-list-tile-title><strong>IVSS</strong></v-list-tile-title>
+                      <v-list-tile-title>
+                        <strong>IVSS</strong>
+                      </v-list-tile-title>
 
                       <v-list-tile-sub-title>
-
-                        <span class="text--primary">{{nominaDetalle.ivss ? 'Si' : 'No'}} = {{nominaDetalle.montos.ivss | numberFormat}}</span>
+                        <span
+                          class="text--primary"
+                        >{{nominaDetalle.ivss ? 'Si' : 'No'}} = {{nominaDetalle.montos.ivss | numberFormat}}</span>
                       </v-list-tile-sub-title>
                     </v-list-tile-content>
                   </v-list-tile>
@@ -140,11 +174,14 @@
                 <v-flex xs6>
                   <v-list-tile>
                     <v-list-tile-content>
-                      <v-list-tile-title><strong>FAOV</strong></v-list-tile-title>
+                      <v-list-tile-title>
+                        <strong>FAOV</strong>
+                      </v-list-tile-title>
 
                       <v-list-tile-sub-title>
-
-                        <span class="text--primary">{{nominaDetalle.faov ? 'Si' : 'No'}} = {{nominaDetalle.montos.faov | numberFormat}}</span>
+                        <span
+                          class="text--primary"
+                        >{{nominaDetalle.faov ? 'Si' : 'No'}} = {{nominaDetalle.montos.faov | numberFormat}}</span>
                       </v-list-tile-sub-title>
                     </v-list-tile-content>
                   </v-list-tile>
@@ -155,11 +192,14 @@
                 <v-flex xs6>
                   <v-list-tile>
                     <v-list-tile-content>
-                      <v-list-tile-title><strong>Paro Forzoso</strong></v-list-tile-title>
+                      <v-list-tile-title>
+                        <strong>Paro Forzoso</strong>
+                      </v-list-tile-title>
 
                       <v-list-tile-sub-title>
-
-                        <span class="text--primary">{{nominaDetalle.paro_forzoso ? 'Si' : 'No'}} = {{nominaDetalle.montos.paro_forzoso | numberFormat}}</span>
+                        <span
+                          class="text--primary"
+                        >{{nominaDetalle.paro_forzoso ? 'Si' : 'No'}} = {{nominaDetalle.montos.paro_forzoso | numberFormat}}</span>
                       </v-list-tile-sub-title>
                     </v-list-tile-content>
                   </v-list-tile>
@@ -173,10 +213,14 @@
                 <v-flex xs6>
                   <v-list-tile>
                     <v-list-tile-content>
-                      <v-list-tile-title><strong>Total Asignaciones</strong></v-list-tile-title>
+                      <v-list-tile-title>
+                        <strong>Total Asignaciones</strong>
+                      </v-list-tile-title>
 
                       <v-list-tile-sub-title>
-                        <span class="text--primary">{{nominaDetalle.montos.total_asignaciones | numberFormat}}</span>
+                        <span
+                          class="text--primary"
+                        >{{nominaDetalle.montos.total_asignaciones | numberFormat}}</span>
                       </v-list-tile-sub-title>
                     </v-list-tile-content>
                   </v-list-tile>
@@ -184,11 +228,14 @@
                 <v-flex xs6>
                   <v-list-tile>
                     <v-list-tile-content>
-                      <v-list-tile-title><strong>Total Deducciones</strong></v-list-tile-title>
+                      <v-list-tile-title>
+                        <strong>Total Deducciones</strong>
+                      </v-list-tile-title>
 
                       <v-list-tile-sub-title>
-
-                        <span class="text--primary">{{nominaDetalle.montos.total_deducciones | numberFormat}}</span>
+                        <span
+                          class="text--primary"
+                        >{{nominaDetalle.montos.total_deducciones | numberFormat}}</span>
                       </v-list-tile-sub-title>
                     </v-list-tile-content>
                   </v-list-tile>
@@ -199,11 +246,14 @@
                 <v-flex xs6>
                   <v-list-tile>
                     <v-list-tile-content>
-                      <v-list-tile-title><strong>Cesta Ticket</strong></v-list-tile-title>
+                      <v-list-tile-title>
+                        <strong>Cesta Ticket</strong>
+                      </v-list-tile-title>
 
                       <v-list-tile-sub-title>
-
-                        <span class="text--primary">{{ nominaDetalle.montos.cesta_ticket | numberFormat}}</span>
+                        <span
+                          class="text--primary"
+                        >{{ nominaDetalle.montos.cesta_ticket | numberFormat}}</span>
                       </v-list-tile-sub-title>
                     </v-list-tile-content>
                   </v-list-tile>
@@ -212,17 +262,19 @@
                 <v-flex xs6>
                   <v-list-tile>
                     <v-list-tile-content>
-                      <v-list-tile-title><strong>Total a pagar</strong></v-list-tile-title>
+                      <v-list-tile-title>
+                        <strong>Total a pagar</strong>
+                      </v-list-tile-title>
 
                       <v-list-tile-sub-title>
-
-                        <span class="text--primary">{{nominaDetalle.montos.monto_total | numberFormat}}</span>
+                        <span
+                          class="text--primary"
+                        >{{nominaDetalle.montos.monto_total | numberFormat}}</span>
                       </v-list-tile-sub-title>
                     </v-list-tile-content>
                   </v-list-tile>
                 </v-flex>
               </v-layout>
-
             </v-container>
           </v-card-text>
 
@@ -273,7 +325,10 @@
                       id="feriados"
                       v-validate="'numeric|min_value:0|max_value:15'"
                     ></v-text-field>
-                    <v-alert v-show="errors.has('feriados')" type="error">{{errors.first('feriados')}}</v-alert>
+                    <v-alert
+                      v-show="errors.has('feriados')"
+                      type="error"
+                    >{{errors.first('feriados')}}</v-alert>
                   </v-flex>
                 </v-layout>
 
@@ -302,12 +357,14 @@
                       id="he_diurnas"
                       v-validate="'numeric|min_value:0'"
                     ></v-text-field>
-                    <v-alert v-show="errors.has('he_diurnas')" type="error">{{errors.first('he_diurnas')}}</v-alert>
+                    <v-alert
+                      v-show="errors.has('he_diurnas')"
+                      type="error"
+                    >{{errors.first('he_diurnas')}}</v-alert>
                   </v-flex>
                 </v-layout>
 
                 <v-layout wrap>
-
                   <v-flex xs6>
                     <v-checkbox v-model="nominaDetalleUpd.faov" label="FAOV"></v-checkbox>
                   </v-flex>
@@ -317,7 +374,6 @@
                   </v-flex>
                 </v-layout>
               </v-container>
-
             </v-card-text>
             <v-card-actions>
               <v-spacer></v-spacer>
@@ -365,8 +421,8 @@ export default {
       dialogVer: false,
       dialogUpd: false,
       alert: false,
-      alertType: 'error',
-      alertMsg: ''
+      alertType: "error",
+      alertMsg: ""
     };
   },
   components: {},
@@ -466,7 +522,7 @@ export default {
             vm.dialogUpd = false;
             vm.alert = true;
             vm.alertType = "success";
-            vm.alertMsg = "Nómina modificada"
+            vm.alertMsg = "Nómina modificada";
           })
           .catch(err => console.log(err));
       });
@@ -481,18 +537,35 @@ export default {
           }
         })
         .then(res => {
-          const date = moment().format("DD-MM-YYY, h:mm:ss a");
+          const date = moment().format("DD-MM-YYYY, h:mm:ss a");
 
-          const nominaDesde = moment(res.data.desde).format("DD-MM-YYY");
-          const nominaHasta = moment(res.data.hasta).format("DD-MM-YYY");
+          const nominaDesde = moment(res.data.desde).format("DD-MM-YYYY");
+          const nominaHasta = moment(res.data.hasta).format("DD-MM-YYYY");
+          const fechaIngreso = moment(res.data.fecha_ingreso).format(
+            "DD-MM-YYY"
+          );
+          const pago_salario = this.nmbFormat(res.data.montos.pago_salario);
+          const he_diurnas = this.nmbFormat(res.data.montos.he_diurnas);
+          const he_nocturnas = this.nmbFormat(res.data.montos.he_nocturnas);
+          const feriados = this.nmbFormat(res.data.montos.feriados);
+          const ivss = this.nmbFormat(res.data.montos.ivss);
+          const paro_forzoso = this.nmbFormat(res.data.montos.paro_forzoso);
+          const faov = this.nmbFormat(res.data.montos.faov);
+          const total_asignaciones = this.nmbFormat(
+            res.data.montos.total_asignaciones
+          );
+          const total_deducciones = this.nmbFormat(
+            res.data.montos.total_deducciones
+          );
+          const monto_total = this.nmbFormat(res.data.montos.monto_total);
 
           let dd = {
             footer: {
               columns: [
                 {
                   text: `Direccion`,
-                  alignment: 'center',
-                  bold: true, 
+                  alignment: "center",
+                  bold: true
                 }
               ]
             },
@@ -502,30 +575,32 @@ export default {
                   `${vm.$store.state.empresa.nombre}`,
                   `RIF V-12312413534`
                 ],
-                style: 'header'
+                style: "header"
               },
               {
-                text: 'Recibo de pago',
+                text: "Recibo de pago",
                 bold: true,
-                alignment: 'center',
+                alignment: "center",
                 fontSize: 16,
                 margin: [0, 0, 0, 4]
               },
               {
                 text: `Emitido el ${date}`,
                 bold: true,
-                alignment: 'center',
+                alignment: "center",
                 fontSize: 10,
                 margin: [0, 0, 0, 4]
               },
               {
                 text: `Nómina del ${nominaDesde} al ${nominaHasta}`,
                 bold: true,
-                alignment: 'center',
+                alignment: "center",
                 margin: [0, 0, 0, 15]
               },
               {
-                text: `${res.data.cedula} - ${res.data.nombre1} ${res.data.apellido1}`,
+                text: `${res.data.cedula} - ${res.data.nombre1} ${
+                  res.data.apellido1
+                }`,
                 bold: true,
                 margin: [0, 0, 0, 2]
               },
@@ -535,30 +610,119 @@ export default {
                 margin: [0, 0, 0, 2]
               },
               {
-                text: `Fecha de Ingreso ${res.data.fecha_ingreso}`,
+                text: `Fecha de Ingreso ${fechaIngreso}`,
                 bold: true,
                 margin: [0, 0, 0, 10]
               },
               {
-                layout: 'headerLineOnly', // optional
+                layout: "headerLineOnly", // optional
                 table: {
                   // headers are automatically repeated if the table spans over multiple pages
                   // you can declare how many rows should be treated as headers
                   headerRows: 1,
-                  widths: [ 200, '*', '*', '*' ],
+                  widths: [200, "*", "*", "*"],
 
                   body: [
-                    [ 'Descripción', {text: 'D/H/Porc', alignment: 'right'}, {text: 'Asignaciones', alignment: 'right'}, {text: 'Deducciones', alignment: 'right'} ],
-                    [ 'Salario', {text: `${res.data.dias_trabajados} Días`, alignment: 'right'}, {text: `${res.data.montos.pago_salario}`, alignment: 'right'}, {text: '0', alignment: 'right'} ],
-                    [ 'Horas Extras Diurnas', {text: `${res.data.he_diurnas} Horas`, alignment: 'right'}, {text: `${res.data.montos.he_diurnas}`, alignment: 'right'}, {text: '0', alignment: 'right'} ],
-                    [ 'Horas Extras Nocturnas', {text: `${res.data.he_nocturnas} Horas`, alignment: 'right'}, {text: `${res.data.montos.he_nocturnas}`, alignment: 'right'}, {text: '0', alignment: 'right'} ],
-                    [ 'Domingo / Feriados', {text: `${res.data.feriados} Días`, alignment: 'right'}, {text: `${res.data.montos.feriados}`, alignment: 'right'}, {text: '0', alignment: 'right'} ],
-                    [ 'IVSS', {text: `4.00 %`, alignment: 'right'}, {text: `0`, alignment: 'right'}, {text: `${res.data.montos.ivss}`, alignment: 'right'} ],
-                    [ 'Paro Forzoso', {text: `0.50 %`, alignment: 'right'}, {text: `0`, alignment: 'right'}, {text: `${res.data.montos.paro_forzoso}`, alignment: 'right'} ],
-                    [ {text: 'FAOV'}, {text: `1.00 %`, alignment: 'right'}, {text: `0`, alignment: 'right'}, {text: `${res.data.montos.faov}`, alignment: 'right'} ],
-                    [ {text: 'TOTALES', bold: true}, {text: ``, alignment: 'right'}, {text: `${res.data.montos.total_asignaciones} bs`, bold: true, alignment: 'right'}, {text: `${res.data.montos.total_deducciones} bs`,  bold: true, alignment: 'right'} ],
-                    [ {text: ''}, {text: ``, alignment: 'right'}, {text: `Neto a Cobrar Bs.`, bold: true, alignment: 'right'}, {text: `${res.data.montos.monto_total}`,  bold: true, alignment: 'right'} ],
-
+                    [
+                      "Descripción",
+                      { text: "D/H/Porc", alignment: "right" },
+                      { text: "Asignaciones", alignment: "right" },
+                      { text: "Deducciones", alignment: "right" }
+                    ],
+                    [
+                      "Salario",
+                      {
+                        text: `${res.data.dias_trabajados} Días`,
+                        alignment: "right"
+                      },
+                      {
+                        text: `${pago_salario}`,
+                        alignment: "right"
+                      },
+                      { text: "0", alignment: "right" }
+                    ],
+                    [
+                      "Horas Extras Diurnas",
+                      {
+                        text: `${res.data.he_diurnas} Horas`,
+                        alignment: "right"
+                      },
+                      {
+                        text: `${he_diurnas}`,
+                        alignment: "right"
+                      },
+                      { text: "0", alignment: "right" }
+                    ],
+                    [
+                      "Horas Extras Nocturnas",
+                      {
+                        text: `${res.data.he_nocturnas} Horas`,
+                        alignment: "right"
+                      },
+                      {
+                        text: `${he_nocturnas}`,
+                        alignment: "right"
+                      },
+                      { text: "0", alignment: "right" }
+                    ],
+                    [
+                      "Domingo / Feriados",
+                      { text: `${res.data.feriados} Días`, alignment: "right" },
+                      {
+                        text: `${feriados}`,
+                        alignment: "right"
+                      },
+                      { text: "0", alignment: "right" }
+                    ],
+                    [
+                      "IVSS",
+                      { text: `4.00 %`, alignment: "right" },
+                      { text: `0`, alignment: "right" },
+                      { text: `${ivss}`, alignment: "right" }
+                    ],
+                    [
+                      "Paro Forzoso",
+                      { text: `0.50 %`, alignment: "right" },
+                      { text: `0`, alignment: "right" },
+                      {
+                        text: `${paro_forzoso}`,
+                        alignment: "right"
+                      }
+                    ],
+                    [
+                      { text: "FAOV" },
+                      { text: `1.00 %`, alignment: "right" },
+                      { text: `0`, alignment: "right" },
+                      { text: `${faov}`, alignment: "right" }
+                    ],
+                    [
+                      { text: "TOTALES", bold: true },
+                      { text: ``, alignment: "right" },
+                      {
+                        text: `${total_asignaciones}`,
+                        bold: true,
+                        alignment: "right"
+                      },
+                      {
+                        text: `${total_deducciones}`,
+                        bold: true,
+                        alignment: "right"
+                      }
+                    ],
+                    [
+                      { text: "" },
+                      { text: ``, alignment: "right" },
+                      {
+                        text: `Neto a Cobrar Bs.`,
+                        bold: true,
+                        alignment: "right"
+                      },
+                      {
+                        text: `${monto_total}`,
+                        bold: true,
+                        alignment: "right"
+                      }
+                    ]
                   ]
                 }
               },
@@ -572,13 +736,13 @@ export default {
                 text: `Recibo Conforme`,
                 bold: true,
                 fontSize: 16,
-                alignment: 'center',
+                alignment: "center",
                 margin: [0, 0, 0, 50]
               },
               {
                 text: `C.I N° ${res.data.cedula}`,
                 fontSize: 16,
-                alignment: 'center',
+                alignment: "center",
                 bold: true,
                 border: [false, true, false, false],
                 margin: [2, 0, 0, 10]
@@ -588,7 +752,7 @@ export default {
               header: {
                 fontSize: 18,
                 bold: true,
-                alignment: 'center',
+                alignment: "center",
                 margin: [0, 0, 0, 20]
               }
             }
@@ -597,6 +761,13 @@ export default {
           pdfMake.createPdf(dd).open();
         })
         .catch(err => console.log(err));
+    },
+    nmbFormat(value) {
+      value = new Intl.NumberFormat("es-VE", {
+        style: "decimal",
+        minimumFractionDigits: 2
+      }).format(value);
+      return value;
     }
   },
   filters: {
