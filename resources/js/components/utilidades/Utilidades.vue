@@ -107,23 +107,6 @@
               <v-container grid-list-md>
                 <v-layout wrap>
                   <v-flex xs12>
-                    <v-text-field
-                      :color="errors.has('utilidades') ? 'error' : 'teal darken-1'"
-                      v-model="trabajador.dias_utilidades"
-                      name="utilidades"
-                      label="Días Utilidades"
-                      id="utilidades"
-                      v-validate="'required|numeric|min_value:30|max_value:120'"
-                    ></v-text-field>
-                    <v-alert
-                      v-show="errors.has('utilidades')"
-                      type="error"
-                    >{{errors.first('utilidades')}}</v-alert>
-                  </v-flex>
-                </v-layout>
-
-                <v-layout wrap>
-                  <v-flex xs12>
                     <v-checkbox v-model="trabajador.fraccionada" label="Fraccionada?"></v-checkbox>
                   </v-flex>
                 </v-layout>
@@ -267,7 +250,7 @@ export default {
 
         axios
           .post(
-            `http://payroll.com.local/api/utilidades/calcular`,
+            `http://payroll.com.local/api/utilidades/calcular/${vm.empresa_id}`,
             vm.trabajador,
             {
               headers: {

@@ -42,7 +42,7 @@
               </v-btn>
               <v-btn
                 @click="disableUser(props.item.id)"
-                v-if="props.item.estatus == 'activo' && props.item.username == $store.state.currentUser.user.username"
+                v-if="props.item.estatus == 'activo' && props.item.username != $store.state.currentUser.user.username"
                 icon
                 small
                 color="error"
@@ -211,6 +211,8 @@ export default {
     };
   },
   async created() {
+    console.log(this.$store.state.currentUser);
+
     this.allUsers();
     // ! TODO: modularizar este diccionario y exportarlo para utilizarlo en cualquier parte..
     const dict = {

@@ -199,7 +199,6 @@ export default {
   },
   created() {
     this.getBases();
-
     const dict = {
       custom: {
         monto: {

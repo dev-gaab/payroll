@@ -7,6 +7,7 @@ use App\Http\Controllers\Controller;
 use App\Models\Salario;
 use App\Models\Utilidades;
 use App\Models\Trabajador;
+use App\Models\Empresa;
 use Illuminate\Support\Facades\DB;
 
 class UtilidadesController extends Controller
@@ -33,13 +34,9 @@ class UtilidadesController extends Controller
       return response()->json($utilidades);
     }
 
-    public function addUtilidades(Request $request) {
+    public function addUtilidades($empresa_id, Request $request) {
 
-      if ($request->dias_utilidades < 30)
-        return response()->json(["error" => "Los dias de utilidades no pueden ser menores a 30"]);
-
-      if($request->dias_utilidades > 120)
-        return response()->json(["error" => "Los dias de utilidades no pueden ser mayores a 120 dias (4 meses)"]);
+      $empresa = Empresa::find($empresa_id);
 
       $comprobar_utilidades = Utilidades::where('trabajador_id', $request->id)
         ->whereYear('fecha', date('Y'))
@@ -60,7 +57,7 @@ class UtilidadesController extends Controller
 
       if($request->fraccionada) {
         if($year_ingreso < date('Y')) {
-          $dias = ($request->dias_utilidades * (int) date('m')) / 12;
+          $dias = ($empresa->dias_utilidades * (int) date('m')) / 12;
           if(date('m') == 12) $tipo = 'completa';
           $meses = (int) date('m');
         } else {
@@ -73,11 +70,11 @@ class UtilidadesController extends Controller
 
           if($meses == 12) $tipo = 'completa';
 
-          $dias = ($request->dias_utilidades * $meses) / 12;
+          $dias = ($empresa->dias_utilidades * $meses) / 12;
         }
       } else {
         $meses = 12;
-        $dias = $request->dias_utilidades;
+        $dias = $empresa->dias_utilidades;
         $tipo = 'completa';
       }
 
@@ -86,7 +83,7 @@ class UtilidadesController extends Controller
       $utilidades = new Utilidades();
       $utilidades->trabajador_id = $request->id;
       $utilidades->fecha = date('Y-m-d');
-      $utilidades->dias = $request->dias_utilidades;
+      $utilidades->dias = $empresa->dias_utilidades;
       $utilidades->monto = $monto;
       $utilidades->sd_actual = $salario->salario_diario;
       $utilidades->tipo = $tipo;

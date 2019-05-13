@@ -82,8 +82,11 @@ export default {
         });
     },
     activarEmpresa(id, nombre, direccion) {
-      this.$store.commit("activarEmpresa", { id: id, nombre: nombre, direccion: direccion });
-      
+      this.$store.commit("activarEmpresa", {
+        id: id,
+        nombre: nombre,
+        direccion: direccion
+      });
     }
   },
   filters: {

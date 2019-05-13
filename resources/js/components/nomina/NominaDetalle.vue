@@ -609,6 +609,7 @@ export default {
           }
         })
         .then(res => {
+          console.log(res.data);
           const date = moment().format("DD-MM-YYYY, h:mm:ss a");
 
           const nominaDesde = moment(res.data.desde).format("DD-MM-YYYY");
@@ -630,6 +631,8 @@ export default {
             res.data.montos.total_deducciones
           );
           const monto_total = this.nmbFormat(res.data.montos.monto_total);
+          const otras_asignaciones = this.nmbFormat(res.data.otras_asignaciones);
+
           let dd = {
             footer: {
               columns: [
@@ -772,6 +775,15 @@ export default {
                       { text: `${faov}`, alignment: "right" }
                     ],
                     [
+                      "Otras Asignaciones",
+                      { text: ``, alignment: "right" },
+                      {
+                        text: `${otras_asignaciones}`,
+                        alignment: "right"
+                      },
+                      { text: "0", alignment: "right" },
+                    ],
+                    [
                       { text: "TOTALES", bold: true },
                       { text: ``, alignment: "right" },
                       {
@@ -806,7 +818,7 @@ export default {
                 text: `Observaciones: ${res.data.observaciones}`,
                 fontSize: 10,
                 bold: true,
-                margin: [0, 40, 0, 50]
+                margin: [0, 20, 0, 50]
               },
               {
                 text: `He recibido de la Empresa la cantidad especificada en este recibo, que comprende con la totalidad de mi salario al periodo que se indica en el mismo`,

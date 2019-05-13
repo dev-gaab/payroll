@@ -28,6 +28,7 @@ class ReportesController extends Controller
     		->join('nomina', 'nomina_detalle.nomina_id', 'nomina.id')
     		->join('trabajador', 'nomina_detalle.trabajador_id', 'trabajador.id')
     		->where('nomina_detalle.id', $id)
+            ->select('nomina.*', 'trabajador.*', 'nomina_detalle.*')
     		->first();
 
     	$nomina->montos = json_decode($nomina->montos);

@@ -547,8 +547,12 @@ export default {
         pdfMake.createPdf(dd).open();
       });
     },
-    activarEmpresa(id, nombre,direccion) {
-      this.$store.commit("activarEmpresa", { id: id, nombre: nombre, direccion: direccion });
+    activarEmpresa(id, nombre, direccion) {
+      this.$store.commit("activarEmpresa", {
+        id: id,
+        nombre: nombre,
+        direccion: direccion
+      });
 
       this.messageSuc = `¡La empresa se ha cambiado! ${nombre}`;
       this.alertSuc = true;

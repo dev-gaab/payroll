@@ -1,5 +1,5 @@
-let user = sessionStorage.getItem('user');
-let currentEmpresa = sessionStorage.getItem('empresa');
+let user = sessionStorage.getItem("user");
+let currentEmpresa = sessionStorage.getItem("empresa");
 
 if (!user) {
   user = null;
@@ -14,7 +14,6 @@ if (!currentEmpresa) {
 }
 
 export default {
-
   state: {
     currentUser: user,
     isLoggedIn: !!user,
@@ -24,23 +23,23 @@ export default {
   },
   getters: {
     isLoading(state) {
-      return state.loading
+      return state.loading;
     },
 
     isLoggedIn(state) {
-      return state.isLoggedIn
+      return state.isLoggedIn;
     },
 
     currentUser(state) {
-      return state.currentUser
+      return state.currentUser;
     },
 
     authError(state) {
-      return state.auth_error
+      return state.auth_error;
     },
 
     empresa(state) {
-      return state.empresa
+      return state.empresa;
     }
   },
   mutations: {
@@ -64,15 +63,15 @@ export default {
     },
 
     loginFailed(state, payload) {
-      state.loading = false
-      state.auth_error = payload.error
+      state.loading = false;
+      state.auth_error = payload.error;
     },
 
     logout(state) {
-      sessionStorage.clear()
-      state.isLoggedIn = false
-      state.currentUser = null
-      state.empresa = null
+      sessionStorage.clear();
+      state.isLoggedIn = false;
+      state.currentUser = null;
+      state.empresa = null;
     },
 
     activarEmpresa(state, payload) {
@@ -87,7 +86,7 @@ export default {
   },
   actions: {
     login(context) {
-      context.commit('login');
+      context.commit("login");
     }
   }
 };

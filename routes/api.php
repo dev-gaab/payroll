@@ -79,7 +79,7 @@ Route::group(['prefix' => 'vacaciones', 'middleware' => 'auth:api'], function ()
 Route::group(['prefix' => 'utilidades', 'middleware' => 'auth:api'], function () {
   Route::get('/{empresa_id}', 'Api\UtilidadesController@todas');
   Route::get('/disponibles/{empresa_id}', 'Api\UtilidadesController@disponibles');
-  Route::post('/calcular', 'Api\UtilidadesController@addUtilidades');
+  Route::post('/calcular/{empresa_id}', 'Api\UtilidadesController@addUtilidades');
   Route::get('/ver/{id}', 'Api\UtilidadesController@addUtilidades');
   Route::delete('/{id}', 'Api\UtilidadesController@delete');
 });
