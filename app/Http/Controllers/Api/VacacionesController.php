@@ -57,10 +57,10 @@ class VacacionesController extends Controller
       $years_servicio = $diferencia->y;
 
       $dias_disfrute = (15 + $years_servicio) - 1;
-      // $bono_vacacional = 15 + $years_servicio;
+      $bono_vacacional = 15 + $years_servicio;
 
       if ($dias_disfrute > 30) $dias_disfrute = 30;
-      // if ($bono_vacacional > 30) $bono_vacacional = 30;
+      if ($bono_vacacional > 30) $bono_vacacional = 30;
 
       if($request->isFraccionada) {
         $fecha_egreso = new \DateTime($trabajador->fecha_egreso);
@@ -76,16 +76,19 @@ class VacacionesController extends Controller
       $fecha_final = $this->calcularFechaFinal(round($dias_disfrute), $request->dias_feriados, $request->fecha_inicio);
 
       $total_dias_vac = round($dias_disfrute) + $request->dias_feriados + $fecha_final["dias_descanso"];
-      // $dias_a_pagar = $total_dias_vac + $bono_vacacional;
+      $dias_a_pagar = $total_dias_vac + $bono_vacacional;
 
-      // $cesta_ticket = CestaTicket::where('estatus', 'activa')->first();
+      $cesta_ticket = CestaTicket::where('estatus', 'activa')->first();
 
-      // $monto_cesta_ticket = ($cesta_ticket->cantidad/30) * $dias_disfrute;
+      $monto_cesta_ticket = ($cesta_ticket->cantidad/30) * $dias_disfrute;
 
-      $total_pagar = $dias_disfrute * $salario->salario_diario;
+      $total_pagar = ($dias_a_pagar * $salario->salario_diario) + $monto_cesta_ticket;
 
       $montos = [
         "total_dias_vacaciones" => $total_dias_vac,
+        "bono_vacacional" => $bono_vacacional,
+        "dias_a_pagar" => $dias_a_pagar,
+        "cesta_ticket" => $monto_cesta_ticket,
         "total_pagar" => $total_pagar
       ];
 

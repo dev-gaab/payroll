@@ -55,4 +55,18 @@ class ReportesController extends Controller
         return response()->json($nomina);
 
     }
+
+    public function reciboVacaciones($id) {
+        $vacaciones = DB::table('vacaciones')
+            ->join('trabajador', 'vacaciones.trabajador_id', 'trabajador.id')
+            ->where('vacaciones.id', $id)
+            ->select('vacaciones.*', 'trabajador.*')
+            ->first();
+
+        $vacaciones->montos = json_decode($vacaciones->montos);
+        $vacaciones->montos->cesta_ticket = round($vacaciones->montos->cesta_ticket, 2);
+        $vacaciones->montos->total_pagar = round($vacaciones->montos->total_pagar, 2);
+
+        return response()->json($vacaciones);
+    }
 }

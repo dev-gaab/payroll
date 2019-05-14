@@ -22,7 +22,7 @@
             <!-- Acciones -->
             <td class="justify-center layout px-0">
               <v-btn
-                @click="activarEmpresa(props.item.id, props.item.razon_social, props.item.direccion)"
+                @click="activarEmpresa(props.item.id, props.item.razon_social, props.item.direccion, props.item.rif)"
                 icon
                 small
                 color="success"
@@ -81,11 +81,12 @@ export default {
           console.log(err);
         });
     },
-    activarEmpresa(id, nombre, direccion) {
+    activarEmpresa(id, nombre, direccion, rif) {
       this.$store.commit("activarEmpresa", {
         id: id,
         nombre: nombre,
-        direccion: direccion
+        direccion: direccion,
+        rif
       });
     }
   },

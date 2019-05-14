@@ -78,7 +78,8 @@ export default {
       state.empresa = {
         id: payload.id,
         nombre: payload.nombre,
-        direccion: payload.direccion
+        direccion: payload.direccion,
+        rif: payload.rif
       };
 
       sessionStorage.setItem("empresa", JSON.stringify(state.empresa));

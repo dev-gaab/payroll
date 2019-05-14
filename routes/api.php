@@ -89,6 +89,7 @@ Route::group(['prefix' => 'reportes', 'middleware' => 'auth:api'], function () {
   Route::get('/empresas/inactivas', 'Api\ReportesController@empresasInactivas');
   Route::get('/nomina/detalle/{id}', 'Api\ReportesController@nominaUno');
   Route::get('/nominas/all/{id}', 'Api\ReportesController@allNominas');
+  Route::get('/vacaciones/{id}', 'Api\ReportesController@reciboVacaciones');
 });
 
 
