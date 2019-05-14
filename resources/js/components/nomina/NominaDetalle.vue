@@ -459,6 +459,7 @@
 
 <script>
 import axios from "axios";
+import {historial} from "../users/historial";
 import pdfMake from "pdfmake/build/pdfmake";
 import pdfFonts from "pdfmake/build/vfs_fonts";
 pdfMake.vfs = pdfFonts.pdfMake.vfs;
@@ -595,6 +596,9 @@ export default {
             vm.alert = true;
             vm.alertType = "success";
             vm.alertMsg = "Nómina modificada";
+
+            historial(vm.$store.state.currentUser.token, "Modificar nomina detalle");
+
           })
           .catch(err => console.log(err));
       });
@@ -853,10 +857,275 @@ export default {
           };
 
           pdfMake.createPdf(dd).open();
+          historial(vm.$store.state.currentUser.token, "Imprimir Nomina Detalle");
         })
         .catch(err => console.log(err));
     },
-    printAll() {},
+    printAll() {
+      const vm = this;
+
+      axios
+        .get(`/api/reportes/nominas/all/${vm.idNomina}`, {
+          headers: {
+            Authorization: `Bearer ${vm.$store.state.currentUser.token}`
+          }
+        })
+        .then(res => {
+          const date = moment().format("DD-MM-YYYY, h:mm:ss a");
+          const nominas = res.data;
+          const nominaDesde = moment(nominas[0].desde).format("DD-MM-YYYY");
+          const nominaHasta = moment(nominas[0].hasta).format("DD-MM-YYYY");
+          const fechaIngreso = moment(nominas[0].fecha_ingreso).format(
+            "DD-MM-YYYY"
+          );
+          let content = [];
+
+          nominas.forEach(nomina => {
+            let pago_salario = this.nmbFormat(nomina.montos.pago_salario);
+            let he_diurnas = this.nmbFormat(nomina.montos.he_diurnas);
+            let he_nocturnas = this.nmbFormat(nomina.montos.he_nocturnas);
+            let feriados = this.nmbFormat(nomina.montos.feriados);
+            let ivss = this.nmbFormat(nomina.montos.ivss);
+            let paro_forzoso = this.nmbFormat(nomina.montos.paro_forzoso);
+            let faov = this.nmbFormat(nomina.montos.faov);
+            let total_asignaciones = this.nmbFormat(
+              nomina.montos.total_asignaciones
+            );
+            let total_deducciones = this.nmbFormat(
+              nomina.montos.total_deducciones
+            );
+            let monto_total = this.nmbFormat(nomina.montos.monto_total);
+            let otras_asignaciones = this.nmbFormat(nomina.otras_asignaciones);
+
+
+            content.push({
+                stack: [
+                  `${vm.$store.state.empresa.nombre}`,
+                  `RIF ${vm.$store.state.empresa.rif}`
+                ],
+                style: "header"
+              },
+              {
+                text: "Recibo de pago",
+                bold: true,
+                alignment: "center",
+                fontSize: 16,
+                margin: [0, 0, 0, 4]
+              },
+              {
+                text: `Emitido el ${date}`,
+                bold: true,
+                alignment: "center",
+                fontSize: 10,
+                margin: [0, 0, 0, 4]
+              },
+              {
+                text: `Nómina del ${nominaDesde} al ${nominaHasta}`,
+                bold: true,
+                alignment: "center",
+                margin: [0, 0, 0, 15]
+              },
+              {
+                text: `Código: ${nomina.trabajador_id}`,
+                bold: true,
+                margin: [0, 0, 0, 2]
+              },
+              {
+                text: `${nomina.cedula} - ${nomina.nombre1} ${
+                  nomina.apellido1
+                }`,
+                bold: true,
+                margin: [0, 0, 0, 2]
+              },
+              {
+                text: `Cargo: ${nomina.cargo}`,
+                bold: true,
+                margin: [0, 0, 0, 2]
+              },
+              {
+                text: `Fecha de Ingreso: ${fechaIngreso}`,
+                bold: true,
+                margin: [0, 0, 0, 10]
+              },
+              {
+                layout: "headerLineOnly", // optional
+                table: {
+                  // headers are automatically repeated if the table spans over multiple pages
+                  // you can declare how many rows should be treated as headers
+                  headerRows: 1,
+                  widths: [200, "*", "*", "*"],
+
+                  body: [
+                    [
+                      "Descripción",
+                      { text: "D/H/Porc", alignment: "right" },
+                      { text: "Asignaciones", alignment: "right" },
+                      { text: "Deducciones", alignment: "right" }
+                    ],
+                    [
+                      "Salario",
+                      {
+                        text: `${nomina.dias_trabajados} Días`,
+                        alignment: "right"
+                      },
+                      {
+                        text: `${pago_salario}`,
+                        alignment: "right"
+                      },
+                      { text: "0", alignment: "right" }
+                    ],
+                    [
+                      "Horas Extras Diurnas",
+                      {
+                        text: `${nomina.he_diurnas} Horas`,
+                        alignment: "right"
+                      },
+                      {
+                        text: `${he_diurnas}`,
+                        alignment: "right"
+                      },
+                      { text: "0", alignment: "right" }
+                    ],
+                    [
+                      "Horas Extras Nocturnas",
+                      {
+                        text: `${nomina.he_nocturnas} Horas`,
+                        alignment: "right"
+                      },
+                      {
+                        text: `${he_nocturnas}`,
+                        alignment: "right"
+                      },
+                      { text: "0", alignment: "right" }
+                    ],
+                    [
+                      "Domingo / Feriados",
+                      { text: `${nomina.feriados} Días`, alignment: "right" },
+                      {
+                        text: `${feriados}`,
+                        alignment: "right"
+                      },
+                      { text: "0", alignment: "right" }
+                    ],
+                    [
+                      "IVSS",
+                      { text: `4.00 %`, alignment: "right" },
+                      { text: `0`, alignment: "right" },
+                      { text: `${ivss}`, alignment: "right" }
+                    ],
+                    [
+                      "Paro Forzoso",
+                      { text: `0.50 %`, alignment: "right" },
+                      { text: `0`, alignment: "right" },
+                      {
+                        text: `${paro_forzoso}`,
+                        alignment: "right"
+                      }
+                    ],
+                    [
+                      { text: "FAOV" },
+                      { text: `1.00 %`, alignment: "right" },
+                      { text: `0`, alignment: "right" },
+                      { text: `${faov}`, alignment: "right" }
+                    ],
+                    [
+                      "Otras Asignaciones",
+                      { text: ``, alignment: "right" },
+                      {
+                        text: `${otras_asignaciones}`,
+                        alignment: "right"
+                      },
+                      { text: "0", alignment: "right" },
+                    ],
+                    [
+                      { text: "TOTALES", bold: true },
+                      { text: ``, alignment: "right" },
+                      {
+                        text: `${total_asignaciones}`,
+                        bold: true,
+                        alignment: "right"
+                      },
+                      {
+                        text: `${total_deducciones}`,
+                        bold: true,
+                        alignment: "right"
+                      }
+                    ],
+                    [
+                      { text: "" },
+                      { text: ``, alignment: "right" },
+                      {
+                        text: `Neto a Cobrar Bs.`,
+                        bold: true,
+                        alignment: "right"
+                      },
+                      {
+                        text: `${monto_total}`,
+                        bold: true,
+                        alignment: "right"
+                      }
+                    ]
+                  ]
+                }
+              },
+              {
+                text: `Observaciones: ${nomina.observaciones}`,
+                fontSize: 10,
+                bold: true,
+                margin: [0, 20, 0, 50]
+              },
+              {
+                text: `He recibido de la Empresa la cantidad especificada en este recibo, que comprende con la totalidad de mi salario al periodo que se indica en el mismo`,
+                fontSize: 10,
+                bold: true,
+                margin: [0, 20, 0, 50]
+              },
+              {
+                text: `Recibo Conforme`,
+                bold: true,
+                fontSize: 16,
+                alignment: "center",
+                margin: [0, 0, 0, 50]
+              },
+              {
+                text: `C.I N° ${nomina.cedula}`,
+                fontSize: 16,
+                alignment: "center",
+                bold: true,
+                border: [false, true, false, false],
+                margin: [2, 0, 0, 10],
+                pageBreak: 'after'
+              });
+          });
+          
+
+          let dd = {
+            footer: {
+              columns: [
+                {
+                  text: `${this.$store.state.empresa.direccion}`,
+                  alignment: "center",
+                  bold: true
+                }
+              ]
+            },
+            content: content,
+            styles: {
+              header: {
+                fontSize: 18,
+                bold: true,
+                alignment: "center",
+                margin: [0, 0, 0, 20]
+              }
+            }
+          };
+
+          pdfMake.createPdf(dd).open();
+          historial(vm.$store.state.currentUser.token, "Imprimir Nomina Detalle");
+
+        })
+        .catch(err => console.log(err));
+    },
     nmbFormat(value) {
       value = new Intl.NumberFormat("es-VE", {
         style: "decimal",

@@ -17,12 +17,6 @@ class ReportesController extends Controller
     	return response()->json($empresas_activas);
     }
 
-    public function empresasInactivas(){
-    	$empresas_inactivas = Empresa::where('estatus', '<>' ,'activa')->get();
-
-    	return response()->json($empresas_inactivas);
-    }
-
     public function nominaUno($id) {
     	$nomina = DB::table('nomina_detalle')
     		->join('nomina', 'nomina_detalle.nomina_id', 'nomina.id')
@@ -39,5 +33,26 @@ class ReportesController extends Controller
         $nomina->montos->monto_total = round($nomina->montos->monto_total, 2);
 
     	return response()->json($nomina);
+    }
+
+    public function allNominas($id) {
+        $nomina = DB::table('nomina_detalle')
+            ->join('nomina', 'nomina_detalle.nomina_id', 'nomina.id')
+            ->join('trabajador', 'nomina_detalle.trabajador_id', 'trabajador.id')
+            ->where('nomina.id', $id)
+            ->select('nomina.*', 'trabajador.*', 'nomina_detalle.*')
+            ->get();
+
+        for ($i=0; $i < sizeof($nomina); $i++) { 
+            $nomina[$i]->montos = json_decode($nomina[$i]->montos);
+            $nomina[$i]->montos->ivss = round($nomina[$i]->montos->ivss, 2);
+            $nomina[$i]->montos->pago_salario = round($nomina[$i]->montos->pago_salario, 2);
+            $nomina[$i]->montos->total_asignaciones = round($nomina[$i]->montos->total_asignaciones, 2);
+            $nomina[$i]->montos->total_deducciones = round($nomina[$i]->montos->total_deducciones, 2);
+            $nomina[$i]->montos->monto_total = round($nomina[$i]->montos->monto_total, 2);
+        }
+
+        return response()->json($nomina);
+
     }
 }

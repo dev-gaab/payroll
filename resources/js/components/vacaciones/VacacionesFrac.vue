@@ -43,6 +43,8 @@
 
 <script>
 import axios from "axios";
+import {historial} from "../users/historial";
+
 const moment = require('moment');
 
 export default {
@@ -120,6 +122,9 @@ export default {
           vm.alertMsg = "Vacaciones Calculadas";
           vm.allVacacionesFraccionadas();
           vm.alert = true;
+
+          historial(vm.$store.state.currentUser.token, "Vacaciones fraccionadas");
+
         }
       })
       .catch(err => console.log(err));

@@ -273,6 +273,8 @@
 
 <script>
 import axios from "axios";
+import {historial} from "../users/historial";
+
 const moment = require("moment");
 
 class Trabajador {
@@ -441,6 +443,8 @@ export default {
               vm.$data.alertType = "success";
               vm.$data.alertMessage = "Trabajador Agregado!";
               vm.$validator.reset();
+              historial(vm.$store.state.currentUser.token, "Registrar trabajador");
+
             } else {
               vm.$data.alert = true;
               vm.$data.alertType = "error";

@@ -131,6 +131,8 @@
 
 <script>
 import axios from "axios";
+import {historial} from "../users/historial";
+
 const moment = require("moment");
 
 class Empresa {
@@ -244,6 +246,8 @@ export default {
 
               vm.$data.empresa = new Empresa();
               vm.$validator.reset();
+              historial(vm.$store.state.currentUser.token, "Registrar Empresa");
+
             } else {
               vm.alert = true;
               vm.alertType = "error";

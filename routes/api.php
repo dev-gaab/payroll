@@ -88,6 +88,7 @@ Route::group(['prefix' => 'reportes', 'middleware' => 'auth:api'], function () {
   Route::get('/empresas/activas', 'Api\ReportesController@empresasActivas');
   Route::get('/empresas/inactivas', 'Api\ReportesController@empresasInactivas');
   Route::get('/nomina/detalle/{id}', 'Api\ReportesController@nominaUno');
+  Route::get('/nominas/all/{id}', 'Api\ReportesController@allNominas');
 });
 
 
@@ -97,4 +98,9 @@ Route::group(['prefix' => 'bases', 'middleware' => 'auth:api'], function () {
   Route::get('/salarios', 'Api\BasesController@histoSalario');
   Route::post('/salarios', 'Api\BasesController@updSalario');
   Route::post('/cesta', 'Api\BasesController@updCesta');
+});
+
+Route::group(['prefix' => 'historial', 'middleware' => 'auth:api'], function() {
+  Route::get('/{id}', 'Api\UserController@verHistorial');
+  Route::post('/', 'Api\UserController@guardarProceso');
 });

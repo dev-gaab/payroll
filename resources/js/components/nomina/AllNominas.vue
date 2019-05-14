@@ -42,7 +42,7 @@
               >
                 <v-icon small>fa-eye</v-icon>
               </v-btn>
-              <v-btn
+              <!-- <v-btn
                 @click="print(props.item.id)"
                 icon
                 small
@@ -51,7 +51,7 @@
                 title="Imprimir Resumen de pago"
               >
                 <v-icon small>fa-print</v-icon>
-              </v-btn>
+              </v-btn> -->
             </td>
           </template>
 
@@ -69,6 +69,7 @@
 
 <script>
 import axios from "axios";
+import {historial} from "../users/historial";
 const moment = require("moment");
 
 export default {
@@ -153,6 +154,9 @@ export default {
               vm.alertType = "success";
               vm.alertMsg = "Nueva nómina generada";
               vm.alert = true;
+
+              historial(vm.$store.state.currentUser.token, "Generar nómina");
+
             }
           });
       }

@@ -257,6 +257,8 @@
 
 <script>
 import axios from "axios";
+import {historial} from "../users/historial";
+
 import pdfMake from "pdfmake/build/pdfmake";
 import pdfFonts from "pdfmake/build/vfs_fonts";
 pdfMake.vfs = pdfFonts.pdfMake.vfs;
@@ -430,6 +432,8 @@ export default {
             vm.messageSuc = "Empresa Inhabilitada";
 
             vm.allEmpresas();
+            historial(vm.$store.state.currentUser.token, "Inhabilitar empresa");
+
           })
           .catch(err => console.log(err));
       }
@@ -458,6 +462,8 @@ export default {
               vm.messageSuc = "Empresa Modificada";
               vm.dialogUpd = false;
               vm.allEmpresas();
+              historial(vm.$store.state.currentUser.token, "Modificar Empresa");
+
             } else {
               vm.alertUpd = true;
               vm.alertUpdMsg = res.data.error;

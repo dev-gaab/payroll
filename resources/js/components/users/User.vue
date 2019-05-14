@@ -41,6 +41,15 @@
                 <v-icon small>fa-edit</v-icon>
               </v-btn>
               <v-btn
+                @click="verHistorial(props.item.id)"
+                icon
+                small
+                color="primary"
+                title="Historial de procesos"
+              >
+                <v-icon small>schedule</v-icon>
+              </v-btn>
+              <v-btn
                 @click="disableUser(props.item.id)"
                 v-if="props.item.estatus == 'activo' && props.item.username != $store.state.currentUser.user.username"
                 icon
@@ -171,12 +180,52 @@
         </v-card>
       </v-dialog>
     </v-layout>
+
+    <v-layout row justify-center>
+      <v-dialog v-model="dialogHisto" persistent max-width="500">
+        <v-flex xs12>
+          <v-card>
+            <v-card-title>
+              <h3>Historial</h3>
+              <v-spacer></v-spacer>
+              <v-text-field
+                color="teal darken-4"
+                v-model="search_histo"
+                append-icon="fa-search"
+                label="Search"
+                single-line
+                hide-details
+              ></v-text-field>
+              <v-spacer></v-spacer>
+              <v-btn @click.native="dialogHisto = false" icon flat>
+                <v-icon medium>fa-times-circle</v-icon>
+              </v-btn>
+            </v-card-title>
+            <v-data-table :headers="headersHisto" :items="history" :search="search_histo">
+              <template slot="items" slot-scope="props">
+                <td>{{ props.item.data.proceso }}</td>
+                <td>{{ props.item.data.fecha | dateFormat }}</td>
+              </template>
+
+              <v-alert
+                slot="no-results"
+                :value="true"
+                color
+                icon="fa-exclamation-triangle"
+              >Tu busqueda "{{ search_histo }}" no encontro resultados.</v-alert>
+            </v-data-table>
+          </v-card>
+        </v-flex>
+      </v-dialog>
+    </v-layout>
   </v-layout>
 </template>
 
 <script>
 // TODO: validar formularios con VeeValidate, integrarlo al proyecto.
 import axios from "axios";
+import {historial} from "./historial";
+
 const moment = require("moment");
 
 export default {
@@ -207,7 +256,14 @@ export default {
       alertTableType: "success",
       alertModal: false,
       alertModalMessage: "",
-      alertModalType: "error"
+      alertModalType: "error",
+      history: [],
+      dialogHisto: false,
+      headersHisto :[
+        { text: "Proceso", value: "proceso" },
+        { text: "Fecha", value: "fecha" },
+      ],
+      search_histo: ""
     };
   },
   async created() {
@@ -273,6 +329,20 @@ export default {
         })
         .catch(err => console.log(err));
     },
+    verHistorial(id) {
+      const vm = this;
+      axios
+        .get(`http://payroll.com.local/api/historial/${id}`, {
+          headers: {
+            Authorization: `Bearer ${vm.$store.state.currentUser.token}`
+          }
+        })
+        .then(res => {
+          vm.history = res.data;
+          vm.dialogHisto = true;
+        })
+        .catch(err => console.log(err));
+    },
     updUser() {
       this.$validator.validate().then(valid => {
         if (!valid) {
@@ -308,6 +378,8 @@ export default {
             vm.alertTable = true;
             vm.alertTableType = "success";
             vm.allUsers();
+            historial(vm.$store.state.currentUser.token, "Modificar usuario");
+
           })
           .catch(err => console.log(err));
       });
@@ -331,6 +403,9 @@ export default {
             vm.alertTableMessage = "Usuario inhabilitado.";
             vm.alertTableType = "success";
             vm.allUsers();
+
+            historial(vm.$store.state.currentUser.token, "Inhabilitar usuario");
+
           })
           .catch(err => console.log(err));
       }
@@ -354,6 +429,9 @@ export default {
             vm.alertTableMessage = "Usuario habilitado.";
             vm.alertTableType = "success";
             vm.allUsers();
+            
+            historial(vm.$store.state.currentUser.token, "habilitar usuario");
+
           })
           .catch(err => console.log(err));
       }
@@ -364,7 +442,13 @@ export default {
       if (!value) return "";
       value = value.toString();
       return value.charAt(0).toUpperCase() + value.slice(1);
-    }
+    },
+    dateFormat(value) {
+      if (!value) return "";
+
+      value = moment(value, "YYYY-MM-DD H:m:s").format("DD/MM/YYYY HH:mm:ss");
+      return value;
+    },
   }
 };
 </script>

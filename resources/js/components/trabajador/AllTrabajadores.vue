@@ -552,6 +552,8 @@
 
 <script>
 import axios from "axios";
+import {historial} from "../users/historial";
+
 const moment = require("moment");
 
 export default {
@@ -765,6 +767,9 @@ export default {
               vm.messageSuc = "Trabajador Modificado";
               vm.allTrabajadores();
               vm.$data.dialogUpd = false;
+              
+              historial(vm.$store.state.currentUser.token, "Modificar trabajador");
+
             } else {
               vm.alertUpd = true;
               vm.alertUpdMsg = res.data.error;
@@ -804,6 +809,8 @@ export default {
             vm.messageSuc = "Trabajador Inhabilitado";
 
             vm.allTrabajadores();
+            historial(vm.$store.state.currentUser.token, "Inhabilitar trabajador");
+
           })
           .catch(err => console.log(err));
 

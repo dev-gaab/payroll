@@ -134,6 +134,8 @@
 
 <script>
 import axios from "axios";
+import {historial} from "../users/historial";
+
 const moment = require("moment");
 
 export default {
@@ -297,6 +299,9 @@ export default {
               vm.alertMsg = "Vacaciones modificadas";
               vm.allVacaciones();
               vm.dialogUpd = false;
+
+              historial(vm.$store.state.currentUser.token, "Modificar vacaciones");
+
             }
           })
           .catch(error => console.log(error));

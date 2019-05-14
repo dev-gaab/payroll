@@ -135,6 +135,7 @@
 
 <script>
 import axios from "axios";
+import {historial} from "./historial";
 
 export default {
   data() {
@@ -223,6 +224,9 @@ export default {
               vm.$data.alertType = "success";
               vm.$data.alertMessage = "Usuario Agregado!";
               vm.$validator.reset();
+              
+              historial(vm.$store.state.currentUser.token, "Registrar Usuario");
+
             } else {
               vm.$data.alert = true;
               vm.$data.alertType = "error";

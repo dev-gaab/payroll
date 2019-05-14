@@ -131,6 +131,8 @@
 
 <script>
 import axios from "axios";
+import {historial} from "../users/historial";
+
 const moment = require("moment");
 
 export default {
@@ -265,6 +267,9 @@ export default {
               vm.dialog = false;
               vm.dialogCal = false;
               vm.allUtilidades();
+
+              historial(vm.$store.state.currentUser.token, "Calcular utilidades");
+
             }
           })
           .catch(err => console.log(err));
