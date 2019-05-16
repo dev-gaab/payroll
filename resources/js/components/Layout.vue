@@ -75,7 +75,7 @@
           </v-list-tile-content>
         </v-list-tile>
 
-        <v-list-tile @click="routAllBases">
+        <v-list-tile @click="routAllBases" v-if="$store.state.currentUser.isAdmin">
           <v-list-tile-action>
             <v-icon>fa-calculator</v-icon>
           </v-list-tile-action>
@@ -116,6 +116,15 @@
           </v-list-tile-action>
           <v-list-tile-content>
             <v-list-tile-title>Usuarios</v-list-tile-title>
+          </v-list-tile-content>
+        </v-list-tile>
+
+        <v-list-tile @click="routHelp">
+          <v-list-tile-action>
+            <v-icon>contact_support</v-icon>
+          </v-list-tile-action>
+          <v-list-tile-content>
+            <v-list-tile-title>Ayuda</v-list-tile-title>
           </v-list-tile-content>
         </v-list-tile>
       </v-list>
@@ -222,6 +231,9 @@ export default {
     // Reportes
     routReportesEmpresa() {
       this.$router.push({ path: "/reportes/empresa" });
+    },
+    routHelp() {
+      this.$router.push({ path: "/ayuda" });
     },
     logout() {
       const vm = this;

@@ -31,7 +31,7 @@
             <td>{{ props.item.montos.total_pagar | numberFormat }}</td>
             <!-- Acciones -->
             <td class="justify-center layout px-0">
-              <!-- <v-btn
+              <v-btn
                 v-if="comprobarFecha(props.item.fecha_final) && props.item.tipo == 'anual'"
                 @click="editVacaciones(props.item.id)"
                 icon
@@ -40,7 +40,7 @@
                 title="Editar vacaciones"
               >
                 <v-icon small>fa-edit</v-icon>
-              </v-btn> -->
+              </v-btn>
               <v-btn
                 v-if="comprobarFecha(props.item.fecha_final)"
                 icon
@@ -143,8 +143,8 @@
 
 <script>
 import axios from "axios";
-import {historial} from "../users/historial";
-import {numeroALetras} from "./numLetras";
+import { historial } from "../users/historial";
+import { numeroALetras } from "./numLetras";
 
 const moment = require("moment");
 
@@ -310,125 +310,127 @@ export default {
               vm.allVacaciones();
               vm.dialogUpd = false;
 
-              historial(vm.$store.state.currentUser.token, "Modificar vacaciones");
-
+              historial(
+                vm.$store.state.currentUser.token,
+                "Modificar vacaciones"
+              );
             }
           })
           .catch(error => console.log(error));
       });
     },
     print(id) {
-
       const vm = this;
-        axios
-          .get(
-            `http://payroll.com.local/api/reportes/vacaciones/${id}`,
-            {
-              headers: {
-                Authorization: `Bearer ${vm.$store.state.currentUser.token}`
+      axios
+        .get(`http://payroll.com.local/api/reportes/vacaciones/${id}`, {
+          headers: {
+            Authorization: `Bearer ${vm.$store.state.currentUser.token}`
+          }
+        })
+        .then(res => {
+          const date = moment().format("DD-MM-YYYY, h:mm:ss a");
+          const montoTotal = vm.nmbFormat(res.data.montos.total_pagar);
+          const montoLet = numeroALetras(res.data.montos.total_pagar);
+          const year = moment(res.data.fecha_inicial).format("YYYY");
+          const ya = year - 1;
+
+          let dd = {
+            footer: {
+              columns: [
+                {
+                  text: `${this.$store.state.empresa.direccion}`,
+                  alignment: "center",
+                  bold: true
+                }
+              ]
+            },
+            content: [
+              {
+                stack: [
+                  `${vm.$store.state.empresa.nombre}`,
+                  `RIF ${vm.$store.state.empresa.rif}`
+                ],
+                style: "header"
+              },
+              {
+                text: "Recibo de vacaciones",
+                bold: true,
+                alignment: "center",
+                fontSize: 16,
+                margin: [0, 0, 0, 4]
+              },
+              {
+                text: `Emitido el ${date}`,
+                bold: true,
+                alignment: "center",
+                fontSize: 10,
+                margin: [0, 0, 0, 4]
+              },
+              {
+                text: `POR: ${montoTotal}`,
+                bold: true,
+                alignment: "center",
+                margin: [0, 15, 0, 15]
+              },
+              {
+                text: `He recibido de ${
+                  vm.$store.state.empresa.nombre
+                } la cantidad de ${montoLet} (${montoTotal}), por concepto de VACACIONES MAS LA LEY DE ALIMENTACION (CESTA TICKET), correspondientes al periodo AÑO ${ya} - ${year}.`,
+                margin: [0, 0, 0, 15]
+              },
+              {
+                text: `Queda entendido que ${
+                  vm.$store.state.empresa.nombre
+                } no me adeuda nada por este concepto por el periodo comprendido desde el año ${ya} - ${year}`,
+                bold: true,
+                margin: [0, 0, 0, 15]
+              },
+              {
+                text: `Carúpano: ${moment().format("DD-MM-YYYY")}`,
+                bold: true,
+                margin: [0, 0, 0, 20]
+              },
+              {
+                text: `Recibo Conforme`,
+                bold: true,
+                fontSize: 16,
+                alignment: "center",
+                margin: [0, 0, 0, 50]
+              },
+              {
+                text: `${res.data.nombre1} ${res.data.apellido1}`,
+                fontSize: 16,
+                alignment: "center",
+                bold: true,
+                border: [false, true, false, false],
+                margin: [2, 0, 0, 10]
+              },
+              {
+                text: `C.I N° ${res.data.cedula}`,
+                fontSize: 16,
+                alignment: "center",
+                bold: true,
+                border: [false, true, false, false],
+                margin: [2, 0, 0, 10]
+              }
+            ],
+            styles: {
+              header: {
+                fontSize: 18,
+                bold: true,
+                alignment: "center",
+                margin: [0, 0, 0, 20]
               }
             }
-          )
-          .then(res => {
-            const date = moment().format("DD-MM-YYYY, h:mm:ss a");
-            const montoTotal = vm.nmbFormat(res.data.montos.total_pagar);
-            const montoLet = numeroALetras(res.data.montos.total_pagar);
-            const year = moment(res.data.fecha_inicial).format("YYYY");
-            const ya = year - 1;
+          };
 
-            let dd = {
-              footer: {
-                columns: [
-                  {
-                    text: `${this.$store.state.empresa.direccion}`,
-                    alignment: "center",
-                    bold: true
-                  }
-                ]
-              },
-              content: [
-                {
-                  stack: [
-                    `${vm.$store.state.empresa.nombre}`,
-                    `RIF ${vm.$store.state.empresa.rif}`
-                  ],
-                  style: "header"
-                },
-                {
-                  text: "Recibo de vacaciones",
-                  bold: true,
-                  alignment: "center",
-                  fontSize: 16,
-                  margin: [0, 0, 0, 4]
-                },
-                {
-                  text: `Emitido el ${date}`,
-                  bold: true,
-                  alignment: "center",
-                  fontSize: 10,
-                  margin: [0, 0, 0, 4]
-                },
-                {
-                  text: `POR: ${montoTotal}`,
-                  bold: true,
-                  alignment: "center",
-                  margin: [0, 15, 0, 15]
-                },
-                {
-                  text: `He recibido de ${vm.$store.state.empresa.nombre} la cantidad de ${montoLet} (${montoTotal}), por concepto de VACACIONES MAS LA LEY DE ALIMENTACION (CESTA TICKET), correspondientes al periodo AÑO ${ya} - ${year}.`,
-                  margin: [0, 0, 0, 15]
-                },
-                {
-                  text: `Queda entendido que ${vm.$store.state.empresa.nombre} no me adeuda nada por este concepto por el periodo comprendido desde el año ${ya} - ${year}`,
-                  bold: true,
-                  margin: [0, 0, 0, 15]
-                },
-                {
-                  text: `Carúpano: ${moment().format("DD-MM-YYYY")}`,
-                  bold: true,
-                  margin: [0, 0, 0, 20]
-                },
-                {
-                  text: `Recibo Conforme`,
-                  bold: true,
-                  fontSize: 16,
-                  alignment: "center",
-                  margin: [0, 0, 0, 50]
-                },
-                {
-                  text: `${res.data.nombre1} ${res.data.apellido1}`,
-                  fontSize: 16,
-                  alignment: "center",
-                  bold: true,
-                  border: [false, true, false, false],
-                  margin: [2, 0, 0, 10]
-                },
-                {
-                  text: `C.I N° ${res.data.cedula}`,
-                  fontSize: 16,
-                  alignment: "center",
-                  bold: true,
-                  border: [false, true, false, false],
-                  margin: [2, 0, 0, 10]
-                }
-              ],
-              styles: {
-                header: {
-                  fontSize: 18,
-                  bold: true,
-                  alignment: "center",
-                  margin: [0, 0, 0, 20]
-                }
-              }
-            };
-
-            pdfMake.createPdf(dd).open();
-            historial(vm.$store.state.currentUser.token, "Imprimir Nomina Detalle");
-          })
-          .catch(error => console.log(error));
-          
-
-          
+          pdfMake.createPdf(dd).open();
+          historial(
+            vm.$store.state.currentUser.token,
+            "Imprimir Nomina Detalle"
+          );
+        })
+        .catch(error => console.log(error));
     },
 
     nmbFormat(value) {
@@ -437,7 +439,7 @@ export default {
         currency: "VES"
       }).format(value);
       return value;
-    } 
+    }
   },
   filters: {
     capitalize(value) {

@@ -17,6 +17,7 @@ import VacacionesFrac from "../components/vacaciones/VacacionesFrac";
 import Utilidades from "../components/utilidades/Utilidades";
 import Prestaciones from "../components/prestaciones/Prestaciones";
 import ReportesEmpresa from "../components/reportes/ReportesEmpresa";
+import Help from "../components/Help";
 
 Vue.use(Router);
 /**
@@ -166,6 +167,14 @@ export default new Router({
       path: "/reportes/empresa",
       name: "ReportesEmpresa",
       component: ReportesEmpresa,
+      meta: {
+        requiresAuth: true
+      }
+    },
+    {
+      path: "/ayuda",
+      name: "Ayuda",
+      component: Help,
       meta: {
         requiresAuth: true
       }
