@@ -93,7 +93,7 @@
           </v-list-tile-content>
         </v-list-tile>
 
-        <v-list-group no-action>
+        <!-- <v-list-group no-action>
           <v-list-tile slot="activator">
             <v-list-tile-action>
               <v-icon>print</v-icon>
@@ -108,7 +108,7 @@
               <v-list-tile-title>Empresas</v-list-tile-title>
             </v-list-tile-content>
           </v-list-tile>
-        </v-list-group>
+        </v-list-group> -->
 
         <v-list-tile @click="routUsers" v-if="$store.state.currentUser.isAdmin">
           <v-list-tile-action>
